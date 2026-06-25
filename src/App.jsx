@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Routes, Route, Link, NavLink, useNavigate, useLocation } from "react-router-dom";
-import { Zap, Share2, Search, Globe, Edit3, X, Menu } from "lucide-react";
+import { Zap, Share2, Search, Globe, Edit3, X, Menu, Linkedin, Github, Instagram, Mail } from "lucide-react";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Skills from "./pages/Skills";
@@ -642,10 +642,10 @@ function App() {
             <Link to="/skills">Skills</Link>
             <Link to="/about">About</Link>
             <Link to="/blog">Blog</Link>
-            <a href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
-            <a href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
-            {profile.instagram && <a href={profile.instagram} target="_blank" rel="noreferrer">Instagram</a>}
-            {profile.email && <a href={`mailto:${profile.email}`}>Email</a>}
+            <a href={profile.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn"><Linkedin size={18} /></a>
+            <a href={profile.github} target="_blank" rel="noreferrer" aria-label="GitHub"><Github size={18} /></a>
+            {profile.instagram && <a href={profile.instagram} target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram size={18} /></a>}
+            {profile.email && <a href={`mailto:${profile.email}`} aria-label="Email"><Mail size={18} /></a>}
           </div>
           <button
             className="ghost-button"
