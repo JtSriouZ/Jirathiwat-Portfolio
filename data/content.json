@@ -1,0 +1,394 @@
+{
+  "profile": {
+    "name": "Jirathiwat Suntipreedatham",
+    "role": "Software Engineer, AI & Full-Stack Developer",
+    "location": "Bangkok City, Thailand",
+    "aboutTitle": "Software engineer & AI engineer",
+    "headline": "Software engineer and part-time IT CITY sales consultant building real-time AI systems, cinematic recommendation engines, and production-ready web applications.",
+    "bio": "Hi to see you there! I am Jirathiwat Suntipreedatham, a software engineer, Faculty of Information and Communication Technology, Mahidol University student, and part-time Sales Consultant at IT CITY Public Company Limited in Bangkok. My background includes international computer competition experience, international seminar experience, leadership in an International Relations Program, project work, sales work, and marketing department experience.",
+    "email": "hello@jirathiwat.dev",
+    "github": "https://github.com/JirathiwatSun",
+    "linkedin": "https://www.linkedin.com/in/jirathiwat-suntipreedatham-38a8a1193/?locale=th",
+    "avatar": "profile-photo.png",
+    "skills": [
+      "Computer Vision",
+      "Artificial Intelligence",
+      "Software Engineering",
+      "Python",
+      "C",
+      "CSS",
+      "HTML5",
+      "Full-Stack Development",
+      "Web Applications",
+      "Data Science",
+      "Operating Systems",
+      "JavaScript",
+      "Java",
+      "Customer Satisfaction",
+      "Sales"
+    ]
+  },
+  "expertise": [
+    {
+      "id": "ai-engineering",
+      "category": "AI & Data Science",
+      "description": "Designing and deploying machine learning models, computer vision pipelines, and intelligent recommendation systems.",
+      "skills": [
+        "Python",
+        "PyTorch",
+        "TensorFlow",
+        "Scikit-Learn",
+        "Pandas",
+        "NumPy",
+        "OpenCV",
+        "YOLO",
+        "Jupyter",
+        "Keras",
+        "Hugging Face",
+        "Deep Learning",
+        "Generative AI",
+        "MLOps",
+        "Matplotlib"
+      ]
+    },
+    {
+      "id": "software-engineering",
+      "category": "Software Engineering",
+      "description": "Building robust, scalable, and deterministic software architectures with a focus on system-level performance.",
+      "skills": [
+        "Java",
+        "C",
+        "C++",
+        "Python",
+        "Git",
+        "GitHub",
+        "Docker",
+        "Linux",
+        "Kubernetes",
+        "AWS",
+        "GCP",
+        "CI/CD",
+        "Object-Oriented Design",
+        "Data Structures",
+        "Algorithms",
+        "System Design"
+      ]
+    },
+    {
+      "id": "backend-development",
+      "category": "Back-End Development",
+      "description": "Creating high-performance APIs, managing hybrid databases, and handling server-side logic and deployments.",
+      "skills": [
+        "Node.js",
+        "Express.js",
+        "FastAPI",
+        "GraphQL",
+        "RESTful APIs",
+        "SQL",
+        "MongoDB",
+        "PostgreSQL",
+        "MySQL",
+        "Redis",
+        "Firebase",
+        "Docker",
+        "Nginx",
+        "Render",
+        "Heroku",
+        "Postman"
+      ]
+    },
+    {
+      "id": "frontend-development",
+      "category": "Front-End Development",
+      "description": "Crafting responsive, dynamic, and beautiful user interfaces with modern web technologies.",
+      "skills": [
+        "HTML5",
+        "CSS3",
+        "JavaScript",
+        "TypeScript",
+        "React.js",
+        "Next.js",
+        "Vue.js",
+        "Vite",
+        "Tailwind CSS",
+        "Bootstrap",
+        "SASS",
+        "Redux",
+        "Figma",
+        "UI/UX"
+      ]
+    }
+  ],
+  "experiences": [
+    {
+      "id": "exp-it-city",
+      "role": "Sales Consultant",
+      "company": "IT CITY Public Company Limited",
+      "period": "May 2024 - Present",
+      "description": "Part-time, on-site Sales Consultant in Bangkok, Bangkok City, Thailand, with experience in customer satisfaction, technology retail, and sales communication."
+    },
+    {
+      "id": "exp-fict-student",
+      "role": "Student",
+      "company": "Faculty of Information and Communication Technology, Mahidol University",
+      "period": "Aug 2024 - Present",
+      "description": "Studying ICT while developing skills across C, Python, software engineering, web development, AI, data science, and operating systems."
+    },
+    {
+      "id": "exp-mahidol-projects",
+      "role": "Software Engineer, AI & Data Science Project Developer",
+      "company": "Faculty of Information and Communication Technology, Mahidol University",
+      "period": "Mar 2026 - Present",
+      "description": "Developed advanced academic projects across real-time computer vision, operating-system-aware AI optimization, hybrid recommendation engines, and full-stack e-commerce systems."
+    },
+    {
+      "id": "exp-portfolio",
+      "role": "Portfolio Owner",
+      "company": "Personal Lab",
+      "period": "2026 - Present",
+      "description": "Built a futuristic portfolio system with animated presentation, media posts, YouTube embeds, GitHub project cards, and a local backend editor prepared for GitHub Pages publishing."
+    }
+  ],
+  "education": [
+    {
+      "id": "edu-mahidol",
+      "school": "Mahidol University",
+      "program": "Faculty of Information and Communication Technology (ICT)",
+      "period": "Aug 2024 - Present",
+      "description": "Current undergraduate ICT student developing technical foundations in software engineering, AI, data science, programming, and systems.",
+      "skills": [
+        "C",
+        "Python",
+        "Software Engineering",
+        "Artificial Intelligence",
+        "Data Science"
+      ]
+    },
+    {
+      "id": "edu-watnairong",
+      "school": "Matthayom Watnairong Semi International School",
+      "program": "Secondary School, Sci - Math",
+      "period": "May 2018 - Apr 2023",
+      "description": "Completed a science-mathematics secondary school track with programming foundations.",
+      "skills": [
+        "Python",
+        "JavaScript",
+        "Programming Foundations"
+      ]
+    }
+  ],
+  "posts": [
+    {
+      "id": "post-iron-dome",
+      "title": "Iron Dome Missile Tracker v3.1",
+      "category": "AI Project",
+      "date": "2026-03-01",
+      "summary": "A real-time tactical computer vision system engineered for deterministic execution, ultra-low latency, and stable high-definition inference pipelines.",
+      "imageUrl": "https://opengraph.githubassets.com/jirathiwat-portfolio/JirathiwatSun/missile-detection-static-main",
+      "youtubeUrl": ""
+    },
+    {
+      "id": "post-cinematch",
+      "title": "CineMatch 2.0: The Cinematic Oracle",
+      "category": "AI Project",
+      "date": "2026-04-16",
+      "summary": "A movie discovery platform using semantic search, hybrid recommendation logic, hidden-gem detection, and 3D cinematic mapping.",
+      "imageUrl": "https://opengraph.githubassets.com/jirathiwat-portfolio/JirathiwatSun/Movie-Recommendation",
+      "youtubeUrl": ""
+    },
+    {
+      "id": "post-boonsonclon",
+      "title": "BoonSonClon Premium Furniture Store",
+      "category": "Web App",
+      "date": "2026-04-28",
+      "summary": "A full-stack e-commerce platform for premium furniture retail with a hybrid database system and responsive mobile-first design.",
+      "imageUrl": "https://opengraph.githubassets.com/jirathiwat-portfolio/JirathiwatSun/ITCS223_WebDev",
+      "youtubeUrl": ""
+    }
+  ],
+  "certificates": [
+    {
+      "id": "cert-python",
+      "title": "Python Programming Archive",
+      "issuer": "Portfolio Certificate Archive",
+      "date": "2026-06-25",
+      "credentialUrl": "",
+      "imageUrl": "",
+      "description": "A certificate archive entry for Python programming achievements. Replace this with the official certificate title, issuer, image, and credential URL in the admin panel.",
+      "skills": [
+        "Python",
+        "Programming",
+        "Software Engineering"
+      ]
+    },
+    {
+      "id": "cert-web",
+      "title": "Web Development Archive",
+      "issuer": "Portfolio Certificate Archive",
+      "date": "2026-06-25",
+      "credentialUrl": "",
+      "imageUrl": "",
+      "description": "A certificate archive entry for HTML5, CSS, JavaScript, and full-stack web application work. Replace this with official certificate details in the admin panel.",
+      "skills": [
+        "HTML5",
+        "CSS",
+        "JavaScript",
+        "Full-Stack Development"
+      ]
+    },
+    {
+      "id": "cert-ai",
+      "title": "AI and Data Science Archive",
+      "issuer": "Portfolio Certificate Archive",
+      "date": "2026-06-25",
+      "credentialUrl": "",
+      "imageUrl": "",
+      "description": "A certificate archive entry for AI, data science, computer vision, and recommendation-system learning. Replace this with official certificate details in the admin panel.",
+      "skills": [
+        "Artificial Intelligence",
+        "Data Science",
+        "Computer Vision"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "project-iron-dome",
+      "name": "Iron Dome Missile Tracker v3.1",
+      "description": "A high-performance real-time tactical computer vision application that optimizes resource-heavy AI inference pipelines inside bounded, time-critical software environments. The system demonstrates how custom OS resource management can accelerate machine learning workloads while handling HD video processing, deep learning inference, and telemetry write-backs without dropping frames.",
+      "language": "Python",
+      "repoUrl": "https://github.com/JirathiwatSun/missile-detection-static-main",
+      "liveUrl": "",
+      "imageUrl": "https://opengraph.githubassets.com/jirathiwat-portfolio/JirathiwatSun/missile-detection-static-main",
+      "updated": "2026-04-25",
+      "featuredRank": 1,
+      "period": "Mar 2026 - Present",
+      "associated": "Faculty of Information and Communication Technology, Mahidol University",
+      "skills": [
+        "Computer Vision",
+        "AI",
+        "Operating Systems",
+        "Real-Time Systems"
+      ],
+      "highlights": [
+        "Perfect ITCS225 grading rubric score of 16/16",
+        "Custom system-level architecture for memory, scheduling, and synchronization",
+        "Deterministic execution with ultra-low latency and frame-rate stability",
+        "Simultaneous HD video processing, inference, and telemetry write-backs"
+      ]
+    },
+    {
+      "id": "project-cinematch",
+      "name": "CineMatch 2.0: The Cinematic Oracle",
+      "description": "A production-grade movie discovery platform for ITCS227 that uses GPU-accelerated semantic search, high-dimensional embeddings, and hybrid recommendation logic to understand the soul and vibe of more than 436,000 movies.",
+      "language": "Jupyter Notebook",
+      "repoUrl": "https://github.com/JirathiwatSun/Movie-Recommendation",
+      "liveUrl": "",
+      "imageUrl": "https://opengraph.githubassets.com/jirathiwat-portfolio/JirathiwatSun/Movie-Recommendation",
+      "updated": "2026-04-16",
+      "featuredRank": 2,
+      "period": "2026",
+      "associated": "Faculty of Information and Communication Technology, Mahidol University",
+      "skills": [
+        "AI",
+        "Data Science",
+        "CSS",
+        "Recommendation Systems"
+      ],
+      "highlights": [
+        "Metadata Soup fingerprint using title, overview, genre, keywords, and era tags",
+        "50/50 hybrid score combining semantic similarity and IMDB weighted quality",
+        "Mood Fusion intent parser for visual style, emotion, and narrative complexity",
+        "Hidden Gem Radar and interactive Plotly 3D discovery explorer"
+      ]
+    },
+    {
+      "id": "project-boonsonclon",
+      "name": "BoonSonClon Premium Furniture Store",
+      "description": "A high-performance full-stack e-commerce platform designed for premium furniture retail, featuring a hybrid database system, production deployment, and a responsive mobile-first shopping experience.",
+      "language": "JavaScript",
+      "repoUrl": "https://github.com/JirathiwatSun/ITCS223_WebDev",
+      "liveUrl": "https://boonsonclon-furniture.onrender.com",
+      "imageUrl": "https://opengraph.githubassets.com/jirathiwat-portfolio/JirathiwatSun/ITCS223_WebDev",
+      "updated": "2026-04-28",
+      "featuredRank": 3,
+      "period": "2026",
+      "associated": "Faculty of Information and Communication Technology, Mahidol University",
+      "skills": [
+        "Web Applications",
+        "Full-Stack Development",
+        "JavaScript",
+        "Responsive Design"
+      ],
+      "highlights": [
+        "Premium furniture e-commerce platform",
+        "Hybrid database system",
+        "Fully responsive mobile-first design",
+        "Live production deployment on Render"
+      ]
+    },
+    {
+      "id": "project-unittest",
+      "name": "2025-ITCS224-UnitTest-6788122",
+      "description": "A Python unit testing repository connected to ITCS224 coursework.",
+      "language": "Python",
+      "repoUrl": "https://github.com/JirathiwatSun/2025-ITCS224-UnitTest-6788122",
+      "liveUrl": "",
+      "imageUrl": "https://opengraph.githubassets.com/jirathiwat-portfolio/JirathiwatSun/2025-ITCS224-UnitTest-6788122",
+      "updated": "2026-04-09",
+      "featuredRank": 4,
+      "period": "2025 - 2026",
+      "associated": "Mahidol University",
+      "skills": [
+        "Python",
+        "Unit Testing"
+      ],
+      "highlights": [
+        "Coursework-focused testing project",
+        "Python test design and validation"
+      ]
+    },
+    {
+      "id": "project-toy",
+      "name": "ITCS224-toy-project",
+      "description": "A toy project repository connected to ITCS224 coursework and software experimentation.",
+      "language": "Course Project",
+      "repoUrl": "https://github.com/JirathiwatSun/ITCS224-toy-project",
+      "liveUrl": "",
+      "imageUrl": "https://opengraph.githubassets.com/jirathiwat-portfolio/JirathiwatSun/ITCS224-toy-project",
+      "updated": "2026-04-03",
+      "featuredRank": 5,
+      "period": "2026",
+      "associated": "Mahidol University",
+      "skills": [
+        "Software Development",
+        "Course Project"
+      ],
+      "highlights": [
+        "Academic software project",
+        "Repository-based development practice"
+      ]
+    },
+    {
+      "id": "project-os",
+      "name": "ITCS225 Principles of Operating Systems",
+      "description": "A Java repository for principles of operating systems coursework.",
+      "language": "Java",
+      "repoUrl": "https://github.com/JirathiwatSun/ITCS225_Principles-of-Operating-Systems",
+      "liveUrl": "",
+      "imageUrl": "https://opengraph.githubassets.com/jirathiwat-portfolio/JirathiwatSun/ITCS225_Principles-of-Operating-Systems",
+      "updated": "2026-02-22",
+      "featuredRank": 6,
+      "period": "2026",
+      "associated": "Mahidol University",
+      "skills": [
+        "Java",
+        "Operating Systems"
+      ],
+      "highlights": [
+        "Operating systems coursework",
+        "Java implementation practice"
+      ]
+    }
+  ]
+}

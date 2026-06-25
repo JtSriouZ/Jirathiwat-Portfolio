@@ -1,0 +1,152 @@
+import { useParams, Link } from "react-router-dom";
+import { Github, ExternalLink, ArrowLeft, Calendar, Building2, Code2 } from "lucide-react";
+import { normalizeList, resolveMediaUrl, getYoutubeEmbedUrl } from "../utils";
+
+export default function ProjectDetail({ content }) {
+  const { id } = useParams();
+  const { projects = [] } = content;
+  
+  const project = projects.find((p) => p.id === id);
+
+  if (!project) {
+    return (
+      <div className="page-content" style={{ textAlign: "center", paddingTop: "4rem" }}>
+        <h2>Project Not Found</h2>
+        <p>The project you are looking for does not exist.</p>
+        <br />
+        <Link to="/projects" className="primary-button">Back to Projects</Link>
+      </div>
+    );
+  }
+
+  const highlights = normalizeList(project.highlights);
+  const skills = normalizeList(project.skills);
+  const mediaUrls = normalizeList(project.mediaUrls);
+  
+  // Split full description by newlines to render multiple paragraphs, fallback to short description
+  const descriptionText = project.fullDescription || project.description;
+  const descriptionParagraphs = descriptionText.split('\n').filter(p => p.trim() !== '');
+
+  return (
+    <div className="page-content">
+      <section className="section project-detail-section reveal is-visible">
+        <div className="project-detail-header">
+          <Link to="/projects" className="ghost-button" style={{ display: "inline-flex", marginBottom: "2rem" }}>
+            <ArrowLeft size={16} />
+            Back to Projects
+          </Link>
+          
+          <div className="post-meta" style={{ marginBottom: "1rem" }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+              <Code2 size={14} />
+              {project.language || "Project"}
+            </span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+              <Calendar size={14} />
+              {project.period || project.updated || "Recent"}
+            </span>
+            {project.associated && (
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                <Building2 size={14} />
+                {project.associated}
+              </span>
+            )}
+          </div>
+          
+          <h1 style={{ fontSize: "2.5rem", marginBottom: "1.5rem" }}>{project.name}</h1>
+          
+          <div className="project-actions" style={{ marginBottom: "2rem" }}>
+            {project.repoUrl && (
+              <a className="secondary-button" href={project.repoUrl} target="_blank" rel="noreferrer">
+                <Github size={16} />
+                Repository
+              </a>
+            )}
+            {project.liveUrl && (
+              <a className="primary-button" href={project.liveUrl} target="_blank" rel="noreferrer">
+                <ExternalLink size={16} />
+                Live Demo
+              </a>
+            )}
+          </div>
+        </div>
+
+        {project.imageUrl && (
+          <div className="project-detail-image" style={{ marginBottom: "3rem", borderRadius: "12px", overflow: "hidden", border: "1px solid var(--line)" }}>
+            <img 
+              src={resolveMediaUrl(project.imageUrl)} 
+              alt={project.name} 
+              style={{ width: "100%", height: "auto", display: "block" }} 
+            />
+          </div>
+        )}
+
+        <div className="project-detail-content" style={{ maxWidth: "800px", margin: "0 auto" }}>
+          <h2>About the Project</h2>
+          <div style={{ marginBottom: "2rem" }}>
+            {descriptionParagraphs.map((para, idx) => (
+              <p key={idx} style={{ fontSize: "1.1rem", lineHeight: "1.8", marginBottom: "1rem" }}>{para}</p>
+            ))}
+          </div>
+          
+          {highlights.length > 0 && (
+            <>
+              <h3>Key Features & Highlights</h3>
+              <ul className="project-highlights" style={{ marginBottom: "2rem" }}>
+                {highlights.map((highlight) => (
+                  <li key={highlight}>{highlight}</li>
+                ))}
+              </ul>
+            </>
+          )}
+
+          {mediaUrls.length > 0 && (
+            <>
+              <h3>Media Gallery</h3>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem", marginBottom: "3rem" }}>
+                {mediaUrls.map((url, idx) => {
+                  const ytEmbed = getYoutubeEmbedUrl(url);
+                  if (ytEmbed) {
+                    return (
+                      <div key={idx} style={{ borderRadius: "8px", overflow: "hidden", aspectRatio: "16/9", border: "1px solid var(--line)" }}>
+                        <iframe
+                          src={ytEmbed}
+                          style={{ width: "100%", height: "100%", border: "none" }}
+                          allowFullScreen
+                          title="Project Video"
+                        />
+                      </div>
+                    );
+                  }
+                  if (url.match(/\.(mp4|webm|ogg)$/i)) {
+                    return (
+                      <div key={idx} style={{ borderRadius: "8px", overflow: "hidden", border: "1px solid var(--line)" }}>
+                        <video src={resolveMediaUrl(url)} controls style={{ width: "100%", display: "block" }} />
+                      </div>
+                    );
+                  }
+                  return (
+                    <div key={idx} style={{ borderRadius: "8px", overflow: "hidden", border: "1px solid var(--line)" }}>
+                      <img src={resolveMediaUrl(url)} alt="Project Media" style={{ width: "100%", height: "auto", display: "block" }} />
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
+
+          {skills.length > 0 && (
+            <>
+              <h3>Technologies Used</h3>
+              <div className="mini-skill-cloud">
+                {skills.map((skill) => (
+                  <span key={skill}>{skill}</span>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </section>
+    </div>
+  );
+}
