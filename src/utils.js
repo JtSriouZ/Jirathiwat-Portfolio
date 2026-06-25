@@ -5,6 +5,9 @@ export function getYoutubeEmbedUrl(url) {
     if (parsed.hostname.includes("youtu.be")) {
       return `https://www.youtube.com/embed/${parsed.pathname.replace("/", "")}`;
     }
+    if (parsed.pathname.includes("/shorts/")) {
+      return `https://www.youtube.com/embed/${parsed.pathname.split("/shorts/")[1].split("/")[0]}`;
+    }
     if (parsed.searchParams.has("v")) {
       return `https://www.youtube.com/embed/${parsed.searchParams.get("v")}`;
     }
@@ -30,7 +33,8 @@ export function resolveMediaUrl(url) {
   if (/^(https?:|data:|blob:|\/)/.test(url)) {
     return url;
   }
-  return `${import.meta.env.BASE_URL}${url}`.replace(/([^:]\/)\/+/g, "$1");
+  const baseUrl = import.meta.env?.BASE_URL || "/";
+  return `${baseUrl}${url}`.replace(/([^:]\/)\/+/g, "$1");
 }
 
 export function triggerGoogleTranslate(languageCode) {
@@ -40,8 +44,71 @@ export function triggerGoogleTranslate(languageCode) {
   return true;
 }
 
+function skillIconUrl(fileName) {
+  return `https://cdn.jsdelivr.net/gh/tandpfun/skill-icons/icons/${fileName}.svg`;
+}
+
+function faviconUrl(domain) {
+  return `https://icons.duckduckgo.com/ip3/${domain}.ico`;
+}
+
 export function getSkillIconUrl(skillName) {
   const normalized = skillName.toLowerCase().trim();
+  const aliases = {
+    "react": "react.js",
+    "next": "next.js",
+    "vue": "vue.js",
+    "tailwind": "tailwind css",
+    "css": "css3",
+    "html": "html5",
+    "js": "javascript",
+    "ts": "typescript",
+    "node": "node.js",
+    "express": "express.js",
+    "scikit learn": "scikit-learn",
+    "sklearn": "scikit-learn",
+    "google cloud": "gcp",
+    "amazon web services": "aws",
+    "premiere pro": "adobe premiere pro",
+    "photoshop": "adobe photoshop",
+    "lightroom": "adobe lightroom",
+    "visual studio code": "vs code",
+    "vscode": "vs code",
+    "npm": "npm",
+    "openai api": "openai",
+    "google ai studio": "gemini",
+    "v0": "v0",
+    "bolt.new": "bolt",
+    "socketio": "socket.io",
+    "socket io": "socket.io",
+    "three": "three.js",
+    "framer": "framer motion",
+    "fusion360": "fusion 360",
+    "obs": "obs studio"
+  };
+  const key = aliases[normalized] || normalized;
+  const conceptualSkills = new Set([
+    "artificial intelligence",
+    "computer vision",
+    "customer satisfaction",
+    "data science",
+    "full-stack development",
+    "image & video editing",
+    "operating systems",
+    "programming",
+    "real-time systems",
+    "recommendation systems",
+    "responsive design",
+    "sales",
+    "server & networking",
+    "software engineering",
+    "unit testing",
+    "web applications"
+  ]);
+
+  if (conceptualSkills.has(key)) {
+    return "";
+  }
   
   const deviconUrls = {
     "python": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg",
@@ -54,26 +121,56 @@ export function getSkillIconUrl(skillName) {
     "jupyter": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jupyter/jupyter-original.svg",
     "keras": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/keras/keras-original.svg",
     "matplotlib": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/matplotlib/matplotlib-original.svg",
+    "plotly": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/plotly/plotly-original.svg",
+    "seaborn": faviconUrl("seaborn.pydata.org"),
+    "scipy": "https://scipy.org/images/logo.svg",
+    "streamlit": "https://streamlit.io/images/brand/streamlit-logo-primary-colormark-darktext.svg",
+    "transformers": "https://huggingface.co/front/assets/huggingface_logo-noborder.svg",
+    "sentence transformers": "https://huggingface.co/front/assets/huggingface_logo-noborder.svg",
+    "deep learning": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tensorflow/tensorflow-original.svg",
+    "generative ai": "",
+    "mlops": faviconUrl("mlflow.org"),
+    "langchain": faviconUrl("langchain.com"),
+    "openai": faviconUrl("openai.com"),
+    "google colab": faviconUrl("colab.research.google.com"),
+    "roboflow": faviconUrl("roboflow.com"),
+    "ultralytics": "https://raw.githubusercontent.com/ultralytics/assets/main/logo/Ultralytics_Logotype_Original.svg",
     "java": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg",
-    "c": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/c/c-original.svg",
+    "c": skillIconUrl("C"),
     "c++": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg",
     "c/c++": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg",
     "git": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg",
-    "github": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg",
+    "github": skillIconUrl("Github-Dark"),
     "docker": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg",
     "linux": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg",
+    "windows": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/windows11/windows11-original.svg",
+    "windows server": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/windows11/windows11-original.svg",
+    "wsl": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg",
+    "bash": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/bash/bash-original.svg",
+    "powershell": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/powershell/powershell-original.svg",
+    "vs code": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg",
+    "npm": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/npm/npm-original-wordmark.svg",
+    "github actions": skillIconUrl("GithubActions-Dark"),
+    "ci/cd": skillIconUrl("GithubActions-Dark"),
+    "vercel": skillIconUrl("Vercel-Dark"),
+    "netlify": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/netlify/netlify-original.svg",
     "kubernetes": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kubernetes/kubernetes-original.svg",
     "gcp": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/googlecloud/googlecloud-original.svg",
     "aws": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg",
     "node.js": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg",
-    "express.js": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/express/express-original.svg",
+    "express.js": skillIconUrl("ExpressJS-Dark"),
     "fastapi": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/fastapi/fastapi-original.svg",
+    "restful apis": skillIconUrl("Postman"),
     "graphql": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/graphql/graphql-plain.svg",
     "mongodb": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg",
     "postgresql": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg",
     "mysql": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg",
+    "sql": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg",
     "redis": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/redis/redis-plain.svg",
     "firebase": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg",
+    "supabase": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/supabase/supabase-original.svg",
+    "prisma": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/prisma/prisma-original.svg",
+    "sqlite": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/sqlite/sqlite-original.svg",
     "nginx": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nginx/nginx-original.svg",
     "heroku": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/heroku/heroku-original.svg",
     "postman": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg",
@@ -82,7 +179,7 @@ export function getSkillIconUrl(skillName) {
     "javascript": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg",
     "typescript": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg",
     "react.js": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg",
-    "next.js": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg",
+    "next.js": skillIconUrl("NextJS-Dark"),
     "vue.js": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vuejs/vuejs-original.svg",
     "vite": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vite/vite-original.svg",
     "tailwind css": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg",
@@ -90,50 +187,75 @@ export function getSkillIconUrl(skillName) {
     "sass": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/sass/sass-original.svg",
     "redux": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/redux/redux-original.svg",
     "figma": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg",
-    "adobe photoshop": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/photoshop/photoshop-original.svg",
-    "adobe premiere pro": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/premierepro/premierepro-original.svg",
-    "davinci resolve": "https://upload.wikimedia.org/wikipedia/commons/9/90/DaVinci_Resolve_17_logo.svg",
-    "adobe lightroom": "https://upload.wikimedia.org/wikipedia/commons/b/b6/Adobe_Photoshop_Lightroom_CC_logo.svg",
-    "chatgpt": "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg",
-    "claude": "https://cdn.simpleicons.org/anthropic/D97757",
-    "claude code": "https://cdn.simpleicons.org/anthropic/D97757",
-    "gemini": "https://cdn.simpleicons.org/googlegemini/8E75B2",
-    "codex": "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg",
-    "antigravity": "https://www.google.com/s2/favicons?domain=deepmind.google&sz=128",
-    "c": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/c/c-original.svg",
+    "framer motion": faviconUrl("framer.com"),
+    "gsap": faviconUrl("gsap.com"),
+    "three.js": skillIconUrl("ThreeJS-Dark"),
+    "react router": faviconUrl("reactrouter.com"),
+    "lucide": faviconUrl("lucide.dev"),
+    "chart.js": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/chartjs/chartjs-original.svg",
+    "canva": faviconUrl("canva.com"),
+    "webgl": "https://upload.wikimedia.org/wikipedia/commons/2/25/WebGL_Logo.svg",
+    "ui/ux": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg",
+    "object-oriented design": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg",
+    "data structures": "",
+    "algorithms": "",
+    "system design": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kubernetes/kubernetes-original.svg",
+    "adobe photoshop": skillIconUrl("Photoshop"),
+    "adobe premiere pro": skillIconUrl("Premiere"),
+    "adobe illustrator": skillIconUrl("Illustrator"),
+    "adobe after effects": skillIconUrl("AfterEffects"),
+    "davinci resolve": faviconUrl("blackmagicdesign.com/products/davinciresolve"),
+    "adobe lightroom": faviconUrl("adobe.com/products/photoshop-lightroom.html"),
+    "chatgpt": faviconUrl("chatgpt.com"),
+    "claude": faviconUrl("claude.ai"),
+    "claude code": faviconUrl("claude.ai"),
+    "gemini": faviconUrl("gemini.google.com"),
+    "codex": faviconUrl("openai.com"),
+    "antigravity": faviconUrl("deepmind.google"),
     "ubuntu": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/ubuntu/ubuntu-original.svg",
-    "github copilot": "https://cdn.simpleicons.org/githubcopilot/FFFFFF",
-    "cursor": "https://cdn.simpleicons.org/cursor/FFFFFF",
-    "blender": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Blender_logo_no_text.svg",
-    "midjourney": "https://www.google.com/s2/favicons?domain=midjourney.com&sz=128",
-    "shapr3d": "https://www.google.com/s2/favicons?domain=shapr3d.com&sz=128",
-    "capcut": "https://cdn.iconscout.com/icon/free/png-256/free-capcut-logo-icon-download-in-svg-png-gif-file-formats--technology-social-media-company-brand-vol-1-pack-logos-icons-2944738.png"
+    "github copilot": faviconUrl("github.com/features/copilot"),
+    "cursor": faviconUrl("cursor.com"),
+    "perplexity": faviconUrl("perplexity.ai"),
+    "anthropic": faviconUrl("anthropic.com"),
+    "v0": faviconUrl("v0.dev"),
+    "bolt": faviconUrl("bolt.new"),
+    "replit": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/replit/replit-original.svg",
+    "blender": skillIconUrl("Blender-Dark"),
+    "midjourney": faviconUrl("midjourney.com"),
+    "shapr3d": faviconUrl("shapr3d.com"),
+    "fusion 360": faviconUrl("autodesk.com/products/fusion-360/overview"),
+    "sketchup": skillIconUrl("Sketchup-Dark"),
+    "unity": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/unity/unity-original.svg",
+    "unreal engine": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/unrealengine/unrealengine-original.svg",
+    "autocad": skillIconUrl("AutoCAD-Dark"),
+    "proxmox": faviconUrl("proxmox.com"),
+    "cisco": resolveMediaUrl("logos/cisco.png"),
+    "wireshark": resolveMediaUrl("logos/wireshark.png"),
+    "capcut": resolveMediaUrl("logos/capcut.png"),
+    "obs studio": faviconUrl("obsproject.com"),
+    "cloudflare": skillIconUrl("Cloudflare-Dark"),
+    "tailscale": faviconUrl("tailscale.com"),
+    "wireguard": faviconUrl("wireguard.com"),
+    "pfsense": faviconUrl("pfsense.org"),
+    "truenas": faviconUrl("truenas.com"),
+    "virtualbox": faviconUrl("virtualbox.org"),
+    "vmware": faviconUrl("vmware.com"),
+    "socket.io": faviconUrl("socket.io"),
+    "jwt": faviconUrl("jwt.io"),
+    "websocket": ""
   };
 
-  if (deviconUrls[normalized]) {
-    return deviconUrls[normalized];
+  if (deviconUrls[key]) {
+    return deviconUrls[key];
   }
   
-  // Fallback to simpleicons for things like YOLO, Hugging Face, MLOps, Render
+  // Fallback to reliable colored assets for tools that are not in Devicon.
   const simpleIconsMapping = {
-    'yolo': 'yolo',
-    'hugging face': 'huggingface',
-    'mlops': 'mlflow',
-    'render': 'render',
-    'claude': 'anthropic',
-    'claude code': 'anthropic',
-    'antigravity': 'google',
-    'codex': 'openai',
-    'chatgpt': 'openai',
-    'gemini': 'googlegemini',
-    'shapr3d': 'shapr3d',
-    'adobe premiere pro': 'adobepremierepro',
-    'adobe photoshop': 'adobephotoshop',
-    'adobe lightroom': 'adobelightroom',
-    'davinci resolve': 'davinciresolve',
-    'github copilot': 'githubcopilot'
+    "yolo": faviconUrl("ultralytics.com"),
+    "hugging face": "https://huggingface.co/front/assets/huggingface_logo-noborder.svg",
+    "render": "https://render.com/images/deploy-to-render-button.svg",
+    "firebase": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg"
   };
   
-  const slug = simpleIconsMapping[normalized] || normalized.replace(/[^a-z0-9]/g, '');
-  return `https://cdn.simpleicons.org/${slug}`;
+  return simpleIconsMapping[key] || "";
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Terminal, Code, Cpu, Database, Layout, Box, Network, Code2, Globe, Braces, Cloud, BarChart, Sparkles, Image, MonitorPlay, Cuboid } from "lucide-react";
+import { Terminal, Code, Cpu, Database, Layout, Box, Network, Code2, Globe, Braces, Cloud, BarChart, Sparkles, MonitorPlay, Cuboid } from "lucide-react";
 import { getSkillIconUrl, normalizeList } from "../utils";
 
 function getCategoryIcon(categoryId) {
@@ -15,6 +15,12 @@ function getCategoryIcon(categoryId) {
 
 function getFallbackIcon(skill) {
   const s = skill.toLowerCase();
+  if (s.includes("ui") || s.includes("ux") || s.includes("design")) return <Layout size={32} strokeWidth={1.5} />;
+  if (s.includes("3d") || s.includes("model")) return <Cuboid size={32} strokeWidth={1.5} />;
+  if (s.includes("prompt") || s.includes("generative")) return <Sparkles size={32} strokeWidth={1.5} />;
+  if (s.includes("image") || s.includes("video") || s.includes("media")) return <MonitorPlay size={32} strokeWidth={1.5} />;
+  if (s.includes("programming")) return <Code2 size={32} strokeWidth={1.5} />;
+  if (s.includes("test") || s.includes("ci/cd")) return <Terminal size={32} strokeWidth={1.5} />;
   if (s.includes("sql") || s.includes("database")) return <Database size={32} strokeWidth={1.5} />;
   if (s.includes("algorithm")) return <Code2 size={32} strokeWidth={1.5} />;
   if (s.includes("system") || s.includes("network")) return <Network size={32} strokeWidth={1.5} />;
@@ -28,11 +34,12 @@ function getFallbackIcon(skill) {
 
 function SkillCard({ skill }) {
   const [error, setError] = useState(false);
+  const iconUrl = error ? "" : getSkillIconUrl(skill);
   return (
     <div className="skill-card">
-      {!error ? (
+      {iconUrl ? (
         <img 
-          src={getSkillIconUrl(skill)} 
+          src={iconUrl} 
           alt={skill} 
           style={{ width: "48px", height: "48px", objectFit: "contain" }}
           onError={() => setError(true)}

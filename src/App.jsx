@@ -100,6 +100,13 @@ function AnimatedBackgroundCanvas({ routeKey }) {
     let height = 0;
     let dpr = 1;
     let particles = [];
+    const pointer = {
+      x: window.innerWidth * 0.5,
+      y: window.innerHeight * 0.34,
+      targetX: window.innerWidth * 0.5,
+      targetY: window.innerHeight * 0.34,
+      active: false,
+    };
 
     const getPalette = () => {
       const source = document.querySelector(".portfolio") || document.documentElement;
@@ -158,6 +165,7 @@ function AnimatedBackgroundCanvas({ routeKey }) {
       context.lineCap = "round";
       context.lineJoin = "round";
       context.shadowBlur = 0;
+      context.globalAlpha = 1;
       context.globalCompositeOperation = "source-over";
 
       const backgroundSweep = context.createLinearGradient(0, 0, width, height);
@@ -177,6 +185,12 @@ function AnimatedBackgroundCanvas({ routeKey }) {
       };
 
       context.globalCompositeOperation = "lighter";
+
+      if (!reduceMotion) {
+        pointer.x += (pointer.targetX - pointer.x) * 0.12;
+        pointer.y += (pointer.targetY - pointer.y) * 0.12;
+      }
+
       drawNebula(
         width * (0.18 + Math.sin(seconds * 0.12) * 0.035),
         height * (0.18 + Math.cos(seconds * 0.11) * 0.025),
@@ -199,26 +213,30 @@ function AnimatedBackgroundCanvas({ routeKey }) {
         0.1
       );
 
+      const cursorGlow = context.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, Math.max(width, height) * 0.22);
+      cursorGlow.addColorStop(0, alphaColor(palette.accent, pointer.active ? 0.22 : 0.11));
+      cursorGlow.addColorStop(0.34, alphaColor(palette.accentTwo, pointer.active ? 0.08 : 0.04));
+      cursorGlow.addColorStop(1, alphaColor(palette.accentThree, 0));
+      context.fillStyle = cursorGlow;
+      context.fillRect(0, 0, width, height);
+
       const laneColors = [palette.accent, palette.accentTwo, palette.accentThree];
       const drawPerspectiveGrid = () => {
-        const horizon = height * 0.55;
+        const horizon = height * 0.58;
         const vanishingX = width * 0.52 + Math.sin(seconds * 0.16) * width * 0.04;
         const floorBottom = height + 80;
-        const floorTop = horizon - 24;
+        const floorTop = horizon;
         const columns = 18;
         const rows = 16;
 
         context.save();
-        context.beginPath();
-        context.rect(0, horizon - 40, width, height - horizon + 120);
-        context.clip();
         context.globalCompositeOperation = "lighter";
         context.shadowBlur = 10;
         context.shadowColor = palette.accentTwo;
 
         for (let index = -columns; index <= columns; index += 1) {
           const bottomX = width * 0.5 + index * (width / columns) * 0.68;
-          context.globalAlpha = 0.17;
+          context.globalAlpha = 0.09;
           context.strokeStyle = alphaColor(index % 2 === 0 ? palette.accentTwo : palette.accent, 0.95);
           context.lineWidth = index === 0 ? 1.35 : 0.75;
           context.beginPath();
@@ -227,13 +245,13 @@ function AnimatedBackgroundCanvas({ routeKey }) {
           context.stroke();
         }
 
-        for (let row = 1; row <= rows; row += 1) {
+        for (let row = 3; row <= rows; row += 1) {
           const progress = row / rows;
           const eased = progress * progress;
           const y = floorTop + eased * (floorBottom - floorTop);
           const halfWidth = (width * 0.06) + eased * width * 0.76;
           const wave = Math.sin(seconds * 1.4 + row * 0.55) * 3;
-          context.globalAlpha = 0.08 + progress * 0.18;
+          context.globalAlpha = 0.02 + Math.pow(progress, 1.45) * 0.2;
           context.strokeStyle = alphaColor(row % 2 === 0 ? palette.accent : palette.accentTwo, 0.95);
           context.lineWidth = row % 4 === 0 ? 1.2 : 0.7;
           context.beginPath();
@@ -247,23 +265,6 @@ function AnimatedBackgroundCanvas({ routeKey }) {
       };
 
       drawPerspectiveGrid();
-
-      for (let index = 0; index < 11; index += 1) {
-        const laneY = ((index + 1) / 9) * height;
-        const drift = ((seconds * (26 + index * 4)) + index * 170) % (width + 540);
-        const startX = drift - 340;
-        const startY = laneY + Math.sin(seconds * 0.5 + index) * 42;
-        context.globalAlpha = 0.18;
-        context.strokeStyle = laneColors[index % laneColors.length];
-        context.lineWidth = index % 3 === 0 ? 1.45 : 0.85;
-        context.shadowBlur = 16;
-        context.shadowColor = laneColors[index % laneColors.length];
-        context.beginPath();
-        context.moveTo(startX, startY);
-        context.bezierCurveTo(startX + 140, startY - 105, startX + 270, startY + 75, startX + 470, startY - 24);
-        context.stroke();
-      }
-      context.shadowBlur = 0;
 
       for (let ring = 0; ring < 4; ring += 1) {
         const x = width * (0.22 + ring * 0.18) + Math.sin(seconds * 0.2 + ring) * 24;
@@ -329,12 +330,30 @@ function AnimatedBackgroundCanvas({ routeKey }) {
     resize();
     draw();
 
+    const updatePointer = (event) => {
+      const point = event.touches?.[0] || event;
+      if (typeof point?.clientX !== "number" || typeof point?.clientY !== "number") return;
+
+      pointer.targetX = point.clientX;
+      pointer.targetY = point.clientY;
+      pointer.active = true;
+    };
+
+    const deactivatePointer = () => {
+      pointer.active = false;
+    };
+
     window.addEventListener("resize", resize);
-    if (!reduceMotion) frame = requestAnimationFrame(draw);
+    window.addEventListener("pointermove", updatePointer, { passive: true });
+    window.addEventListener("touchmove", updatePointer, { passive: true });
+    window.addEventListener("pointerleave", deactivatePointer, { passive: true });
 
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("resize", resize);
+      window.removeEventListener("pointermove", updatePointer);
+      window.removeEventListener("touchmove", updatePointer);
+      window.removeEventListener("pointerleave", deactivatePointer);
     };
   }, [routeKey]);
 
@@ -350,30 +369,6 @@ function App() {
   const [language, setLanguage] = useState("en");
   const navigate = useNavigate();
   const location = useLocation();
-
-  useEffect(() => {
-    let frame = 0;
-
-    const updatePointer = (event) => {
-      const point = event.touches?.[0] || event;
-      if (typeof point?.clientX !== "number" || typeof point?.clientY !== "number") return;
-
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        document.documentElement.style.setProperty("--pointer-x", `${point.clientX}px`);
-        document.documentElement.style.setProperty("--pointer-y", `${point.clientY}px`);
-      });
-    };
-
-    window.addEventListener("pointermove", updatePointer, { passive: true });
-    window.addEventListener("touchmove", updatePointer, { passive: true });
-
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("pointermove", updatePointer);
-      window.removeEventListener("touchmove", updatePointer);
-    };
-  }, []);
 
   useEffect(() => {
     const cardSelector = [
@@ -432,6 +427,7 @@ function App() {
 
   // Re-run reveal animation whenever the route changes
   useEffect(() => {
+    let observer;
     // Scroll to top on page change
     window.scrollTo(0, 0);
 
@@ -445,7 +441,7 @@ function App() {
         runScramble(element);
       };
 
-      const observer = new IntersectionObserver(
+      observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
@@ -468,10 +464,12 @@ function App() {
         }
       });
 
-      return () => observer.disconnect();
     }, 50);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      observer?.disconnect();
+    };
   }, [location.pathname]);
 
   const fetchContent = async () => {

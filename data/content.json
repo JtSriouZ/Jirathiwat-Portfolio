@@ -62,10 +62,21 @@
         "Jupyter",
         "Keras",
         "Hugging Face",
+        "Transformers",
+        "Sentence Transformers",
+        "LangChain",
+        "OpenAI API",
+        "Google Colab",
+        "Roboflow",
+        "Ultralytics",
         "Deep Learning",
         "Generative AI",
         "MLOps",
-        "Matplotlib"
+        "Matplotlib",
+        "Plotly",
+        "Seaborn",
+        "SciPy",
+        "Streamlit"
       ]
     },
     {
@@ -81,9 +92,18 @@
         "GitHub",
         "Docker",
         "Linux",
+        "Ubuntu",
+        "Windows",
+        "WSL",
+        "Bash",
+        "PowerShell",
+        "VS Code",
+        "NPM",
         "Kubernetes",
         "AWS",
         "GCP",
+        "Vercel",
+        "GitHub Actions",
         "CI/CD",
         "Object-Oriented Design",
         "Data Structures",
@@ -107,11 +127,18 @@
         "MySQL",
         "Redis",
         "Firebase",
+        "Supabase",
+        "Prisma",
+        "SQLite",
         "Docker",
         "Nginx",
         "Render",
+        "Vercel",
         "Heroku",
-        "Postman"
+        "Postman",
+        "JWT",
+        "WebSocket",
+        "Socket.IO"
       ]
     },
     {
@@ -132,6 +159,14 @@
         "SASS",
         "Redux",
         "Figma",
+        "Framer Motion",
+        "GSAP",
+        "Three.js",
+        "WebGL",
+        "React Router",
+        "Lucide",
+        "Chart.js",
+        "Canva",
         "UI/UX"
       ]
     },
@@ -148,7 +183,14 @@
         "GitHub Copilot",
         "Cursor",
         "Gemini",
-        "Midjourney"
+        "Midjourney",
+        "OpenAI",
+        "Anthropic",
+        "Perplexity",
+        "Google AI Studio",
+        "V0",
+        "Bolt",
+        "Replit"
       ]
     },
     {
@@ -158,7 +200,11 @@
       "skills": [
         "Shapr3D",
         "Blender",
-        "AutoCAD"
+        "AutoCAD",
+        "Fusion 360",
+        "SketchUp",
+        "Unity",
+        "Unreal Engine"
       ]
     },
     {
@@ -169,8 +215,12 @@
         "Adobe Premiere Pro",
         "Adobe Photoshop",
         "Adobe Lightroom",
+        "Adobe Illustrator",
+        "Adobe After Effects",
         "DaVinci Resolve",
-        "CapCut"
+        "CapCut",
+        "Canva",
+        "OBS Studio"
       ]
     },
     {
@@ -180,9 +230,18 @@
       "skills": [
         "Proxmox",
         "Cisco",
+        "Wireshark",
         "Ubuntu",
         "Docker",
-        "Nginx"
+        "Nginx",
+        "Cloudflare",
+        "Tailscale",
+        "WireGuard",
+        "pfSense",
+        "TrueNAS",
+        "VirtualBox",
+        "VMware",
+        "Windows Server"
       ]
     }
   ],

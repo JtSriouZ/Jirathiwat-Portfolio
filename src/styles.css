@@ -18,8 +18,6 @@
   --shadow: 0 28px 90px rgba(0, 0, 0, 0.46);
   --glow-cyan: 0 0 24px rgba(101, 232, 255, 0.34);
   --glow-pink: 0 0 28px rgba(255, 111, 216, 0.2);
-  --pointer-x: 50vw;
-  --pointer-y: 30vh;
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -38,7 +36,6 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background:
-    radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(101, 232, 255, 0.2), transparent 17rem),
     radial-gradient(circle at 82% 10%, rgba(255, 111, 216, 0.15), transparent 24rem),
     radial-gradient(circle at 10% 82%, rgba(145, 255, 207, 0.12), transparent 26rem),
     linear-gradient(135deg, #03050c 0%, #071223 42%, #10071d 100%);
@@ -149,13 +146,8 @@ button[aria-busy="true"] {
 }
 
 .page-motion-bg::after {
-  position: absolute;
-  inset: 0;
-  content: "";
-  background:
-    radial-gradient(circle at var(--pointer-x) var(--pointer-y), color-mix(in srgb, var(--page-accent) 22%, transparent), transparent 12rem);
-  mix-blend-mode: screen;
-  opacity: 0.64;
+  display: none;
+  content: none;
 }
 
 .motion-canvas {
@@ -1017,8 +1009,7 @@ p {
   inset: 0;
   content: "";
   background:
-    linear-gradient(180deg, transparent 0%, rgba(5, 7, 13, 0.18) 48%, rgba(5, 7, 13, 0.78) 100%),
-    repeating-linear-gradient(0deg, rgba(101, 232, 255, 0.08) 0 1px, transparent 1px 12px);
+    linear-gradient(180deg, transparent 0%, rgba(5, 7, 13, 0.18) 48%, rgba(5, 7, 13, 0.78) 100%);
   mix-blend-mode: screen;
   opacity: 0.54;
 }
@@ -1304,7 +1295,7 @@ p {
 
 .skill-card img,
 .skill-card .fallback-icon {
-  filter: grayscale(20%) opacity(0.88);
+  filter: saturate(1.08) opacity(0.94);
   transition:
     filter 220ms ease,
     color 220ms ease,
@@ -1336,7 +1327,7 @@ p {
 .skill-card:hover img,
 .skill-card:hover .fallback-icon {
   color: var(--cyan) !important;
-  filter: grayscale(0%) opacity(1) drop-shadow(0 0 14px color-mix(in srgb, var(--page-accent-2) 45%, transparent));
+  filter: saturate(1.3) opacity(1) drop-shadow(0 0 14px color-mix(in srgb, var(--page-accent-2) 45%, transparent));
   transform: translateY(-2px) scale(1.08);
 }
 
@@ -1484,8 +1475,7 @@ p {
     inset 0 0 34px color-mix(in srgb, var(--page-accent-2) 8%, transparent);
 }
 
-.post-image,
-.certificate-card img {
+.post-image {
   width: calc(100% + 2.7rem);
   height: 230px;
   margin: -1.35rem -1.35rem 1.25rem;
@@ -1515,17 +1505,6 @@ p {
     radial-gradient(circle at 80% 12%, color-mix(in srgb, var(--page-accent-3) 12%, transparent), transparent 14rem),
     linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025)),
     rgba(4, 8, 15, 0.82);
-}
-
-.project-media::before {
-  position: absolute;
-  inset: 0;
-  content: "";
-  background:
-    linear-gradient(90deg, rgba(101, 232, 255, 0.08) 1px, transparent 1px),
-    linear-gradient(rgba(145, 255, 207, 0.06) 1px, transparent 1px);
-  background-size: 32px 32px;
-  opacity: 0.28;
 }
 
 .project-media img {
@@ -1558,9 +1537,178 @@ p {
   min-height: 100%;
 }
 
-.certificate-card > img {
+.certificate-visual {
+  position: relative;
+  display: grid;
   width: 100%;
-  margin: 0;
+  min-height: 230px;
+  overflow: hidden;
+  place-items: center;
+  border-bottom: 1px solid rgba(101, 232, 255, 0.18);
+  background:
+    radial-gradient(circle at 18% 16%, rgba(101, 232, 255, 0.28), transparent 11rem),
+    radial-gradient(circle at 82% 18%, rgba(255, 111, 216, 0.24), transparent 12rem),
+    radial-gradient(circle at 50% 110%, rgba(145, 255, 207, 0.18), transparent 14rem),
+    linear-gradient(135deg, rgba(15, 26, 47, 0.94), rgba(39, 20, 58, 0.86));
+  aspect-ratio: 16 / 9;
+  isolation: isolate;
+}
+
+.certificate-visual-detail {
+  max-width: 980px;
+  min-height: clamp(280px, 44vw, 520px);
+  margin: 0 auto 3rem;
+  border: 1px solid rgba(101, 232, 255, 0.26);
+  border-radius: 8px;
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.34),
+    0 0 48px color-mix(in srgb, var(--page-accent) 12%, transparent);
+}
+
+.certificate-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(1.08) contrast(1.04);
+  transition:
+    transform 320ms ease,
+    filter 320ms ease;
+}
+
+.certificate-card:hover .certificate-visual img {
+  transform: scale(1.035);
+  filter: saturate(1.16) contrast(1.08);
+}
+
+.certificate-visual::before,
+.certificate-visual::after {
+  position: absolute;
+  content: "";
+  pointer-events: none;
+}
+
+.certificate-visual::before {
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.09) 42%, transparent 54%),
+    radial-gradient(circle at 72% 26%, rgba(255, 255, 255, 0.13), transparent 8rem);
+  mix-blend-mode: screen;
+  opacity: 0.56;
+}
+
+.certificate-visual::after {
+  inset: auto 0 0;
+  z-index: 2;
+  height: 42%;
+  background: linear-gradient(180deg, transparent, rgba(5, 7, 13, 0.62));
+}
+
+.certificate-placeholder {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  width: min(82%, 520px);
+  min-height: 72%;
+  place-items: center;
+  padding: 1.2rem;
+  text-align: center;
+}
+
+.certificate-orbit {
+  position: absolute;
+  width: min(54vw, 260px);
+  border: 1px solid rgba(101, 232, 255, 0.26);
+  border-radius: 50%;
+  aspect-ratio: 1;
+  box-shadow:
+    inset 0 0 32px rgba(101, 232, 255, 0.08),
+    0 0 38px rgba(255, 111, 216, 0.12);
+  transform: rotate(-14deg) scaleX(1.28);
+  animation: certOrbit 9s linear infinite;
+}
+
+.certificate-orbit::before,
+.certificate-orbit::after {
+  position: absolute;
+  inset: 16%;
+  border: 1px solid rgba(145, 255, 207, 0.18);
+  border-radius: inherit;
+  content: "";
+}
+
+.certificate-orbit::after {
+  inset: 32%;
+  border-color: rgba(255, 211, 106, 0.24);
+}
+
+.certificate-sigil {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  width: clamp(74px, 11vw, 108px);
+  place-items: center;
+  border: 1px solid rgba(145, 255, 207, 0.36);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.22), transparent 34%),
+    linear-gradient(145deg, rgba(101, 232, 255, 0.2), rgba(255, 111, 216, 0.1)),
+    rgba(5, 10, 20, 0.82);
+  color: var(--green);
+  aspect-ratio: 1;
+  box-shadow:
+    0 0 34px rgba(145, 255, 207, 0.22),
+    inset 0 0 28px rgba(101, 232, 255, 0.12);
+}
+
+.certificate-placeholder-copy {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  max-width: 460px;
+  gap: 0.35rem;
+  margin-top: 1.1rem;
+}
+
+.certificate-placeholder-copy span,
+.certificate-visual-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  color: var(--green);
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.certificate-placeholder-copy strong {
+  color: var(--text);
+  font-size: clamp(1rem, 2vw, 1.45rem);
+}
+
+.certificate-placeholder-copy small {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--text-muted);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: 1.45;
+}
+
+.certificate-visual-badge {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 3;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid rgba(145, 255, 207, 0.3);
+  border-radius: 8px;
+  background: rgba(5, 10, 20, 0.72);
+  backdrop-filter: blur(16px);
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .project-body,
@@ -2142,7 +2290,7 @@ body {
 
 .record-card {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   gap: 1rem;
   padding: 1rem;
   border: 1px solid rgba(152, 241, 255, 0.14);
@@ -2300,6 +2448,16 @@ body {
   }
 }
 
+@keyframes certOrbit {
+  from {
+    transform: rotate(-14deg) scaleX(1.28);
+  }
+
+  to {
+    transform: rotate(346deg) scaleX(1.28);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -2447,9 +2605,15 @@ body {
     justify-content: flex-start;
   }
 
-  .record-card,
+  .record-card {
+    grid-template-columns: auto 1fr;
+  }
   .record-fields {
     grid-template-columns: 1fr;
+    grid-column: 1 / -1;
+  }
+  .record-actions {
+    grid-column: 1 / -1;
   }
 
   .record-actions {

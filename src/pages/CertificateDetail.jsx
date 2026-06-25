@@ -1,5 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { ExternalLink, ArrowLeft, Calendar, Award } from "lucide-react";
+import CertificateVisual from "../components/CertificateVisual";
 import { normalizeList, resolveMediaUrl, getYoutubeEmbedUrl } from "../utils";
 
 export default function CertificateDetail({ content }) {
@@ -57,40 +58,7 @@ export default function CertificateDetail({ content }) {
           </div>
         </div>
 
-        {certificate.imageUrl ? (
-          <div className="project-detail-image" style={{ marginBottom: "3rem", borderRadius: "12px", overflow: "hidden", border: "1px solid var(--line)" }}>
-            <img 
-              src={resolveMediaUrl(certificate.imageUrl)} 
-              alt={certificate.title} 
-              style={{ width: "100%", height: "auto", display: "block" }} 
-            />
-          </div>
-        ) : (
-          <div className="project-detail-image" style={{ marginBottom: "3rem", borderRadius: "12px", border: "1px solid var(--line)", overflow: "hidden" }}>
-            <div style={{
-              width: "100%",
-              height: "250px",
-              background: "linear-gradient(135deg, rgba(0,240,255,0.05) 0%, rgba(0,0,0,0.2) 100%)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center"
-            }}>
-              <div style={{
-                width: "80px",
-                height: "80px",
-                borderRadius: "50%",
-                background: "rgba(0,240,255,0.1)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "var(--cyan)",
-                boxShadow: "0 0 30px rgba(0,240,255,0.15)"
-              }}>
-                <Award size={40} strokeWidth={1.5} />
-              </div>
-            </div>
-          </div>
-        )}
+        <CertificateVisual certificate={certificate} variant="detail" />
 
         <div className="project-detail-content" style={{ maxWidth: "800px", margin: "0 auto" }}>
           <h2>About the Certificate</h2>

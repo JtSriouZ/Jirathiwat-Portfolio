@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Edit3, Save, Trash2, Plus } from "lucide-react";
+import { Edit3, Save, Trash2, Plus, GripVertical } from "lucide-react";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { resolveMediaUrl, normalizeList } from "../utils";
 
 const blankPost = { title: "", category: "News", date: new Date().toISOString().slice(0, 10), summary: "", fullDescription: "", imageUrl: "", mediaUrls: "", youtubeUrl: "", externalUrl: "" };
@@ -180,6 +181,26 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
     }
   };
 
+  const handleDragEnd = async (result, list, setList, sectionKey) => {
+    if (!result.destination) return;
+    if (result.source.index === result.destination.index) return;
+    
+    const items = Array.from(list);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    
+    setList(items);
+    
+    try {
+      const orderedIds = items.map(item => item.id);
+      await api(`/api/reorder/${sectionKey}`, { method: "PUT", body: JSON.stringify({ orderedIds }) });
+      await onRefresh();
+      setMessage("Reordered successfully");
+    } catch (err) {
+      setMessage(err.message || "Error saving order");
+    }
+  };
+
   return (
     <div className="admin-shell">
       <header className="admin-header">
@@ -188,7 +209,7 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
           <h1>Portfolio backend</h1>
         </div>
         <div className="admin-actions">
-          {!canEdit && <p className="save-message">Static GitHub Pages preview. Run locally to save edits.</p>}
+          {!canEdit && <p className="save-message">Read-only preview. Add Vercel Blob storage or run locally to save edits.</p>}
           {canEdit && !adminToken && <p className="save-message">Admin locked</p>}
           {canEdit && adminToken && <p className="save-message">Admin unlocked</p>}
           {message && <p className="save-message">{message}</p>}
@@ -204,7 +225,7 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
           <section className="editor-panel wide-panel auth-panel">
             <div>
               <h2>Admin login</h2>
-              <p>Enter your local admin password to edit content.</p>
+              <p>Enter your admin password to edit content.</p>
             </div>
             <form className="auth-form" onSubmit={login}>
               <TextInput label="Admin password" type="password" value={password} onChange={setPassword} />
@@ -288,11 +309,24 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
               <Plus size={18} /> Add
             </button>
           </div>
-          <div className="record-list">
-            {expertiseList.map((item) => (
-              <EditableExpertise key={item.id} expertise={item} canEdit={canSave} onSave={(draft) => handleSave(draft, "/api/expertise", setExpertiseList, "expertise")} onDelete={(id) => handleDelete(id, "/api/expertise", setExpertiseList, "expertise")} saving={saving} />
-            ))}
-          </div>
+          <DragDropContext onDragEnd={(res) => handleDragEnd(res, expertiseList, setExpertiseList, "expertise")}>
+            <Droppable droppableId="expertise">
+              {(provided) => (
+                <div className="record-list" {...provided.droppableProps} ref={provided.innerRef}>
+                  {expertiseList.map((item, index) => (
+                    <Draggable key={item.id} draggableId={item.id} index={index}>
+                      {(provided) => (
+                        <div ref={provided.innerRef} {...provided.draggableProps} style={provided.draggableProps.style}>
+                          <EditableExpertise expertise={item} canEdit={canSave} dragHandleProps={provided.dragHandleProps} onSave={(draft) => handleSave(draft, "/api/expertise", setExpertiseList, "expertise")} onDelete={(id) => handleDelete(id, "/api/expertise", setExpertiseList, "expertise")} saving={saving} />
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
         </section>
 
         <section className="editor-panel wide-panel">
@@ -302,11 +336,24 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
               <Plus size={18} /> Add
             </button>
           </div>
-          <div className="record-list">
-            {projects.map((item) => (
-              <EditableProject key={item.id} project={item} canEdit={canSave} onSave={(draft) => handleSave(draft, "/api/projects", setProjects, "project")} onDelete={(id) => handleDelete(id, "/api/projects", setProjects, "project")} saving={saving} />
-            ))}
-          </div>
+          <DragDropContext onDragEnd={(res) => handleDragEnd(res, projects, setProjects, "projects")}>
+            <Droppable droppableId="projects">
+              {(provided) => (
+                <div className="record-list" {...provided.droppableProps} ref={provided.innerRef}>
+                  {projects.map((item, index) => (
+                    <Draggable key={item.id} draggableId={item.id} index={index}>
+                      {(provided) => (
+                        <div ref={provided.innerRef} {...provided.draggableProps} style={provided.draggableProps.style}>
+                          <EditableProject project={item} canEdit={canSave} dragHandleProps={provided.dragHandleProps} onSave={(draft) => handleSave(draft, "/api/projects", setProjects, "project")} onDelete={(id) => handleDelete(id, "/api/projects", setProjects, "project")} saving={saving} />
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
         </section>
 
         <section className="editor-panel wide-panel">
@@ -316,11 +363,24 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
               <Plus size={18} /> Add
             </button>
           </div>
-          <div className="record-list">
-            {certificates.map((item) => (
-              <EditableCertificate key={item.id} certificate={item} canEdit={canSave} onSave={(draft) => handleSave(draft, "/api/certificates", setCertificates, "certificate")} onDelete={(id) => handleDelete(id, "/api/certificates", setCertificates, "certificate")} saving={saving} />
-            ))}
-          </div>
+          <DragDropContext onDragEnd={(res) => handleDragEnd(res, certificates, setCertificates, "certificates")}>
+            <Droppable droppableId="certificates">
+              {(provided) => (
+                <div className="record-list" {...provided.droppableProps} ref={provided.innerRef}>
+                  {certificates.map((item, index) => (
+                    <Draggable key={item.id} draggableId={item.id} index={index}>
+                      {(provided) => (
+                        <div ref={provided.innerRef} {...provided.draggableProps} style={provided.draggableProps.style}>
+                          <EditableCertificate certificate={item} canEdit={canSave} dragHandleProps={provided.dragHandleProps} onSave={(draft) => handleSave(draft, "/api/certificates", setCertificates, "certificate")} onDelete={(id) => handleDelete(id, "/api/certificates", setCertificates, "certificate")} saving={saving} />
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
         </section>
 
         <section className="editor-panel wide-panel">
@@ -330,11 +390,24 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
               <Plus size={18} /> Add
             </button>
           </div>
-          <div className="record-list">
-            {posts.map((item) => (
-              <EditablePost key={item.id} post={item} canEdit={canSave} onSave={(draft) => handleSave(draft, "/api/posts", setPosts, "post")} onDelete={(id) => handleDelete(id, "/api/posts", setPosts, "post")} saving={saving} />
-            ))}
-          </div>
+          <DragDropContext onDragEnd={(res) => handleDragEnd(res, posts, setPosts, "posts")}>
+            <Droppable droppableId="posts">
+              {(provided) => (
+                <div className="record-list" {...provided.droppableProps} ref={provided.innerRef}>
+                  {posts.map((item, index) => (
+                    <Draggable key={item.id} draggableId={item.id} index={index}>
+                      {(provided) => (
+                        <div ref={provided.innerRef} {...provided.draggableProps} style={provided.draggableProps.style}>
+                          <EditablePost post={item} canEdit={canSave} dragHandleProps={provided.dragHandleProps} onSave={(draft) => handleSave(draft, "/api/posts", setPosts, "post")} onDelete={(id) => handleDelete(id, "/api/posts", setPosts, "post")} saving={saving} />
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
         </section>
 
         <section className="editor-panel wide-panel">
@@ -344,11 +417,24 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
               <Plus size={18} /> Add
             </button>
           </div>
-          <div className="record-list">
-            {experiences.map((item) => (
-              <EditableExperience key={item.id} experience={item} canEdit={canSave} onSave={(draft) => handleSave(draft, "/api/experiences", setExperiences, "exp")} onDelete={(id) => handleDelete(id, "/api/experiences", setExperiences, "exp")} saving={saving} />
-            ))}
-          </div>
+          <DragDropContext onDragEnd={(res) => handleDragEnd(res, experiences, setExperiences, "experiences")}>
+            <Droppable droppableId="experiences">
+              {(provided) => (
+                <div className="record-list" {...provided.droppableProps} ref={provided.innerRef}>
+                  {experiences.map((item, index) => (
+                    <Draggable key={item.id} draggableId={item.id} index={index}>
+                      {(provided) => (
+                        <div ref={provided.innerRef} {...provided.draggableProps} style={provided.draggableProps.style}>
+                          <EditableExperience experience={item} canEdit={canSave} dragHandleProps={provided.dragHandleProps} onSave={(draft) => handleSave(draft, "/api/experiences", setExperiences, "exp")} onDelete={(id) => handleDelete(id, "/api/experiences", setExperiences, "exp")} saving={saving} />
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
         </section>
 
         <section className="editor-panel wide-panel">
@@ -358,11 +444,24 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
               <Plus size={18} /> Add
             </button>
           </div>
-          <div className="record-list">
-            {educations.map((item) => (
-              <EditableEducation key={item.id} education={item} canEdit={canSave} onSave={(draft) => handleSave(draft, "/api/education", setEducations, "edu")} onDelete={(id) => handleDelete(id, "/api/education", setEducations, "edu")} saving={saving} />
-            ))}
-          </div>
+          <DragDropContext onDragEnd={(res) => handleDragEnd(res, educations, setEducations, "education")}>
+            <Droppable droppableId="education">
+              {(provided) => (
+                <div className="record-list" {...provided.droppableProps} ref={provided.innerRef}>
+                  {educations.map((item, index) => (
+                    <Draggable key={item.id} draggableId={item.id} index={index}>
+                      {(provided) => (
+                        <div ref={provided.innerRef} {...provided.draggableProps} style={provided.draggableProps.style}>
+                          <EditableEducation education={item} canEdit={canSave} dragHandleProps={provided.dragHandleProps} onSave={(draft) => handleSave(draft, "/api/education", setEducations, "edu")} onDelete={(id) => handleDelete(id, "/api/education", setEducations, "edu")} saving={saving} />
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
         </section>
 
       </main>
@@ -370,11 +469,16 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
   );
 }
 
-function EditableExpertise({ expertise, canEdit, onSave, onDelete, saving }) {
+function EditableExpertise({ expertise, canEdit, onSave, onDelete, saving, dragHandleProps }) {
   const [draft, setDraft] = useState({ ...expertise, skills: normalizeList(expertise.skills).join(", ") });
   useEffect(() => { setDraft({ ...expertise, skills: normalizeList(expertise.skills).join(", ") }); }, [expertise]);
   return (
     <article className="record-card">
+      {dragHandleProps && (
+        <div className="drag-handle" {...dragHandleProps} style={{ display: "flex", alignItems: "center", justifyContent: "center", cursor: canEdit ? "grab" : "default", opacity: canEdit ? 1 : 0.3 }}>
+          <GripVertical size={20} />
+        </div>
+      )}
       <div className="record-fields">
         <TextInput label="Category" value={draft.category} onChange={(category) => setDraft({ ...draft, category })} />
         <TextArea label="Description" value={draft.description} onChange={(description) => setDraft({ ...draft, description })} />
@@ -385,11 +489,16 @@ function EditableExpertise({ expertise, canEdit, onSave, onDelete, saving }) {
   );
 }
 
-function EditablePost({ post, canEdit, onSave, onDelete, saving }) {
+function EditablePost({ post, canEdit, onSave, onDelete, saving, dragHandleProps }) {
   const [draft, setDraft] = useState({ ...post, mediaUrls: normalizeList(post.mediaUrls).join(", ") });
   useEffect(() => { setDraft({ ...post, mediaUrls: normalizeList(post.mediaUrls).join(", ") }); }, [post]);
   return (
     <article className="record-card">
+      {dragHandleProps && (
+        <div className="drag-handle" {...dragHandleProps} style={{ display: "flex", alignItems: "center", justifyContent: "center", cursor: canEdit ? "grab" : "default", opacity: canEdit ? 1 : 0.3 }}>
+          <GripVertical size={20} />
+        </div>
+      )}
       <div className="record-fields">
         <TextInput label="Title" value={draft.title} onChange={(title) => setDraft({ ...draft, title })} />
         <TextInput label="Category" value={draft.category} onChange={(category) => setDraft({ ...draft, category })} />
@@ -406,11 +515,16 @@ function EditablePost({ post, canEdit, onSave, onDelete, saving }) {
   );
 }
 
-function EditableEducation({ education, canEdit, onSave, onDelete, saving }) {
+function EditableEducation({ education, canEdit, onSave, onDelete, saving, dragHandleProps }) {
   const [draft, setDraft] = useState({ ...education, skills: normalizeList(education.skills).join(", ") });
   useEffect(() => { setDraft({ ...education, skills: normalizeList(education.skills).join(", ") }); }, [education]);
   return (
     <article className="record-card">
+      {dragHandleProps && (
+        <div className="drag-handle" {...dragHandleProps} style={{ display: "flex", alignItems: "center", justifyContent: "center", cursor: canEdit ? "grab" : "default", opacity: canEdit ? 1 : 0.3 }}>
+          <GripVertical size={20} />
+        </div>
+      )}
       <div className="record-fields">
         <TextInput label="School" value={draft.school || ""} onChange={(school) => setDraft({ ...draft, school })} />
         <TextInput label="Program" value={draft.program || ""} onChange={(program) => setDraft({ ...draft, program })} />
@@ -423,11 +537,16 @@ function EditableEducation({ education, canEdit, onSave, onDelete, saving }) {
   );
 }
 
-function EditableCertificate({ certificate, canEdit, onSave, onDelete, saving }) {
+function EditableCertificate({ certificate, canEdit, onSave, onDelete, saving, dragHandleProps }) {
   const [draft, setDraft] = useState({ ...certificate, skills: normalizeList(certificate.skills).join(", "), mediaUrls: normalizeList(certificate.mediaUrls).join(", ") });
   useEffect(() => { setDraft({ ...certificate, skills: normalizeList(certificate.skills).join(", "), mediaUrls: normalizeList(certificate.mediaUrls).join(", ") }); }, [certificate]);
   return (
     <article className="record-card">
+      {dragHandleProps && (
+        <div className="drag-handle" {...dragHandleProps} style={{ display: "flex", alignItems: "center", justifyContent: "center", cursor: canEdit ? "grab" : "default", opacity: canEdit ? 1 : 0.3 }}>
+          <GripVertical size={20} />
+        </div>
+      )}
       <div className="record-fields">
         <TextInput label="Title" value={draft.title || ""} onChange={(title) => setDraft({ ...draft, title })} />
         <TextInput label="Issuer" value={draft.issuer || ""} onChange={(issuer) => setDraft({ ...draft, issuer })} />
@@ -444,11 +563,16 @@ function EditableCertificate({ certificate, canEdit, onSave, onDelete, saving })
   );
 }
 
-function EditableProject({ project, canEdit, onSave, onDelete, saving }) {
+function EditableProject({ project, canEdit, onSave, onDelete, saving, dragHandleProps }) {
   const [draft, setDraft] = useState({ ...project, skills: normalizeList(project.skills).join(", "), highlights: normalizeList(project.highlights).join(" | "), mediaUrls: normalizeList(project.mediaUrls).join(", ") });
   useEffect(() => { setDraft({ ...project, skills: normalizeList(project.skills).join(", "), highlights: normalizeList(project.highlights).join(" | "), mediaUrls: normalizeList(project.mediaUrls).join(", ") }); }, [project]);
   return (
     <article className="record-card">
+      {dragHandleProps && (
+        <div className="drag-handle" {...dragHandleProps} style={{ display: "flex", alignItems: "center", justifyContent: "center", cursor: canEdit ? "grab" : "default", opacity: canEdit ? 1 : 0.3 }}>
+          <GripVertical size={20} />
+        </div>
+      )}
       <div className="record-fields">
         <TextInput label="Title" value={draft.title || draft.name || ""} onChange={(title) => setDraft({ ...draft, title })} />
         <TextInput label="Language" value={draft.language || ""} onChange={(language) => setDraft({ ...draft, language })} />
@@ -470,11 +594,16 @@ function EditableProject({ project, canEdit, onSave, onDelete, saving }) {
   );
 }
 
-function EditableExperience({ experience, canEdit, onSave, onDelete, saving }) {
+function EditableExperience({ experience, canEdit, onSave, onDelete, saving, dragHandleProps }) {
   const [draft, setDraft] = useState(experience);
   useEffect(() => { setDraft(experience); }, [experience]);
   return (
     <article className="record-card">
+      {dragHandleProps && (
+        <div className="drag-handle" {...dragHandleProps} style={{ display: "flex", alignItems: "center", justifyContent: "center", cursor: canEdit ? "grab" : "default", opacity: canEdit ? 1 : 0.3 }}>
+          <GripVertical size={20} />
+        </div>
+      )}
       <div className="record-fields">
         <TextInput label="Role" value={draft.role || ""} onChange={(role) => setDraft({ ...draft, role })} />
         <TextInput label="Company" value={draft.company || ""} onChange={(company) => setDraft({ ...draft, company })} />

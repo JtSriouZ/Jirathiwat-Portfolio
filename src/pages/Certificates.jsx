@@ -1,6 +1,7 @@
 import { Award, ExternalLink, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { normalizeList, resolveMediaUrl } from "../utils";
+import CertificateVisual from "../components/CertificateVisual";
+import { normalizeList } from "../utils";
 
 export default function Certificates({ content }) {
   const { certificates = [], profile = {} } = content;
@@ -21,37 +22,9 @@ export default function Certificates({ content }) {
         <div className="certificate-grid">
           {certificates.map((certificate) => (
             <article className="certificate-card" key={certificate.id}>
-              {certificate.imageUrl ? (
-                <Link to={`/certificates/${certificate.id}`} style={{ display: "block" }}>
-                  <img src={resolveMediaUrl(certificate.imageUrl)} alt="" loading="lazy" />
-                </Link>
-              ) : (
-                <Link to={`/certificates/${certificate.id}`} style={{ display: "block" }}>
-                  <div style={{
-                    width: "100%",
-                    height: "200px",
-                    background: "linear-gradient(135deg, rgba(0,240,255,0.05) 0%, rgba(0,0,0,0.2) 100%)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderBottom: "1px solid var(--line)"
-                  }}>
-                    <div style={{
-                      width: "64px",
-                      height: "64px",
-                      borderRadius: "50%",
-                      background: "rgba(0,240,255,0.1)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "var(--cyan)",
-                      boxShadow: "0 0 20px rgba(0,240,255,0.15)"
-                    }}>
-                      <Award size={32} strokeWidth={1.5} />
-                    </div>
-                  </div>
-                </Link>
-              )}
+              <Link to={`/certificates/${certificate.id}`} style={{ display: "block" }} aria-label={`Open ${certificate.title}`}>
+                <CertificateVisual certificate={certificate} />
+              </Link>
               <div className="certificate-body">
                 <div className="post-meta">
                   <span>{certificate.issuer || "Certificate"}</span>

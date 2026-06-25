@@ -3,6 +3,7 @@ import { existsSync, readFileSync, promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import crypto from "node:crypto";
+import { get, put } from "@vercel/blob";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -10,9 +11,11 @@ const rootDir = path.resolve(__dirname, "..");
 const dataPath = path.join(rootDir, "data", "content.json");
 const distPath = path.join(rootDir, "dist");
 const publicDir = path.join(rootDir, "public");
-const envPath = path.join(rootDir, ".env");
+const envPaths = [path.join(rootDir, ".env"), path.join(rootDir, ".env.local")];
+const contentBlobPath = "portfolio/content.json";
 
-if (existsSync(envPath)) {
+for (const envPath of envPaths) {
+  if (!existsSync(envPath)) continue;
   const envLines = readFileSync(envPath, "utf8").split(/\r?\n/);
   for (const line of envLines) {
     const match = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/i);
@@ -24,17 +27,45 @@ if (existsSync(envPath)) {
 
 const port = Number(process.env.PORT || 3001);
 const adminPassword = process.env.ADMIN_PASSWORD || "";
-const adminSessions = new Set();
+const adminSessionSecret = process.env.ADMIN_SESSION_SECRET || adminPassword || crypto.randomBytes(32).toString("hex");
+const isVercelRuntime = Boolean(process.env.VERCEL || process.env.VERCEL_ENV);
+const hasBlobStorage = Boolean(process.env.BLOB_READ_WRITE_TOKEN);
 
 const app = express();
 app.use(express.json({ limit: "12mb" }));
 
 async function readContent() {
+  if (hasBlobStorage) {
+    try {
+      const blob = await get(contentBlobPath);
+      const raw = await new Response(blob.stream()).text();
+      return JSON.parse(raw);
+    } catch (error) {
+      if (error?.status !== 404 && error?.statusCode !== 404) {
+        console.warn("Falling back to bundled content because Vercel Blob read failed:", error.message);
+      }
+    }
+  }
+
   const raw = await fs.readFile(dataPath, "utf8");
   return JSON.parse(raw);
 }
 
 async function writeContent(content) {
+  if (hasBlobStorage) {
+    await put(contentBlobPath, `${JSON.stringify(content, null, 2)}\n`, {
+      access: "public",
+      addRandomSuffix: false,
+      allowOverwrite: true,
+      contentType: "application/json"
+    });
+    return;
+  }
+
+  if (isVercelRuntime) {
+    throw new Error("Persistent editing on Vercel requires Vercel Blob. Add BLOB_READ_WRITE_TOKEN in your Vercel environment variables.");
+  }
+
   await fs.mkdir(path.dirname(dataPath), { recursive: true });
   await fs.writeFile(dataPath, `${JSON.stringify(content, null, 2)}\n`, "utf8");
 }
@@ -62,10 +93,35 @@ function normalizeList(value) {
     .filter(Boolean);
 }
 
+function createSessionToken() {
+  const payload = Buffer.from(JSON.stringify({
+    exp: Date.now() + 1000 * 60 * 60 * 12,
+    nonce: crypto.randomBytes(16).toString("hex")
+  })).toString("base64url");
+  const signature = crypto.createHmac("sha256", adminSessionSecret).update(payload).digest("base64url");
+  return `${payload}.${signature}`;
+}
+
+function verifySessionToken(token) {
+  const [payload, signature] = String(token || "").split(".");
+  if (!payload || !signature) return false;
+
+  const expected = crypto.createHmac("sha256", adminSessionSecret).update(payload).digest("base64url");
+  if (signature.length !== expected.length) return false;
+  if (!crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected))) return false;
+
+  try {
+    const session = JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
+    return Number(session.exp) > Date.now();
+  } catch {
+    return false;
+  }
+}
+
 function requireAdmin(req, res, next) {
   const header = String(req.headers.authorization || "");
   const token = header.startsWith("Bearer ") ? header.slice(7) : "";
-  if (token && adminSessions.has(token)) {
+  if (verifySessionToken(token)) {
     return next();
   }
 
@@ -75,12 +131,7 @@ function requireAdmin(req, res, next) {
 app.get("/api/content", async (_req, res, next) => {
   try {
     const content = await readContent();
-    res.json({
-      ...content,
-      posts: sortByDateDesc(content.posts || []),
-      certificates: sortByDateDesc(content.certificates || []),
-      projects: sortByUpdatedDesc(content.projects || [])
-    });
+    res.json(content);
   } catch (error) {
     next(error);
   }
@@ -88,7 +139,11 @@ app.get("/api/content", async (_req, res, next) => {
 
 // Lets the frontend know it's talking to a live local server (not static GitHub Pages).
 app.get("/api/auth/status", (_req, res) => {
-  res.json({ canEdit: true });
+  res.json({
+    canEdit: !isVercelRuntime || hasBlobStorage,
+    runtime: isVercelRuntime ? "vercel" : "local",
+    storage: hasBlobStorage ? "vercel-blob" : "local-file"
+  });
 });
 
 app.post("/api/auth/login", (req, res) => {
@@ -100,14 +155,10 @@ app.post("/api/auth/login", (req, res) => {
     return res.status(401).json({ message: "Incorrect admin password." });
   }
 
-  const token = crypto.randomBytes(32).toString("hex");
-  adminSessions.add(token);
-  res.json({ token });
+  res.json({ token: createSessionToken() });
 });
 
 app.post("/api/auth/logout", requireAdmin, (req, res) => {
-  const token = String(req.headers.authorization || "").replace(/^Bearer\s+/, "");
-  adminSessions.delete(token);
   res.status(204).end();
 });
 
@@ -131,6 +182,51 @@ app.put("/api/profile", requireAdmin, async (req, res, next) => {
   }
 });
 
+app.put("/api/reorder/:section", requireAdmin, async (req, res, next) => {
+  try {
+    const { section } = req.params;
+    const { orderedIds } = req.body;
+    
+    if (!Array.isArray(orderedIds)) {
+      return res.status(400).json({ message: "orderedIds must be an array" });
+    }
+
+    const content = await readContent();
+    const list = content[section];
+    
+    if (!Array.isArray(list)) {
+      return res.status(400).json({ message: "Invalid section or section is not a list" });
+    }
+
+    // Map existing items to a dictionary for quick lookup
+    const itemMap = new Map(list.map(item => [item.id, item]));
+    
+    // Create new array based on orderedIds, keeping any remaining items at the end
+    const reorderedList = [];
+    const usedIds = new Set();
+
+    for (const id of orderedIds) {
+      if (itemMap.has(id)) {
+        reorderedList.push(itemMap.get(id));
+        usedIds.add(id);
+      }
+    }
+
+    // Add any items that were not in the orderedIds (just in case)
+    for (const item of list) {
+      if (!usedIds.has(item.id)) {
+        reorderedList.push(item);
+      }
+    }
+
+    content[section] = reorderedList;
+    await writeContent(content);
+    res.json(content[section]);
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.post("/api/profile/avatar", requireAdmin, async (req, res, next) => {
   try {
     const match = String(req.body.image || "").match(/^data:(image\/(?:png|jpeg|jpg|webp));base64,(.+)$/);
@@ -145,16 +241,30 @@ app.post("/api/profile/avatar", requireAdmin, async (req, res, next) => {
     }
 
     const fileName = `profile-photo-${Date.now()}.${extension}`;
-    await fs.mkdir(publicDir, { recursive: true });
-    await fs.writeFile(path.join(publicDir, fileName), buffer);
+    let avatar = fileName;
+
+    if (hasBlobStorage) {
+      const blob = await put(`portfolio/uploads/${fileName}`, buffer, {
+        access: "public",
+        contentType: match[1]
+      });
+      avatar = blob.url;
+    } else {
+      if (isVercelRuntime) {
+        throw new Error("Image uploads on Vercel require Vercel Blob. Add BLOB_READ_WRITE_TOKEN in your Vercel environment variables.");
+      }
+
+      await fs.mkdir(publicDir, { recursive: true });
+      await fs.writeFile(path.join(publicDir, fileName), buffer);
+    }
 
     const content = await readContent();
     content.profile = {
       ...content.profile,
-      avatar: fileName
+      avatar
     };
     await writeContent(content);
-    res.status(201).json({ avatar: fileName });
+    res.status(201).json({ avatar });
   } catch (error) {
     next(error);
   }
@@ -537,9 +647,18 @@ app.get(/.*/, (_req, res) => {
 
 app.use((error, _req, res, _next) => {
   console.error(error);
-  res.status(500).json({ message: "Something went wrong while saving your portfolio." });
+  const message = String(error?.message || "");
+  res.status(500).json({
+    message: message.includes("Vercel Blob")
+      ? message
+      : "Something went wrong while saving your portfolio."
+  });
 });
 
-app.listen(port, "127.0.0.1", () => {
-  console.log(`Portfolio backend running on http://127.0.0.1:${port}`);
-});
+if (!isVercelRuntime) {
+  app.listen(port, "127.0.0.1", () => {
+    console.log(`Portfolio backend running on http://127.0.0.1:${port}`);
+  });
+}
+
+export default app;

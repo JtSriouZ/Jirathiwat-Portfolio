@@ -1,8 +1,8 @@
 # Jirathiwat Suntipreedatham Portfolio
 
-A futuristic animated portfolio with a small backend editor for profile content, news/posts, and experience.
+A futuristic animated portfolio with an admin editor for profile content, projects, posts, experience, academic history, certificates, and skills.
 
-## Run locally
+## Run Locally
 
 ```bash
 npm install
@@ -12,60 +12,69 @@ npm run dev
 Open:
 
 - Portfolio: `http://127.0.0.1:5173`
-- Editor: `http://127.0.0.1:5173/admin`
+- Editor: `http://127.0.0.1:5173/#/admin`
 
-The editor saves content to `data/content.json`.
+Local editing saves to `data/content.json` and local uploads save into `public/`.
 
 ## Admin Security
 
-Local editing is protected by `ADMIN_PASSWORD` in `.env`.
+Editing is protected by `ADMIN_PASSWORD`.
 
 ```bash
 cp .env.example .env
 ```
 
-Then edit `.env` and set your own password. The `.env` file is ignored by git and should not be pushed.
+Then edit `.env` and set:
 
-Public GitHub Pages builds are static and read-only. They do not expose the local backend edit APIs.
-
-## Add Images and YouTube Videos
-
-Open the local editor at `http://127.0.0.1:5173/#/admin`.
-
-- For post images, paste a public image URL into `Image URL`.
-- For YouTube embeds, paste a normal YouTube watch URL or short `youtu.be` URL into `YouTube URL`.
-- For project cards, edit the `Projects` section and add repository, live site, image, language, and description fields.
-
-After editing, commit the changed `data/content.json` and push to publish the updated static site.
-
-## Publish to GitHub Pages
-
-This project includes a GitHub Actions workflow at `.github/workflows/deploy.yml`.
-
-1. Push the repository to GitHub.
-2. Go to your repository settings.
-3. Open `Pages`.
-4. Set the source to `GitHub Actions`.
-5. Push to `main`.
-
-The workflow will build and publish the site to:
-
-```text
-https://<your-github-username>.github.io/Jirathiwat-Portfolio/
+```env
+ADMIN_PASSWORD=Jirathiwat999
 ```
 
-GitHub Pages is static, so it cannot run the Express backend. Use `npm run dev` locally to edit profile, posts, and experience, then commit the changed `data/content.json` and push again.
+The `.env` file is ignored by git and should not be pushed.
+
+## Deploy To Vercel
+
+This project is now Vercel-ready. Vercel serves the Vite frontend from `dist/` and runs the backend through `api/index.js`.
+
+In Vercel, set these Environment Variables:
+
+```env
+ADMIN_PASSWORD=Jirathiwat999
+BLOB_READ_WRITE_TOKEN=<your-vercel-blob-token>
+```
+
+`BLOB_READ_WRITE_TOKEN` is required for production admin edits and profile image uploads to persist. Without it, the deployed site still displays the bundled `data/content.json`, but the admin panel stays read-only.
+
+Recommended Vercel settings:
+
+- Framework preset: `Vite`
+- Build command: `npm run build`
+- Output directory: `dist`
+
+The included `vercel.json` already routes `/api/*` to the backend function and all other routes to the React app.
+
+## Add Images And YouTube Videos
+
+Open the editor at `/#/admin`.
+
+- For post, project, and certificate images, paste a public image URL into `Image URL`.
+- For profile photo uploads, use the profile image uploader.
+- For YouTube embeds, paste a normal YouTube watch URL, Shorts URL, or short `youtu.be` URL.
+- For galleries, paste media URLs into `Media URLs`.
 
 ## Build
 
 ```bash
 npm run build
-npm run server
 ```
 
-The production server runs on `http://127.0.0.1:5174` by default.
+For an old static-only build:
 
-For a local GitHub Pages-style build:
+```bash
+npm run build:static
+```
+
+For the previous GitHub Pages base-path build:
 
 ```bash
 npm run build:pages
