@@ -92,7 +92,6 @@ export function getSkillIconUrl(skillName) {
     "figma": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg",
     "adobe photoshop": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/photoshop/photoshop-original.svg",
     "adobe premiere pro": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/premierepro/premierepro-original.svg",
-    "capcut": "https://upload.wikimedia.org/wikipedia/commons/d/d8/CapCut_logo.svg",
     "davinci resolve": "https://upload.wikimedia.org/wikipedia/commons/9/90/DaVinci_Resolve_17_logo.svg",
     "adobe lightroom": "https://upload.wikimedia.org/wikipedia/commons/b/b6/Adobe_Photoshop_Lightroom_CC_logo.svg",
     "chatgpt": "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg",
@@ -101,9 +100,8 @@ export function getSkillIconUrl(skillName) {
     "gemini": "https://cdn.simpleicons.org/googlegemini/8E75B2",
     "codex": "https://cdn.simpleicons.org/openai/FFFFFF",
     "antigravity": "https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg",
-    "midjourney": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Midjourney_Emblem.png",
     "github copilot": "https://cdn.simpleicons.org/githubcopilot/FFFFFF",
-    "cursor": "https://upload.wikimedia.org/wikipedia/commons/4/42/Cursor_logo.svg",
+    "cursor": "https://cdn.simpleicons.org/cursor/FFFFFF",
     "blender": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Blender_logo_no_text.svg"
   };
 
