@@ -140,13 +140,6 @@
       "company": "Faculty of Information and Communication Technology, Mahidol University",
       "period": "Mar 2026 - Present",
       "description": "Developed advanced academic projects across real-time computer vision, operating-system-aware AI optimization, hybrid recommendation engines, and full-stack e-commerce systems."
-    },
-    {
-      "id": "exp-portfolio",
-      "role": "Portfolio Owner",
-      "company": "Personal Lab",
-      "period": "2026 - Present",
-      "description": "Built a futuristic portfolio system with animated presentation, media posts, YouTube embeds, GitHub project cards, and a local backend editor prepared for GitHub Pages publishing."
     }
   ],
   "education": [
@@ -325,69 +318,6 @@
         "Hybrid database system",
         "Fully responsive mobile-first design",
         "Live production deployment on Render"
-      ]
-    },
-    {
-      "id": "project-unittest",
-      "name": "2025-ITCS224-UnitTest-6788122",
-      "description": "A Python unit testing repository connected to ITCS224 coursework.",
-      "language": "Python",
-      "repoUrl": "https://github.com/JirathiwatSun/2025-ITCS224-UnitTest-6788122",
-      "liveUrl": "",
-      "imageUrl": "https://opengraph.githubassets.com/jirathiwat-portfolio/JirathiwatSun/2025-ITCS224-UnitTest-6788122",
-      "updated": "2026-04-09",
-      "featuredRank": 4,
-      "period": "2025 - 2026",
-      "associated": "Mahidol University",
-      "skills": [
-        "Python",
-        "Unit Testing"
-      ],
-      "highlights": [
-        "Coursework-focused testing project",
-        "Python test design and validation"
-      ]
-    },
-    {
-      "id": "project-toy",
-      "name": "ITCS224-toy-project",
-      "description": "A toy project repository connected to ITCS224 coursework and software experimentation.",
-      "language": "Course Project",
-      "repoUrl": "https://github.com/JirathiwatSun/ITCS224-toy-project",
-      "liveUrl": "",
-      "imageUrl": "https://opengraph.githubassets.com/jirathiwat-portfolio/JirathiwatSun/ITCS224-toy-project",
-      "updated": "2026-04-03",
-      "featuredRank": 5,
-      "period": "2026",
-      "associated": "Mahidol University",
-      "skills": [
-        "Software Development",
-        "Course Project"
-      ],
-      "highlights": [
-        "Academic software project",
-        "Repository-based development practice"
-      ]
-    },
-    {
-      "id": "project-os",
-      "name": "ITCS225 Principles of Operating Systems",
-      "description": "A Java repository for principles of operating systems coursework.",
-      "language": "Java",
-      "repoUrl": "https://github.com/JirathiwatSun/ITCS225_Principles-of-Operating-Systems",
-      "liveUrl": "",
-      "imageUrl": "https://opengraph.githubassets.com/jirathiwat-portfolio/JirathiwatSun/ITCS225_Principles-of-Operating-Systems",
-      "updated": "2026-02-22",
-      "featuredRank": 6,
-      "period": "2026",
-      "associated": "Mahidol University",
-      "skills": [
-        "Java",
-        "Operating Systems"
-      ],
-      "highlights": [
-        "Operating systems coursework",
-        "Java implementation practice"
       ]
     }
   ]
