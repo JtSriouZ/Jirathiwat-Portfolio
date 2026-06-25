@@ -585,7 +585,7 @@ function App() {
             >
               <Globe size={18} />
             </button>
-            {!isStaticSite && (
+            {import.meta.env.DEV && !isStaticSite && (
               <Link className="ghost-button nav-admin" to="/admin" onClick={handleNavClick}>
                 <Edit3 size={16} />
                 Admin

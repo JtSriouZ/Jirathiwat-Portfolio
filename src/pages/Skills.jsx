@@ -70,7 +70,7 @@ export default function Skills({ content }) {
               <Code size={20} />
               Expertise
             </div>
-            <h2 style={{ fontSize: "clamp(3rem, 6vw, 4.5rem)", fontWeight: "800", letterSpacing: "-0.02em", marginTop: "0.5rem" }}>
+            <h2 style={{ fontSize: "clamp(2rem, 8vw, 4.5rem)", fontWeight: "800", letterSpacing: "-0.02em", marginTop: "0.5rem" }}>
               {profile.headings?.skillsTitle || "Skills & Technologies"}
             </h2>
             <p style={{ maxWidth: "700px", margin: "1.5rem auto 0", color: "var(--text-muted)", fontSize: "1.25rem", lineHeight: "1.6" }}>

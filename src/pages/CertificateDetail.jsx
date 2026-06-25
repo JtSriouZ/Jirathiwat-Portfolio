@@ -47,7 +47,7 @@ export default function CertificateDetail({ content }) {
             </span>
           </div>
           
-          <h1 style={{ fontSize: "2.5rem", marginBottom: "1.5rem" }}>{certificate.title}</h1>
+          <h1 style={{ marginBottom: "1.5rem" }}>{certificate.title}</h1>
           
           <div className="project-actions" style={{ marginBottom: "2rem" }}>
             {certificate.credentialUrl && (

@@ -219,6 +219,19 @@ button[aria-busy="true"] {
   padding: 10px;
   border: 1px solid color-mix(in srgb, var(--page-accent) 42%, transparent);
   border-radius: 8px;
+  background: transparent;
+  animation: borderFlow 10s linear infinite;
+  box-shadow:
+    0 16px 54px rgba(0, 0, 0, 0.4),
+    0 0 32px color-mix(in srgb, var(--page-accent) 14%, transparent);
+}
+
+.topbar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
   background: linear-gradient(
     90deg,
     color-mix(in srgb, var(--page-accent) 25%, rgba(5, 7, 13, 0.85)),
@@ -227,11 +240,8 @@ button[aria-busy="true"] {
     color-mix(in srgb, var(--page-accent) 25%, rgba(5, 7, 13, 0.85))
   );
   background-size: 300% 100%;
-  animation: borderFlow 10s linear infinite;
-  box-shadow:
-    0 16px 54px rgba(0, 0, 0, 0.4),
-    0 0 32px color-mix(in srgb, var(--page-accent) 14%, transparent);
   backdrop-filter: blur(22px) saturate(1.25);
+  -webkit-backdrop-filter: blur(22px) saturate(1.25);
 }
 
 /* The <nav> inside header fills the bar and spaces its children */
@@ -2748,6 +2758,17 @@ body {
   font-size: clamp(2.2rem, 6vw, 4.8rem);
 }
 
+.drag-handle {
+  touch-action: none;
+  padding: 0.5rem;
+  color: var(--text-muted);
+  cursor: grab;
+  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .save-message {
   margin: 0;
   color: var(--green);
@@ -3129,8 +3150,7 @@ body {
     display: flex;
   }
 
-  .nav-link-group,
-  .nav-actions {
+  .nav-link-group {
     display: grid;
     grid-template-columns: 1fr;
   }
@@ -3140,8 +3160,7 @@ body {
   }
 
   .nav-links a,
-  .nav-links button,
-  .nav-actions .nav-icon {
+  .nav-links button {
     width: 100%;
     justify-content: center;
   }

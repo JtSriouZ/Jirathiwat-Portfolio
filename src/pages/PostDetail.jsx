@@ -48,7 +48,7 @@ export default function PostDetail({ content }) {
             </span>
           </div>
           
-          <h1 style={{ fontSize: "2.5rem", marginBottom: "1.5rem" }}>{post.title}</h1>
+          <h1 style={{ marginBottom: "1.5rem" }}>{post.title}</h1>
 
           {post.externalUrl && (
             <div className="project-actions" style={{ marginBottom: "2rem" }}>

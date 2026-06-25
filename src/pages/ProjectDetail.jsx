@@ -54,7 +54,7 @@ export default function ProjectDetail({ content }) {
             )}
           </div>
           
-          <h1 style={{ fontSize: "2.5rem", marginBottom: "1.5rem" }}>{project.name}</h1>
+          <h1 style={{ marginBottom: "1.5rem" }}>{project.name}</h1>
           
           <div className="project-actions" style={{ marginBottom: "2rem" }}>
             {project.repoUrl && (
