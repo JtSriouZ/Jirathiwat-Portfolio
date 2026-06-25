@@ -34,11 +34,11 @@ function SkillCard({ skill }) {
         <img 
           src={getSkillIconUrl(skill)} 
           alt={skill} 
-          style={{ width: "40px", height: "40px" }}
+          style={{ width: "48px", height: "48px", objectFit: "contain" }}
           onError={() => setError(true)}
         />
       ) : (
-        <div style={{ width: "40px", height: "40px", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", transition: "all 0.2s ease" }} className="fallback-icon">
+        <div style={{ width: "48px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", transition: "all 0.2s ease" }} className="fallback-icon">
           {getFallbackIcon(skill)}
         </div>
       )}
