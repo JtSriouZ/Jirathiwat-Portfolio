@@ -19,7 +19,7 @@ export default function Certificates({ content }) {
             <p className="section-note">{profile.headings?.certificatesDesc || "A collection of my professional licenses, certificates, and achievements."}</p>
           </div>
         </div>
-        <div className="certificate-grid">
+        <div className="certificate-grid card-masonry">
           {certificates.map((certificate) => (
             <article className="certificate-card" key={certificate.id}>
               <Link to={`/certificates/${certificate.id}`} style={{ display: "block" }} aria-label={`Open ${certificate.title}`}>

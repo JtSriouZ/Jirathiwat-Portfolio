@@ -20,6 +20,29 @@ export function getYoutubeEmbedUrl(url) {
   return "";
 }
 
+export function isImageUrl(url) {
+  if (!url) return false;
+  if (/^(data:image|blob:)/i.test(url)) return true;
+
+  try {
+    const base = typeof window !== "undefined" ? window.location?.origin : "http://localhost";
+    const parsed = new URL(url, base || "http://localhost");
+    return /\.(avif|bmp|gif|ico|jpe?g|png|svg|webp)$/i.test(parsed.pathname);
+  } catch {
+    return /\.(avif|bmp|gif|ico|jpe?g|png|svg|webp)(\?.*)?$/i.test(String(url));
+  }
+}
+
+export function getUrlLabel(url) {
+  if (!url) return "Open link";
+  try {
+    const parsed = new URL(url);
+    return parsed.hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+}
+
 export function normalizeList(value) {
   if (Array.isArray(value)) return value;
   return String(value || "")
@@ -49,10 +72,10 @@ function skillIconUrl(fileName) {
 }
 
 function faviconUrl(domain) {
-  return `https://icons.duckduckgo.com/ip3/${domain}.ico`;
+  return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
 }
 
-export function getSkillIconUrl(skillName) {
+export function getSkillIconUrls(skillName) {
   const normalized = skillName.toLowerCase().trim();
   const aliases = {
     "react": "react.js",
@@ -107,7 +130,7 @@ export function getSkillIconUrl(skillName) {
   ]);
 
   if (conceptualSkills.has(key)) {
-    return "";
+    return [];
   }
   
   const deviconUrls = {
@@ -206,50 +229,45 @@ export function getSkillIconUrl(skillName) {
     "adobe after effects": skillIconUrl("AfterEffects"),
     "davinci resolve": faviconUrl("blackmagicdesign.com/products/davinciresolve"),
     "adobe lightroom": faviconUrl("adobe.com/products/photoshop-lightroom.html"),
-    "chatgpt": faviconUrl("chatgpt.com"),
-    "claude": faviconUrl("claude.ai"),
-    "claude code": faviconUrl("claude.ai"),
-    "gemini": faviconUrl("gemini.google.com"),
-    "codex": faviconUrl("openai.com"),
+    "chatgpt": "https://cdn.simpleicons.org/openai",
+    "claude": "https://cdn.simpleicons.org/anthropic",
+    "claude code": "https://cdn.simpleicons.org/anthropic",
+    "gemini": "https://cdn.simpleicons.org/googlegemini",
+    "codex": "https://cdn.simpleicons.org/openai",
     "antigravity": faviconUrl("deepmind.google"),
     "ubuntu": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/ubuntu/ubuntu-original.svg",
-    "github copilot": faviconUrl("github.com/features/copilot"),
-    "cursor": faviconUrl("cursor.com"),
-    "perplexity": faviconUrl("perplexity.ai"),
-    "anthropic": faviconUrl("anthropic.com"),
+    "github copilot": "https://cdn.simpleicons.org/githubcopilot",
+    "cursor": "https://cdn.simpleicons.org/cursor",
+    "perplexity": "https://cdn.simpleicons.org/perplexity",
+    "anthropic": "https://cdn.simpleicons.org/anthropic",
     "v0": faviconUrl("v0.dev"),
     "bolt": faviconUrl("bolt.new"),
     "replit": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/replit/replit-original.svg",
-    "blender": skillIconUrl("Blender-Dark"),
-    "midjourney": faviconUrl("midjourney.com"),
+    "blender": "https://cdn.simpleicons.org/blender",
+    "midjourney": "https://cdn.simpleicons.org/midjourney",
     "shapr3d": faviconUrl("shapr3d.com"),
-    "fusion 360": faviconUrl("autodesk.com/products/fusion-360/overview"),
-    "sketchup": skillIconUrl("Sketchup-Dark"),
+    "fusion 360": "https://cdn.simpleicons.org/autodesk",
+    "sketchup": "https://cdn.simpleicons.org/sketchup",
     "unity": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/unity/unity-original.svg",
     "unreal engine": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/unrealengine/unrealengine-original.svg",
-    "autocad": skillIconUrl("AutoCAD-Dark"),
-    "proxmox": faviconUrl("proxmox.com"),
+    "autocad": "https://cdn.simpleicons.org/autocad",
+    "proxmox": "https://cdn.simpleicons.org/proxmox",
     "cisco": resolveMediaUrl("logos/cisco.png"),
     "wireshark": resolveMediaUrl("logos/wireshark.png"),
     "capcut": resolveMediaUrl("logos/capcut.png"),
-    "obs studio": faviconUrl("obsproject.com"),
-    "cloudflare": skillIconUrl("Cloudflare-Dark"),
-    "tailscale": faviconUrl("tailscale.com"),
-    "wireguard": faviconUrl("wireguard.com"),
-    "pfsense": faviconUrl("pfsense.org"),
-    "truenas": faviconUrl("truenas.com"),
-    "virtualbox": faviconUrl("virtualbox.org"),
-    "vmware": faviconUrl("vmware.com"),
-    "socket.io": faviconUrl("socket.io"),
-    "jwt": faviconUrl("jwt.io"),
+    "obs studio": "https://cdn.simpleicons.org/obsstudio",
+    "cloudflare": "https://cdn.simpleicons.org/cloudflare",
+    "tailscale": "https://cdn.simpleicons.org/tailscale",
+    "wireguard": "https://cdn.simpleicons.org/wireguard",
+    "pfsense": "https://cdn.simpleicons.org/pfsense",
+    "truenas": "https://cdn.simpleicons.org/truenas",
+    "virtualbox": "https://cdn.simpleicons.org/virtualbox",
+    "vmware": "https://cdn.simpleicons.org/vmware",
+    "socket.io": "https://cdn.simpleicons.org/socketdotio",
+    "jwt": "https://cdn.simpleicons.org/jsonwebtokens",
     "websocket": ""
   };
 
-  if (deviconUrls[key]) {
-    return deviconUrls[key];
-  }
-  
-  // Fallback to reliable colored assets for tools that are not in Devicon.
   const simpleIconsMapping = {
     "yolo": faviconUrl("ultralytics.com"),
     "hugging face": "https://huggingface.co/front/assets/huggingface_logo-noborder.svg",
@@ -257,5 +275,33 @@ export function getSkillIconUrl(skillName) {
     "firebase": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg"
   };
   
-  return simpleIconsMapping[key] || "";
+  const urlSafe = key.replace(/\s+/g, "").replace(/[^a-z0-9-]/g, "");
+
+  const urls = [];
+
+  // 1. Try colored PNGs from Clearbit API first
+  urls.push(`https://logo.clearbit.com/${urlSafe}.com`);
+  urls.push(`https://logo.clearbit.com/${urlSafe}.io`);
+  urls.push(`https://logo.clearbit.com/${urlSafe}.dev`);
+  urls.push(`https://logo.clearbit.com/${urlSafe}.ai`);
+  urls.push(`https://logo.clearbit.com/${urlSafe}.app`);
+
+  // 2. Exact matched SVGs (Devicon / Tandpfun)
+  if (deviconUrls[key]) urls.push(deviconUrls[key]);
+  if (simpleIconsMapping[key]) urls.push(simpleIconsMapping[key]);
+
+  // 3. General SVGs
+  urls.push(`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${urlSafe}/${urlSafe}-original.svg`);
+  urls.push(`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${urlSafe}/${urlSafe}-plain.svg`);
+  urls.push(`https://cdn.simpleicons.org/${urlSafe}`);
+
+  // 4. Favicon fallbacks
+  urls.push(`https://www.google.com/s2/favicons?domain=${urlSafe}.com&sz=128`);
+  urls.push(`https://www.google.com/s2/favicons?domain=${urlSafe}.dev&sz=128`);
+  urls.push(`https://www.google.com/s2/favicons?domain=${urlSafe}.io&sz=128`);
+  urls.push(`https://www.google.com/s2/favicons?domain=${urlSafe}.ai&sz=128`);
+  urls.push(`https://www.google.com/s2/favicons?domain=${urlSafe}.app&sz=128`);
+
+  // Deduplicate and filter empty
+  return [...new Set(urls.filter(Boolean))];
 }

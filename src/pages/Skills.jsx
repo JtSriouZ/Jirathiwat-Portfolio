@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Terminal, Code, Cpu, Database, Layout, Box, Network, Code2, Globe, Braces, Cloud, BarChart, Sparkles, MonitorPlay, Cuboid } from "lucide-react";
-import { getSkillIconUrl, normalizeList } from "../utils";
+import { getSkillIconUrls, normalizeList } from "../utils";
 
 function getCategoryIcon(categoryId) {
   if (categoryId.includes("ai")) return <Cpu size={24} />;
@@ -33,16 +33,20 @@ function getFallbackIcon(skill) {
 }
 
 function SkillCard({ skill }) {
-  const [error, setError] = useState(false);
-  const iconUrl = error ? "" : getSkillIconUrl(skill);
+  const urls = getSkillIconUrls(skill);
+  const [urlIndex, setUrlIndex] = useState(0);
+  
+  // If we exhaust the array, fallback
+  const currentUrl = urlIndex < urls.length ? urls[urlIndex] : "";
+
   return (
     <div className="skill-card">
-      {iconUrl ? (
+      {currentUrl ? (
         <img 
-          src={iconUrl} 
+          src={currentUrl} 
           alt={skill} 
           style={{ width: "48px", height: "48px", objectFit: "contain" }}
-          onError={() => setError(true)}
+          onError={() => setUrlIndex(i => i + 1)}
         />
       ) : (
         <div style={{ width: "48px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", transition: "all 0.2s ease" }} className="fallback-icon">
@@ -62,12 +66,14 @@ export default function Skills({ content }) {
       <section className="section skills-section reveal is-visible" id="skills">
         <div className="section-heading" style={{ marginBottom: "3rem", textAlign: "center", justifyContent: "center" }}>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <div className="section-kicker" style={{ justifyContent: "center" }}>
-              <Code size={18} />
+            <div className="section-kicker" style={{ justifyContent: "center", fontSize: "0.95rem" }}>
+              <Code size={20} />
               Expertise
             </div>
-            <h2 style={{ fontSize: "2.5rem" }}>{profile.headings?.skillsTitle || "Skills & Technologies"}</h2>
-            <p style={{ maxWidth: "600px", margin: "1rem auto 0", color: "var(--text-muted)" }}>
+            <h2 style={{ fontSize: "clamp(3rem, 6vw, 4.5rem)", fontWeight: "800", letterSpacing: "-0.02em", marginTop: "0.5rem" }}>
+              {profile.headings?.skillsTitle || "Skills & Technologies"}
+            </h2>
+            <p style={{ maxWidth: "700px", margin: "1.5rem auto 0", color: "var(--text-muted)", fontSize: "1.25rem", lineHeight: "1.6" }}>
               {profile.headings?.skillsDesc || "A comprehensive overview of my technical stack, frameworks, and core competencies."}
             </p>
           </div>
@@ -90,7 +96,7 @@ export default function Skills({ content }) {
                 </div>
               </div>
               
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: "1rem" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: "1rem", alignItems: "start" }}>
                 {normalizeList(category.skills).map((skill) => (
                   <SkillCard key={skill} skill={skill} />
                 ))}

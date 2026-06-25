@@ -149,9 +149,9 @@ function AnimatedBackgroundCanvas({ routeKey }) {
       particles = Array.from({ length: count }, (_, index) => ({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.16,
-        vy: (Math.random() - 0.5) * 0.16,
-        size: 0.7 + Math.random() * 1.6,
+        vx: (Math.random() - 0.5) * 0.45,
+        vy: (Math.random() - 0.5) * 0.45,
+        size: 1.0 + Math.random() * 2.5,
         pulse: Math.random() * Math.PI * 2,
         colorIndex: index % 3,
       }));
@@ -192,25 +192,25 @@ function AnimatedBackgroundCanvas({ routeKey }) {
       }
 
       drawNebula(
-        width * (0.18 + Math.sin(seconds * 0.12) * 0.035),
-        height * (0.18 + Math.cos(seconds * 0.11) * 0.025),
-        Math.max(width, height) * 0.46,
+        width * (0.18 + Math.sin(seconds * 0.35) * 0.08),
+        height * (0.18 + Math.cos(seconds * 0.28) * 0.08),
+        Math.max(width, height) * 0.52,
         palette.accentThree,
-        0.18
+        0.22
       );
       drawNebula(
-        width * (0.82 + Math.cos(seconds * 0.1) * 0.03),
-        height * (0.3 + Math.sin(seconds * 0.13) * 0.03),
-        Math.max(width, height) * 0.42,
+        width * (0.82 + Math.cos(seconds * 0.3) * 0.07),
+        height * (0.3 + Math.sin(seconds * 0.38) * 0.07),
+        Math.max(width, height) * 0.48,
         palette.accent,
-        0.16
+        0.20
       );
       drawNebula(
-        width * 0.52,
-        height * (0.85 + Math.sin(seconds * 0.09) * 0.04),
-        Math.max(width, height) * 0.38,
+        width * 0.52 + Math.cos(seconds * 0.22) * width * 0.1,
+        height * (0.85 + Math.sin(seconds * 0.26) * 0.08),
+        Math.max(width, height) * 0.44,
         palette.accentTwo,
-        0.1
+        0.16
       );
 
       const cursorGlow = context.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, Math.max(width, height) * 0.22);
@@ -222,8 +222,8 @@ function AnimatedBackgroundCanvas({ routeKey }) {
 
       const laneColors = [palette.accent, palette.accentTwo, palette.accentThree];
       const drawPerspectiveGrid = () => {
-        const horizon = height * 0.58;
-        const vanishingX = width * 0.52 + Math.sin(seconds * 0.16) * width * 0.04;
+        const horizon = height * 0.25;
+        const vanishingX = width * 0.52 + Math.sin(seconds * 0.4) * width * 0.08;
         const floorBottom = height + 80;
         const floorTop = horizon;
         const columns = 18;
@@ -235,7 +235,7 @@ function AnimatedBackgroundCanvas({ routeKey }) {
         context.shadowColor = palette.accentTwo;
 
         for (let index = -columns; index <= columns; index += 1) {
-          const bottomX = width * 0.5 + index * (width / columns) * 0.68;
+          const bottomX = width * 0.5 + index * (width / columns) * 1.6;
           context.globalAlpha = 0.09;
           context.strokeStyle = alphaColor(index % 2 === 0 ? palette.accentTwo : palette.accent, 0.95);
           context.lineWidth = index === 0 ? 1.35 : 0.75;
@@ -249,7 +249,7 @@ function AnimatedBackgroundCanvas({ routeKey }) {
           const progress = row / rows;
           const eased = progress * progress;
           const y = floorTop + eased * (floorBottom - floorTop);
-          const halfWidth = (width * 0.06) + eased * width * 0.76;
+          const halfWidth = (width * 0.04) + eased * width * 1.6;
           const wave = Math.sin(seconds * 1.4 + row * 0.55) * 3;
           context.globalAlpha = 0.02 + Math.pow(progress, 1.45) * 0.2;
           context.strokeStyle = alphaColor(row % 2 === 0 ? palette.accent : palette.accentTwo, 0.95);
@@ -266,15 +266,15 @@ function AnimatedBackgroundCanvas({ routeKey }) {
 
       drawPerspectiveGrid();
 
-      for (let ring = 0; ring < 4; ring += 1) {
-        const x = width * (0.22 + ring * 0.18) + Math.sin(seconds * 0.2 + ring) * 24;
-        const y = height * (0.18 + (ring % 2) * 0.48) + Math.cos(seconds * 0.16 + ring) * 18;
-        const radius = 42 + ring * 16 + Math.sin(seconds * 0.7 + ring) * 8;
-        context.globalAlpha = 0.16;
+      for (let ring = 0; ring < 6; ring += 1) {
+        const x = width * (0.15 + ring * 0.14) + Math.sin(seconds * 0.45 + ring) * 45;
+        const y = height * (0.15 + (ring % 2) * 0.5) + Math.cos(seconds * 0.38 + ring) * 35;
+        const radius = 50 + ring * 22 + Math.sin(seconds * 1.2 + ring) * 15;
+        context.globalAlpha = 0.22;
         context.strokeStyle = laneColors[(ring + 1) % laneColors.length];
-        context.lineWidth = 1;
+        context.lineWidth = 1.5;
         context.beginPath();
-        context.arc(x, y, radius, seconds * 0.28, seconds * 0.28 + Math.PI * 1.35);
+        context.arc(x, y, radius, seconds * 0.4, seconds * 0.4 + Math.PI * 1.5);
         context.stroke();
       }
 
@@ -296,9 +296,9 @@ function AnimatedBackgroundCanvas({ routeKey }) {
           const dx = first.x - second.x;
           const dy = first.y - second.y;
           const distance = Math.hypot(dx, dy);
-          if (distance > 128) continue;
+          if (distance > 170) continue;
 
-          context.globalAlpha = (1 - distance / 128) * 0.24;
+          context.globalAlpha = (1 - distance / 170) * 0.38;
           context.strokeStyle = a % 2 === 0 ? palette.accent : palette.accentTwo;
           context.lineWidth = 0.85;
           context.beginPath();
@@ -376,6 +376,7 @@ function App() {
       ".project-card",
       ".certificate-card",
       ".post-card",
+      ".home-post-card",
       ".timeline-item",
       ".education-card",
       ".skill-card",
@@ -544,10 +545,12 @@ function App() {
   }
 
   const { profile } = content;
-  const routeKey = location.pathname.split("/").filter(Boolean)[0] || "home";
+  const pathParts = location.pathname.split("/").filter(Boolean);
+  const routeKey = pathParts[0] || "home";
+  const subRouteKey = pathParts.join("-") || "home";
 
   return (
-    <div className={`portfolio page-${routeKey}`}>
+    <div className={`portfolio page-${routeKey} route-${subRouteKey}`}>
       <div className="page-motion-bg" aria-hidden="true">
         <AnimatedBackgroundCanvas routeKey={routeKey} />
       </div>
@@ -627,31 +630,51 @@ function App() {
         </Routes>
 
         <footer className="site-footer">
-          <div>
+          <span className="footer-orbit footer-orbit-one" aria-hidden="true" />
+          <span className="footer-orbit footer-orbit-two" aria-hidden="true" />
+          <span className="footer-scanline" aria-hidden="true" />
+          <div className="footer-brand">
             <Link className="brand" to="/" aria-label="Jirathiwat home">
               <Zap size={28} color="var(--cyan)" />
               <strong>Jirathiwat</strong>
             </Link>
             <p>Software Engineer, AI &amp; Full-Stack Developer in Bangkok City, Thailand.</p>
+            <div className="footer-signal" aria-label="Portfolio system online">
+              <span />
+              Portfolio system online
+            </div>
           </div>
-          <div className="footer-links">
-            <Link to="/projects">Projects</Link>
-            <Link to="/certificates">Certificates</Link>
-            <Link to="/skills">Skills</Link>
-            <Link to="/about">About</Link>
-            <Link to="/blog">Blog</Link>
-            <a href={profile.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn"><Linkedin size={18} /></a>
-            <a href={profile.github} target="_blank" rel="noreferrer" aria-label="GitHub"><Github size={18} /></a>
-            {profile.instagram && <a href={profile.instagram} target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram size={18} /></a>}
-            {profile.email && <a href={`mailto:${profile.email}`} aria-label="Email"><Mail size={18} /></a>}
+          <div className="footer-section">
+            <h2>Explore</h2>
+            <div className="footer-links">
+              <Link to="/projects">Projects</Link>
+              <Link to="/certificates">Certificates</Link>
+              <Link to="/skills">Skills</Link>
+              <Link to="/about">About</Link>
+              <Link to="/blog">Blog</Link>
+            </div>
           </div>
-          <button
-            className="ghost-button"
-            onClick={() => navigator.clipboard?.writeText(window.location.href)}
-          >
-            <Share2 size={16} />
-            Copy Link
-          </button>
+          <div className="footer-actions">
+            <div className="footer-section">
+              <h2>Connect</h2>
+              <div className="footer-socials">
+                <a href={profile.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn"><Linkedin size={18} /></a>
+                <a href={profile.github} target="_blank" rel="noreferrer" aria-label="GitHub"><Github size={18} /></a>
+                {profile.instagram && <a href={profile.instagram} target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram size={18} /></a>}
+                {profile.email && <a href={`mailto:${profile.email}`} aria-label="Email"><Mail size={18} /></a>}
+              </div>
+            </div>
+            <div className="footer-section footer-action">
+              <h2>Share</h2>
+              <button
+                className="ghost-button"
+                onClick={() => navigator.clipboard?.writeText(window.location.href)}
+              >
+                <Share2 size={16} />
+                Copy Link
+              </button>
+            </div>
+          </div>
         </footer>
       </main>
 

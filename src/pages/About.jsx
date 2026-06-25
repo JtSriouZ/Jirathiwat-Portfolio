@@ -1,13 +1,40 @@
+import { useState, useEffect } from "react";
 import { Code2, BriefcaseBusiness, GraduationCap, MapPin, Sparkles, Github, Linkedin, Instagram, Mail } from "lucide-react";
 import { normalizeList, resolveMediaUrl } from "../utils";
+
+function AnimatedNumber({ value }) {
+  const [displayValue, setDisplayValue] = useState("00");
+  
+  useEffect(() => {
+    const targetStr = String(value).padStart(2, "0");
+    let frame = 0;
+    const maxFrames = 40; // ~600ms of random numbers
+    
+    const timer = setInterval(() => {
+      frame++;
+      if (frame >= maxFrames) {
+        setDisplayValue(targetStr);
+        clearInterval(timer);
+      } else {
+        // Generate random 2-digit number
+        const randomNum = Math.floor(Math.random() * 99);
+        setDisplayValue(String(randomNum).padStart(2, "0"));
+      }
+    }, 30);
+    
+    return () => clearInterval(timer);
+  }, [value]);
+
+  return <>{displayValue}</>;
+}
 
 export default function About({ content }) {
   const { profile, experiences, education = [] } = content;
   const skills = normalizeList(profile.skills);
   const aboutStats = [
-    { value: String(experiences.length).padStart(2, "0"), label: "Experience" },
-    { value: String(education.length).padStart(2, "0"), label: "Academic" },
-    { value: String(skills.length).padStart(2, "0"), label: "Core skills" },
+    { value: experiences.length, label: "Experience" },
+    { value: education.length, label: "Academic" },
+    { value: skills.length, label: "Core skills" },
   ];
 
   return (
@@ -77,7 +104,7 @@ export default function About({ content }) {
         <div className="about-metrics">
           {aboutStats.map((stat) => (
             <div className="about-metric" key={stat.label}>
-              <strong>{stat.value}</strong>
+              <strong><AnimatedNumber value={stat.value} /></strong>
               <span>{stat.label}</span>
             </div>
           ))}

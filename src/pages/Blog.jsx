@@ -4,6 +4,7 @@ import { resolveMediaUrl, getYoutubeEmbedUrl } from "../utils";
 
 export default function Blog({ content }) {
   const { posts = [], profile = {} } = content;
+  const sortedPosts = [...posts].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
 
   return (
     <div className="page-content">
@@ -18,8 +19,8 @@ export default function Blog({ content }) {
             <p className="section-note">{profile.headings?.blogDesc || "Thoughts, news, and technical articles."}</p>
           </div>
         </div>
-        <div className="post-grid">
-          {posts.map((post) => (
+        <div className="post-grid card-masonry post-masonry">
+          {sortedPosts.map((post) => (
             <article className="post-card" key={post.id}>
               {post.imageUrl && (
                 <Link to={`/blog/${post.id}`} style={{ display: "block" }}>

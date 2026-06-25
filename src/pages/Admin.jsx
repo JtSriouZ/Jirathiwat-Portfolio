@@ -10,6 +10,21 @@ const blankCertificate = { title: "", issuer: "", date: "", credentialUrl: "", i
 const blankProject = { title: "", description: "", fullDescription: "", language: "", repoUrl: "", liveUrl: "", imageUrl: "", mediaUrls: "", updated: "", period: "", associated: "", skills: "", highlights: "", featuredRank: "" };
 const blankExpertise = { category: "", description: "", skills: "" };
 
+export const StrictModeDroppable = ({ children, ...props }) => {
+  const [enabled, setEnabled] = useState(false);
+  useEffect(() => {
+    const animation = requestAnimationFrame(() => setEnabled(true));
+    return () => {
+      cancelAnimationFrame(animation);
+      setEnabled(false);
+    };
+  }, []);
+  if (!enabled) {
+    return null;
+  }
+  return <Droppable {...props}>{children}</Droppable>;
+};
+
 function isTemporaryId(id) {
   return !id || String(id).startsWith("temp-");
 }
@@ -310,7 +325,7 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
             </button>
           </div>
           <DragDropContext onDragEnd={(res) => handleDragEnd(res, expertiseList, setExpertiseList, "expertise")}>
-            <Droppable droppableId="expertise">
+            <StrictModeDroppable droppableId="expertise">
               {(provided) => (
                 <div className="record-list" {...provided.droppableProps} ref={provided.innerRef}>
                   {expertiseList.map((item, index) => (
@@ -325,7 +340,7 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
                   {provided.placeholder}
                 </div>
               )}
-            </Droppable>
+            </StrictModeDroppable>
           </DragDropContext>
         </section>
 
@@ -337,7 +352,7 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
             </button>
           </div>
           <DragDropContext onDragEnd={(res) => handleDragEnd(res, projects, setProjects, "projects")}>
-            <Droppable droppableId="projects">
+            <StrictModeDroppable droppableId="projects">
               {(provided) => (
                 <div className="record-list" {...provided.droppableProps} ref={provided.innerRef}>
                   {projects.map((item, index) => (
@@ -352,7 +367,7 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
                   {provided.placeholder}
                 </div>
               )}
-            </Droppable>
+            </StrictModeDroppable>
           </DragDropContext>
         </section>
 
@@ -364,7 +379,7 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
             </button>
           </div>
           <DragDropContext onDragEnd={(res) => handleDragEnd(res, certificates, setCertificates, "certificates")}>
-            <Droppable droppableId="certificates">
+            <StrictModeDroppable droppableId="certificates">
               {(provided) => (
                 <div className="record-list" {...provided.droppableProps} ref={provided.innerRef}>
                   {certificates.map((item, index) => (
@@ -379,7 +394,7 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
                   {provided.placeholder}
                 </div>
               )}
-            </Droppable>
+            </StrictModeDroppable>
           </DragDropContext>
         </section>
 
@@ -391,7 +406,7 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
             </button>
           </div>
           <DragDropContext onDragEnd={(res) => handleDragEnd(res, posts, setPosts, "posts")}>
-            <Droppable droppableId="posts">
+            <StrictModeDroppable droppableId="posts">
               {(provided) => (
                 <div className="record-list" {...provided.droppableProps} ref={provided.innerRef}>
                   {posts.map((item, index) => (
@@ -406,7 +421,7 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
                   {provided.placeholder}
                 </div>
               )}
-            </Droppable>
+            </StrictModeDroppable>
           </DragDropContext>
         </section>
 
@@ -418,7 +433,7 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
             </button>
           </div>
           <DragDropContext onDragEnd={(res) => handleDragEnd(res, experiences, setExperiences, "experiences")}>
-            <Droppable droppableId="experiences">
+            <StrictModeDroppable droppableId="experiences">
               {(provided) => (
                 <div className="record-list" {...provided.droppableProps} ref={provided.innerRef}>
                   {experiences.map((item, index) => (
@@ -433,7 +448,7 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
                   {provided.placeholder}
                 </div>
               )}
-            </Droppable>
+            </StrictModeDroppable>
           </DragDropContext>
         </section>
 
@@ -445,7 +460,7 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
             </button>
           </div>
           <DragDropContext onDragEnd={(res) => handleDragEnd(res, educations, setEducations, "education")}>
-            <Droppable droppableId="education">
+            <StrictModeDroppable droppableId="education">
               {(provided) => (
                 <div className="record-list" {...provided.droppableProps} ref={provided.innerRef}>
                   {educations.map((item, index) => (
@@ -460,7 +475,7 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
                   {provided.placeholder}
                 </div>
               )}
-            </Droppable>
+            </StrictModeDroppable>
           </DragDropContext>
         </section>
 

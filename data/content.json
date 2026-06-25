@@ -112,36 +112,6 @@
       ]
     },
     {
-      "id": "backend-development",
-      "category": "Back-End Development",
-      "description": "Creating high-performance APIs, managing hybrid databases, and handling server-side logic and deployments.",
-      "skills": [
-        "Node.js",
-        "Express.js",
-        "FastAPI",
-        "GraphQL",
-        "RESTful APIs",
-        "SQL",
-        "MongoDB",
-        "PostgreSQL",
-        "MySQL",
-        "Redis",
-        "Firebase",
-        "Supabase",
-        "Prisma",
-        "SQLite",
-        "Docker",
-        "Nginx",
-        "Render",
-        "Vercel",
-        "Heroku",
-        "Postman",
-        "JWT",
-        "WebSocket",
-        "Socket.IO"
-      ]
-    },
-    {
       "id": "frontend-development",
       "category": "Front-End Development",
       "description": "Crafting responsive, dynamic, and beautiful user interfaces with modern web technologies.",
@@ -194,6 +164,57 @@
       ]
     },
     {
+      "id": "backend-development",
+      "category": "Back-End Development",
+      "description": "Creating high-performance APIs, managing hybrid databases, and handling server-side logic and deployments.",
+      "skills": [
+        "Node.js",
+        "Express.js",
+        "FastAPI",
+        "GraphQL",
+        "RESTful APIs",
+        "SQL",
+        "MongoDB",
+        "PostgreSQL",
+        "MySQL",
+        "Redis",
+        "Firebase",
+        "Supabase",
+        "Prisma",
+        "SQLite",
+        "Docker",
+        "Nginx",
+        "Render",
+        "Vercel",
+        "Heroku",
+        "Postman",
+        "JWT",
+        "WebSocket",
+        "Socket.IO"
+      ]
+    },
+    {
+      "id": "server-networking",
+      "category": "Server & Networking",
+      "description": "Configuring, deploying, and maintaining reliable server infrastructure and network systems.",
+      "skills": [
+        "Proxmox",
+        "Cisco",
+        "Wireshark",
+        "Ubuntu",
+        "Docker",
+        "Nginx",
+        "Cloudflare",
+        "Tailscale",
+        "WireGuard",
+        "pfSense",
+        "TrueNAS",
+        "VirtualBox",
+        "VMware",
+        "Windows Server"
+      ]
+    },
+    {
       "id": "3d-modeling",
       "category": "3D Modeling",
       "description": "Designing physical objects and environments for product design and interactive experiences.",
@@ -221,27 +242,6 @@
         "CapCut",
         "Canva",
         "OBS Studio"
-      ]
-    },
-    {
-      "id": "server-networking",
-      "category": "Server & Networking",
-      "description": "Configuring, deploying, and maintaining reliable server infrastructure and network systems.",
-      "skills": [
-        "Proxmox",
-        "Cisco",
-        "Wireshark",
-        "Ubuntu",
-        "Docker",
-        "Nginx",
-        "Cloudflare",
-        "Tailscale",
-        "WireGuard",
-        "pfSense",
-        "TrueNAS",
-        "VirtualBox",
-        "VMware",
-        "Windows Server"
       ]
     }
   ],
@@ -298,31 +298,71 @@
   ],
   "posts": [
     {
-      "id": "post-iron-dome",
-      "title": "Iron Dome Missile Tracker v3.1",
-      "category": "AI Project",
-      "date": "2026-03-01",
-      "summary": "A real-time tactical computer vision system engineered for deterministic execution, ultra-low latency, and stable high-definition inference pipelines.",
-      "imageUrl": "https://opengraph.githubassets.com/jirathiwat-portfolio/JirathiwatSun/missile-detection-static-main",
-      "youtubeUrl": ""
+      "id": "post-apple-wwdc26-ai-siri",
+      "title": "Apple WWDC26: Siri AI, Apple Intelligence, and the Developer Platform Shift",
+      "category": "Current Tech",
+      "date": "2026-06-26",
+      "summary": "Apple's latest WWDC push puts Siri AI, Apple Intelligence, stronger parental controls, and platform-wide software upgrades at the center of its next developer cycle.",
+      "imageUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80",
+      "youtubeUrl": "https://www.youtube.com/watch?v=hF8swzNR1-o",
+      "externalUrl": "https://www.apple.com/newsroom/2026/06/apple-unveils-next-generation-of-apple-intelligence-siri-ai-and-more/",
+      "fullDescription": "Apple's WWDC26 announcement is important because it shows where the company wants the next software cycle to go: more AI inside everyday workflows, a stronger Siri AI experience, platform-wide improvements across iOS, iPadOS, macOS, watchOS, visionOS, and tvOS, and more attention on safety and family controls.\n\nFor developers, the interesting part is not only the headline AI branding. The real question is how deeply Apple will let developers connect their apps into intelligent system experiences. If Siri AI becomes more capable and Apple Intelligence becomes more useful across apps, the value of clean app architecture, privacy-first design, and native platform integration becomes even higher.\n\nMy take: this is Apple trying to make AI feel less like a separate chatbot and more like a system layer. That direction fits Apple's strengths, but developers will need clear APIs, strong tooling, and predictable behavior before it becomes a real productivity jump.\n\nSources: Apple Newsroom WWDC26 announcement and Apple Developer WWDC26 video.",
+      "mediaUrls": [
+        "https://www.apple.com/newsroom/2026/06/apple-unveils-next-generation-of-apple-intelligence-siri-ai-and-more/",
+        "https://www.youtube.com/watch?v=hF8swzNR1-o"
+      ]
     },
     {
-      "id": "post-cinematch",
-      "title": "CineMatch 2.0: The Cinematic Oracle",
-      "category": "AI Project",
-      "date": "2026-04-16",
-      "summary": "A movie discovery platform using semantic search, hybrid recommendation logic, hidden-gem detection, and 3D cinematic mapping.",
-      "imageUrl": "https://opengraph.githubassets.com/jirathiwat-portfolio/JirathiwatSun/Movie-Recommendation",
-      "youtubeUrl": ""
+      "id": "post-imax-theater-review-2026",
+      "title": "IMAX Theater Review: Why Premium Cinema Still Feels Like Future Tech",
+      "category": "Movie Tech",
+      "date": "2026-06-25",
+      "summary": "IMAX is expanding new laser locations while immersive venues like Cosm attract major investment, showing that the theater experience is becoming a technology product again.",
+      "imageUrl": "https://www.boxofficepro.com/wp-content/uploads/2022/04/IMAX-with-laser-scaled.jpg",
+      "youtubeUrl": "",
+      "externalUrl": "https://investors.imax.com/news-events/news",
+      "fullDescription": "A good IMAX theater is still one of the clearest examples of technology changing how content feels. The screen scale, projection brightness, image stability, and tuned audio system make the movie feel less like a file being played and more like a physical event.\n\nThe current theater market is interesting because premium formats are growing while ordinary cinema has to fight harder for attention. IMAX has announced new IMAX with Laser locations in 2026, including expansion partnerships in India and the southeastern United States. At the same time, immersive shared-reality venues such as Cosm are attracting major entertainment investment, which suggests that audiences still want large-scale experiences when the technology is special enough.\n\nMy review angle: IMAX is strongest when the movie is designed for it. For large-format sci-fi, action, space, or practical-camera spectacle, the format adds real value. For smaller dialogue-heavy films, the benefit is less dramatic. The future of theaters will likely depend on this kind of premium differentiation: bigger screens, better sound, higher brightness, and experiences that cannot be recreated on a laptop.\n\nSources: IMAX investor news on 2026 IMAX with Laser expansion, IMAX official theater experience information, and recent reporting on Sony's investment in Cosm.",
+      "mediaUrls": [
+        "https://investors.imax.com/news-events/news",
+        "https://www.imax.com/",
+        "https://pagesix.com/2026/06/25/hollywood/why-sony-is-investing-100m-into-shared-reality-operator-cosm/"
+      ]
     },
     {
-      "id": "post-boonsonclon",
-      "title": "BoonSonClon Premium Furniture Store",
-      "category": "Web App",
-      "date": "2026-04-28",
-      "summary": "A full-stack e-commerce platform for premium furniture retail with a hybrid database system and responsive mobile-first design.",
-      "imageUrl": "https://opengraph.githubassets.com/jirathiwat-portfolio/JirathiwatSun/ITCS223_WebDev",
-      "youtubeUrl": ""
+      "id": "post-iron-dome-os-ai",
+      "title": "Building Real-Time AI With Operating-System Thinking",
+      "category": "AI Engineering",
+      "date": "2026-06-26",
+      "summary": "A technical note on why real-time computer vision is not only about model accuracy, but also memory flow, scheduling, synchronization, and predictable execution.",
+      "imageUrl": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1400&q=80",
+      "youtubeUrl": "",
+      "externalUrl": "https://github.com/JirathiwatSun/missile-detection-static-main",
+      "fullDescription": "Real-time AI systems fail when the software around the model cannot keep up with the model itself. In the Iron Dome Missile Tracker project, the core challenge was not simply detecting objects in video. The system also needed stable frame handling, low-latency inference, and predictable write-backs while many tasks were competing for resources.\n\nThis post highlights the engineering mindset behind that work: treat computer vision as a complete system. Memory management, thread coordination, queue design, and I/O behavior all affect how intelligent software behaves under pressure.\n\nThe result is a portfolio case study that connects AI, operating systems, and software engineering into one production-style build.",
+      "mediaUrls": []
+    },
+    {
+      "id": "post-cinematch-oracle",
+      "title": "CineMatch 2.0 and the Search for Movie Vibe",
+      "category": "Data Science",
+      "date": "2026-06-24",
+      "summary": "A behind-the-scenes look at semantic movie search, hybrid scoring, hidden-gem discovery, and why recommendation systems should understand intent instead of only keywords.",
+      "imageUrl": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1400&q=80",
+      "youtubeUrl": "",
+      "externalUrl": "https://github.com/JirathiwatSun/Movie-Recommendation",
+      "fullDescription": "CineMatch 2.0 was designed around a simple idea: people do not always search for movies by title, actor, or genre. Sometimes they search by mood, visual style, emotional impact, or narrative complexity.\n\nThe platform uses metadata soup, semantic embeddings, cosine similarity, and weighted statistical quality to recommend films that match the user intent. It also includes a Hidden Gem Radar to reduce blockbuster bias and surface interesting films that might otherwise be buried.\n\nFor me, this project is a strong example of how data science can become a real product experience when the model, ranking logic, and interface all work together.",
+      "mediaUrls": []
+    },
+    {
+      "id": "post-portfolio-vercel-backend",
+      "title": "Evolving This Portfolio Into an Editable Vercel Web App",
+      "category": "Web Development",
+      "date": "2026-06-22",
+      "summary": "How this portfolio moved from a static website idea into a full editable portfolio with admin controls, posts, certificates, media uploads, and Vercel-ready backend support.",
+      "imageUrl": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1400&q=80",
+      "youtubeUrl": "",
+      "externalUrl": "",
+      "fullDescription": "This portfolio is built to be more than a profile page. It is a content system for projects, experience, certificates, skills, blog posts, images, and embedded videos.\n\nThe backend/admin panel makes it possible to edit portfolio information without changing code every time. Since the site is now prepared for Vercel, it can use backend routes and storage patterns that were not available in a GitHub Pages-only deployment.\n\nThe goal is to make the portfolio feel alive: animated, editable, visual, and ready to grow with each new project.",
+      "mediaUrls": []
     }
   ],
   "certificates": [
@@ -378,7 +418,7 @@
       "language": "Python",
       "repoUrl": "https://github.com/JirathiwatSun/missile-detection-static-main",
       "liveUrl": "",
-      "imageUrl": "https://opengraph.githubassets.com/jirathiwat-portfolio/JirathiwatSun/missile-detection-static-main",
+      "imageUrl": "https://github.com/JirathiwatSun/missile-detection-static-main/raw/main/data/images/image-1.png",
       "updated": "2026-04-25",
       "featuredRank": 1,
       "period": "Mar 2026 - Present",
@@ -391,10 +431,16 @@
       ],
       "highlights": [
         "Perfect ITCS225 grading rubric score of 16/16",
-        "Custom system-level architecture for memory, scheduling, and synchronization",
+        "Custom system-level architecture for memory",
+        "scheduling",
+        "and synchronization",
         "Deterministic execution with ultra-low latency and frame-rate stability",
-        "Simultaneous HD video processing, inference, and telemetry write-backs"
-      ]
+        "Simultaneous HD video processing",
+        "inference",
+        "and telemetry write-backs"
+      ],
+      "fullDescription": "",
+      "mediaUrls": []
     },
     {
       "id": "project-cinematch",
@@ -403,7 +449,7 @@
       "language": "Jupyter Notebook",
       "repoUrl": "https://github.com/JirathiwatSun/Movie-Recommendation",
       "liveUrl": "",
-      "imageUrl": "https://opengraph.githubassets.com/jirathiwat-portfolio/JirathiwatSun/Movie-Recommendation",
+      "imageUrl": "https://i.postimg.cc/9QS3zPTv/Screenshot-2026-04-20-013012.png",
       "updated": "2026-04-16",
       "featuredRank": 2,
       "period": "2026",
@@ -415,11 +461,19 @@
         "Recommendation Systems"
       ],
       "highlights": [
-        "Metadata Soup fingerprint using title, overview, genre, keywords, and era tags",
+        "Metadata Soup fingerprint using title",
+        "overview",
+        "genre",
+        "keywords",
+        "and era tags",
         "50/50 hybrid score combining semantic similarity and IMDB weighted quality",
-        "Mood Fusion intent parser for visual style, emotion, and narrative complexity",
+        "Mood Fusion intent parser for visual style",
+        "emotion",
+        "and narrative complexity",
         "Hidden Gem Radar and interactive Plotly 3D discovery explorer"
-      ]
+      ],
+      "fullDescription": "",
+      "mediaUrls": []
     },
     {
       "id": "project-boonsonclon",
@@ -428,7 +482,7 @@
       "language": "JavaScript",
       "repoUrl": "https://github.com/JirathiwatSun/ITCS223_WebDev",
       "liveUrl": "https://boonsonclon-furniture.onrender.com",
-      "imageUrl": "https://opengraph.githubassets.com/jirathiwat-portfolio/JirathiwatSun/ITCS223_WebDev",
+      "imageUrl": "https://i.postimg.cc/pVDP7S8d/Screenshot-2026-06-16-121823.png",
       "updated": "2026-04-28",
       "featuredRank": 3,
       "period": "2026",
@@ -444,6 +498,71 @@
         "Hybrid database system",
         "Fully responsive mobile-first design",
         "Live production deployment on Render"
+      ],
+      "fullDescription": "",
+      "mediaUrls": []
+    },
+    {
+      "id": "project-homelab",
+      "name": "Personal Home Lab Server",
+      "description": "A custom-built home lab server infrastructure running on a compact 10-inch rack mini PC setup. Powered by Proxmox for efficient virtualization, it serves as a robust environment for self-hosting applications, experimenting with advanced network configurations, and managing personal data.",
+      "fullDescription": "Building a Personal Home Lab Server is an ongoing journey of creating a private, self-hosted cloud environment from scratch. To achieve a balance between high performance and physical footprint, the hardware is centered around a compact 10-inch rack housing a powerful mini PC setup. This ensures low power consumption and quiet operation while providing enough compute power to run dozens of services simultaneously.\n\nThe core of the infrastructure is powered by Proxmox VE, an enterprise-grade open-source bare-metal hypervisor. By installing Proxmox directly on the mini PC, the hardware resources are efficiently partitioned into multiple Virtual Machines (VMs) and lightweight LXC (Linux Containers). This isolates different environments—such as dedicated Ubuntu servers for Docker deployments, testing environments for new software, and dedicated database instances.\n\nNetworking and security are handled using Tailscale, a zero-config VPN built on WireGuard. Instead of exposing vulnerable ports to the public internet via port forwarding, Tailscale creates a secure, encrypted mesh network. This allows seamless, secure remote access to all home lab services and dashboards from any device, anywhere in the world, as if they were on the same local network.\n\nCurrently, the lab serves as the backbone for personal data management, media streaming, and development workflows. Docker is heavily utilized to deploy and orchestrate self-hosted applications, ensuring that every service is containerized, reproducible, and easy to update. This project is a testament to continuous learning in DevOps, system administration, and infrastructure as code.",
+      "language": "Infrastructure",
+      "repoUrl": "",
+      "liveUrl": "",
+      "imageUrl": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=1600",
+      "updated": "2026-06-25",
+      "featuredRank": 4,
+      "period": "2026 - Present",
+      "associated": "Personal Project",
+      "skills": [
+        "Server & Networking",
+        "Proxmox",
+        "Docker",
+        "Ubuntu",
+        "Tailscale"
+      ],
+      "highlights": [
+        "Architected custom bare-metal setup in a 10-inch rack using mini PCs",
+        "Powered by Proxmox VE for lightweight and scalable virtualization",
+        "Implemented secure remote access and networking protocols",
+        "Self-hosted essential development and lifestyle applications"
+      ],
+      "mediaUrls": [
+        "https://www.youtube.com/watch?v=v-FKrwwSFXo"
+      ]
+    },
+    {
+      "id": "project-shapr3d-server-rack",
+      "name": "Shapr3D Custom Server Rack Mount",
+      "description": "A custom 3D-modeled server rack mount designed in Shapr3D for a compact 10-inch homelab rack setup. The design translates real product reference dimensions into a practical rack-mounted frame concept for mini PC and motherboard/server hardware mounting.",
+      "fullDescription": "This project documents my custom 3D CAD design workflow for a compact server rack mounting component, modeled in Shapr3D as part of my personal home lab infrastructure work.\n\nThe design process started from practical hardware requirements: adapting a compact mini PC / motherboard-style server setup into a clean 10-inch rack form factor. I used reference dimensions from rack-mount accessories and translated them into a custom frame with measured spacing, panel cutouts, side supports, screw holes, and structural geometry.\n\nThe model focuses on functional hardware design rather than only visual rendering. The rack frame includes measured spans around 237 mm, mounting holes, front-panel clearance, and reinforced side geometry so the concept can be evaluated for fit, airflow, and physical installation inside a small server rack.\n\nThis project shows my ability to connect software engineering, networking infrastructure, and physical product design: planning server hardware, studying rack dimensions, designing CAD geometry, and iterating toward a usable homelab mounting solution.",
+      "language": "Shapr3D / CAD",
+      "repoUrl": "",
+      "liveUrl": "",
+      "imageUrl": "projects/server-rack-shapr3d-frame.png",
+      "updated": "2026-06-08",
+      "featuredRank": 5,
+      "period": "Jun 2026",
+      "associated": "Personal Home Lab Project",
+      "skills": [
+        "Shapr3D",
+        "CAD",
+        "3D Modeling",
+        "Product Design",
+        "Hardware Prototyping",
+        "Server & Networking"
+      ],
+      "highlights": [
+        "Modeled a custom 10-inch server rack mounting frame in Shapr3D",
+        "Translated real product reference dimensions into CAD geometry",
+        "Designed measured panel openings, screw holes, and support structures",
+        "Connected homelab infrastructure planning with practical hardware design"
+      ],
+      "mediaUrls": [
+        "projects/server-rack-shapr3d-frame.png",
+        "projects/server-rack-shapr3d-panel.png",
+        "projects/server-rack-shapr3d-reference.png"
       ]
     }
   ]

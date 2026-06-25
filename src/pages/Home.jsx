@@ -2,10 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ArrowRight,
   BriefcaseBusiness,
+  CalendarDays,
   GraduationCap,
   Github,
   ExternalLink,
   Mail,
+  Newspaper,
   Award,
   Link as LinkIcon,
   Sparkles,
@@ -22,12 +24,35 @@ function actualRecords(value) {
   return Array.isArray(value) ? value.filter((item) => item && item.id) : [];
 }
 
+const RandomNumber = ({ value }) => {
+  const [displayValue, setDisplayValue] = useState("00");
+
+  useEffect(() => {
+    let frame = 0;
+    const maxFrames = 25;
+    const timer = setInterval(() => {
+      frame++;
+      if (frame >= maxFrames) {
+        setDisplayValue(value);
+        clearInterval(timer);
+      } else {
+        setDisplayValue(String(Math.floor(Math.random() * 99)).padStart(2, "0"));
+      }
+    }, 45);
+
+    return () => clearInterval(timer);
+  }, [value]);
+
+  return <strong>{displayValue}</strong>;
+};
+
 export default function Home({ content, language }) {
-  const { profile, experiences, certificates, projects } = content;
+  const { profile, experiences, certificates, projects, posts } = content;
 
   const safeExperiences = actualRecords(experiences);
   const safeCerts = actualRecords(certificates);
   const safeProjects = actualRecords(projects);
+  const safePosts = actualRecords(posts);
   const [typedText, setTypedText] = useState("");
   const [typingIndex, setTypingIndex] = useState(0);
   const [activeProject, setActiveProject] = useState(0);
@@ -93,6 +118,14 @@ export default function Home({ content, language }) {
     { label: "Certificates", value: String(safeCerts.length).padStart(2, "0") }
   ];
 
+  const latestPosts = useMemo(
+    () =>
+      [...safePosts]
+        .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
+        .slice(0, 3),
+    [safePosts]
+  );
+
   const internalLinks = [
     { label: "Projects", to: "/projects", icon: <Github size={18} /> },
     { label: "Certificates", to: "/certificates", icon: <Award size={18} /> },
@@ -148,7 +181,7 @@ export default function Home({ content, language }) {
         <div className="signal-panel reveal is-visible">
           {stats.map((stat) => (
             <div className="stat" key={stat.label}>
-              <strong>{stat.value}</strong>
+              <RandomNumber value={stat.value} />
               <span>{stat.label}</span>
             </div>
           ))}
@@ -231,6 +264,43 @@ export default function Home({ content, language }) {
                 </Link>
               </div>
             </div>
+          </div>
+        </section>
+      )}
+
+      {latestPosts.length > 0 && (
+        <section className="section home-blog-section reveal">
+          <div className="section-kicker">
+            <Newspaper size={18} />
+            Latest Blog
+          </div>
+          <div className="section-heading">
+            <h2>{profile.headings?.blogTitle || "Latest posts"}</h2>
+            <p className="section-note">{profile.headings?.blogDesc || "Thoughts, news, and technical articles."}</p>
+          </div>
+          <div className="home-post-grid">
+            {latestPosts.map((post) => (
+              <Link className="home-post-card" key={post.id} to={`/blog/${post.id}`}>
+                {post.imageUrl && (
+                  <img src={resolveMediaUrl(post.imageUrl)} alt="" loading="lazy" />
+                )}
+                <div className="home-post-copy">
+                  <div className="post-meta">
+                    <span>{post.category || "Post"}</span>
+                    <span>
+                      <CalendarDays size={14} />
+                      {post.date || "Recent"}
+                    </span>
+                  </div>
+                  <h3>{post.title}</h3>
+                  <p>{post.summary}</p>
+                  <span className="read-more-link">
+                    Read post
+                    <ArrowRight size={16} />
+                  </span>
+                </div>
+              </Link>
+            ))}
           </div>
         </section>
       )}

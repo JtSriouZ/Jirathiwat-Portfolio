@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, Calendar, FileText, ExternalLink } from "lucide-react";
 import { resolveMediaUrl, getYoutubeEmbedUrl, normalizeList } from "../utils";
+import MediaGallery from "../components/MediaGallery";
 
 export default function PostDetail({ content }) {
   const { id } = useParams();
@@ -76,35 +77,7 @@ export default function PostDetail({ content }) {
             ))}
           </div>
 
-          {mediaUrls.length > 0 && (
-            <>
-              <h3>Media Gallery</h3>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem", marginBottom: "3rem" }}>
-                {mediaUrls.map((url, idx) => {
-                  const ytEmbed = getYoutubeEmbedUrl(url);
-                  if (ytEmbed) {
-                    return (
-                      <div key={idx} style={{ borderRadius: "8px", overflow: "hidden", aspectRatio: "16/9", border: "1px solid var(--line)" }}>
-                        <iframe src={ytEmbed} style={{ width: "100%", height: "100%", border: "none" }} allowFullScreen title="Post Video" />
-                      </div>
-                    );
-                  }
-                  if (url.match(/\.(mp4|webm|ogg)$/i)) {
-                    return (
-                      <div key={idx} style={{ borderRadius: "8px", overflow: "hidden", border: "1px solid var(--line)" }}>
-                        <video src={resolveMediaUrl(url)} controls style={{ width: "100%", display: "block" }} />
-                      </div>
-                    );
-                  }
-                  return (
-                    <div key={idx} style={{ borderRadius: "8px", overflow: "hidden", border: "1px solid var(--line)" }}>
-                      <img src={resolveMediaUrl(url)} alt="Post Media" style={{ width: "100%", height: "auto", display: "block" }} />
-                    </div>
-                  );
-                })}
-              </div>
-            </>
-          )}
+          <MediaGallery urls={mediaUrls} itemTitle="Post media" />
         </div>
       </section>
     </div>

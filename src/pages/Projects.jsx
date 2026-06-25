@@ -22,7 +22,7 @@ export default function Projects({ content }) {
             GitHub
           </a>
         </div>
-        <div className="project-grid">
+        <div className="project-grid card-masonry">
           {projects.map((project) => (
             <article className="project-card" key={project.id}>
               {project.imageUrl && (
