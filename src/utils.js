@@ -34,10 +34,9 @@ export function resolveMediaUrl(url) {
 }
 
 export function triggerGoogleTranslate(languageCode) {
-  const combo = document.querySelector(".goog-te-combo");
-  if (!combo) return false;
-  combo.value = languageCode;
-  combo.dispatchEvent(new Event("change"));
+  document.cookie = `googtrans=/en/${languageCode}; path=/;`;
+  document.cookie = `googtrans=/en/${languageCode}; path=/; domain=${window.location.hostname};`;
+  window.location.reload();
   return true;
 }
 
