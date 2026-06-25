@@ -362,7 +362,7 @@ function AnimatedBackgroundCanvas({ routeKey }) {
 
 function App() {
   const [content, setContent] = useState(
-    isStaticSite || !import.meta.env.DEV ? staticContent : null
+    isStaticSite || !import.meta.env.DEV ? (staticContent.default || staticContent) : null
   );
   const [error, setError] = useState(null);
   const [canEdit, setCanEdit] = useState(false);
@@ -410,7 +410,7 @@ function App() {
         {
           pageLanguage: "en",
           autoDisplay: false,
-          layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+          layout: window.google?.translate?.TranslateElement?.InlineLayout?.SIMPLE || 1,
         },
         "google_translate_element"
       );
@@ -477,7 +477,7 @@ function App() {
 
   const fetchContent = async () => {
     if (isStaticSite) {
-      setContent(staticContent);
+      setContent(staticContent.default || staticContent);
       setError(null);
       setCanEdit(false);
       return;
@@ -491,7 +491,7 @@ function App() {
       setError(null);
     } catch (err) {
       console.error("Failed to fetch content:", err);
-      setContent(staticContent);
+      setContent(staticContent.default || staticContent);
       setError(null);
       setCanEdit(false);
     }
