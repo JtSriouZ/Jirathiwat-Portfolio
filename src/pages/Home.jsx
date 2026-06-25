@@ -168,8 +168,8 @@ export default function Home({ content, language }) {
             Interactive Preview
           </div>
           <div className="section-heading">
-            <h2>Featured project stream</h2>
-            <p className="section-note">A sliding look at the strongest builds from AI, data science, and web engineering.</p>
+            <h2>Featured Projects</h2>
+            <p className="section-note">A showcase of my recent work in software engineering, AI, and full-stack development.</p>
           </div>
 
           <div className={isPreviewPaused ? "project-autoplay is-paused" : "project-autoplay"}>
