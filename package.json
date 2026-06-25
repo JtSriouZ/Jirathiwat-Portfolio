@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently \"vite --host 127.0.0.1\" \"node server/index.js\"",
     "server": "node server/index.js",
-    "build": "vite build",
+    "build": "cross-env VITE_STATIC_SITE=true vite build",
     "build:pages": "cross-env VITE_STATIC_SITE=true VITE_BASE_PATH=/Jirathiwat-Portfolio/ vite build",
     "preview": "vite preview --host 127.0.0.1"
   },
