@@ -100,12 +100,14 @@ export function getSkillIconUrl(skillName) {
     "gemini": "https://cdn.simpleicons.org/googlegemini/8E75B2",
     "codex": "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg",
     "antigravity": "https://www.google.com/s2/favicons?domain=deepmind.google&sz=128",
+    "c": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/c/c-original.svg",
+    "ubuntu": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/ubuntu/ubuntu-original.svg",
     "github copilot": "https://cdn.simpleicons.org/githubcopilot/FFFFFF",
     "cursor": "https://cdn.simpleicons.org/cursor/FFFFFF",
     "blender": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Blender_logo_no_text.svg",
     "midjourney": "https://www.google.com/s2/favicons?domain=midjourney.com&sz=128",
     "shapr3d": "https://www.google.com/s2/favicons?domain=shapr3d.com&sz=128",
-    "capcut": "https://www.google.com/s2/favicons?domain=capcut.com&sz=128"
+    "capcut": "https://cdn.iconscout.com/icon/free/png-256/free-capcut-logo-icon-download-in-svg-png-gif-file-formats--technology-social-media-company-brand-vol-1-pack-logos-icons-2944738.png"
   };
 
   if (deviconUrls[normalized]) {

@@ -172,6 +172,18 @@
         "DaVinci Resolve",
         "CapCut"
       ]
+    },
+    {
+      "id": "server-networking",
+      "category": "Server & Networking",
+      "description": "Configuring, deploying, and maintaining reliable server infrastructure and network systems.",
+      "skills": [
+        "Proxmox",
+        "Cisco",
+        "Ubuntu",
+        "Docker",
+        "Nginx"
+      ]
     }
   ],
   "experiences": [
