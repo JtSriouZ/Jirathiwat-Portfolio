@@ -1,4 +1,4 @@
-import { Code2, BriefcaseBusiness, GraduationCap, MapPin, Sparkles, Github, Linkedin } from "lucide-react";
+import { Code2, BriefcaseBusiness, GraduationCap, MapPin, Sparkles, Github, Linkedin, Instagram, Mail } from "lucide-react";
 import { normalizeList, resolveMediaUrl } from "../utils";
 
 export default function About({ content }) {
@@ -49,6 +49,11 @@ export default function About({ content }) {
                 </span>
               </div>
               <div className="about-card-links">
+                {profile.email && (
+                  <a className="icon-link" href={`mailto:${profile.email}`} aria-label="Email">
+                    <Mail size={17} />
+                  </a>
+                )}
                 {profile.github && (
                   <a className="icon-link" href={profile.github} target="_blank" rel="noreferrer" aria-label="GitHub">
                     <Github size={17} />
@@ -57,6 +62,11 @@ export default function About({ content }) {
                 {profile.linkedin && (
                   <a className="icon-link" href={profile.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn">
                     <Linkedin size={17} />
+                  </a>
+                )}
+                {profile.instagram && (
+                  <a className="icon-link" href={profile.instagram} target="_blank" rel="noreferrer" aria-label="Instagram">
+                    <Instagram size={17} />
                   </a>
                 )}
               </div>

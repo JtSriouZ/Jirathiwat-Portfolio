@@ -217,6 +217,7 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
             <TextInput label="Email" value={profile.email} onChange={(email) => setProfile({ ...profile, email })} />
             <TextInput label="GitHub" value={profile.github} onChange={(github) => setProfile({ ...profile, github })} />
             <TextInput label="LinkedIn" value={profile.linkedin} onChange={(linkedin) => setProfile({ ...profile, linkedin })} />
+            <TextInput label="Instagram" value={profile.instagram} onChange={(instagram) => setProfile({ ...profile, instagram })} />
             <div className="avatar-editor">
               <img src={avatarPreview || resolveMediaUrl(profile.avatar || "")} alt="" />
               <div>

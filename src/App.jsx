@@ -644,6 +644,8 @@ function App() {
             <Link to="/blog">Blog</Link>
             <a href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
             <a href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
+            {profile.instagram && <a href={profile.instagram} target="_blank" rel="noreferrer">Instagram</a>}
+            {profile.email && <a href={`mailto:${profile.email}`}>Email</a>}
           </div>
           <button
             className="ghost-button"
