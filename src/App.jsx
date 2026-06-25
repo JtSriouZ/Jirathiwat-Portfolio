@@ -361,7 +361,9 @@ function AnimatedBackgroundCanvas({ routeKey }) {
 }
 
 function App() {
-  const [content, setContent] = useState(null);
+  const [content, setContent] = useState(
+    isStaticSite || !import.meta.env.DEV ? staticContent : null
+  );
   const [error, setError] = useState(null);
   const [canEdit, setCanEdit] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
