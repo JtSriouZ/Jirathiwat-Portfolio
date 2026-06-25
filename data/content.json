@@ -134,6 +134,41 @@
         "Figma",
         "UI/UX"
       ]
+    },
+    {
+      "id": "prompt-engineering",
+      "category": "Prompt Engineering & AI Tools",
+      "description": "Leveraging advanced language models to accelerate development, analyze data, and build intelligent workflows.",
+      "skills": [
+        "Claude",
+        "ChatGPT",
+        "GitHub Copilot",
+        "Cursor",
+        "Gemini",
+        "Midjourney"
+      ]
+    },
+    {
+      "id": "3d-modeling",
+      "category": "3D Modeling",
+      "description": "Designing physical objects and environments for product design and interactive experiences.",
+      "skills": [
+        "Shapr3D",
+        "Blender",
+        "AutoCAD"
+      ]
+    },
+    {
+      "id": "media-editing",
+      "category": "Image & Video Editing",
+      "description": "Creating and editing professional-grade media for content creation and marketing.",
+      "skills": [
+        "Adobe Premiere Pro",
+        "Adobe Photoshop",
+        "Adobe Lightroom",
+        "DaVinci Resolve",
+        "CapCut"
+      ]
     }
   ],
   "experiences": [

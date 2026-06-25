@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Terminal, Code, Cpu, Database, Layout, Box, Network, Code2, Globe, Braces, Cloud, BarChart } from "lucide-react";
+import { Terminal, Code, Cpu, Database, Layout, Box, Network, Code2, Globe, Braces, Cloud, BarChart, Sparkles, Image, MonitorPlay, Cuboid } from "lucide-react";
 import { getSkillIconUrl, normalizeList } from "../utils";
 
 function getCategoryIcon(categoryId) {
@@ -7,6 +7,9 @@ function getCategoryIcon(categoryId) {
   if (categoryId.includes("backend") || categoryId.includes("data")) return <Database size={24} />;
   if (categoryId.includes("frontend")) return <Layout size={24} />;
   if (categoryId.includes("software")) return <Code size={24} />;
+  if (categoryId.includes("prompt")) return <Sparkles size={24} />;
+  if (categoryId.includes("3d")) return <Cuboid size={24} />;
+  if (categoryId.includes("media")) return <MonitorPlay size={24} />;
   return <Terminal size={24} />;
 }
 
