@@ -91,7 +91,20 @@ export function getSkillIconUrl(skillName) {
     "redux": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/redux/redux-original.svg",
     "figma": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg",
     "adobe photoshop": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/photoshop/photoshop-original.svg",
-    "adobe premiere pro": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/premierepro/premierepro-original.svg"
+    "adobe premiere pro": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/premierepro/premierepro-original.svg",
+    "capcut": "https://upload.wikimedia.org/wikipedia/commons/d/d8/CapCut_logo.svg",
+    "davinci resolve": "https://upload.wikimedia.org/wikipedia/commons/9/90/DaVinci_Resolve_17_logo.svg",
+    "adobe lightroom": "https://upload.wikimedia.org/wikipedia/commons/b/b6/Adobe_Photoshop_Lightroom_CC_logo.svg",
+    "chatgpt": "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg",
+    "claude": "https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg",
+    "claude code": "https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg",
+    "gemini": "https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg",
+    "codex": "https://upload.wikimedia.org/wikipedia/commons/4/4d/OpenAI_Logo.svg",
+    "antigravity": "https://upload.wikimedia.org/wikipedia/commons/d/dc/Google_DeepMind_logo.svg",
+    "midjourney": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Midjourney_Emblem.png",
+    "github copilot": "https://upload.wikimedia.org/wikipedia/commons/8/8a/GitHub_Copilot_logo.svg",
+    "cursor": "https://upload.wikimedia.org/wikipedia/commons/4/42/Cursor_logo.svg",
+    "blender": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Blender_logo_no_text.svg"
   };
 
   if (deviconUrls[normalized]) {
