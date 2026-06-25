@@ -967,10 +967,19 @@ p {
   margin-bottom: 2rem;
 }
 
+.section-heading > div {
+  min-width: 0;
+}
+
 .section-note {
   max-width: 420px;
   margin-bottom: 0;
   text-align: right;
+}
+
+.section-heading > div .section-note {
+  margin-top: 0.35rem;
+  text-align: left;
 }
 
 .project-showcase-section {
