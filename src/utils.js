@@ -98,11 +98,14 @@ export function getSkillIconUrl(skillName) {
     "claude": "https://cdn.simpleicons.org/anthropic/D97757",
     "claude code": "https://cdn.simpleicons.org/anthropic/D97757",
     "gemini": "https://cdn.simpleicons.org/googlegemini/8E75B2",
-    "codex": "https://cdn.simpleicons.org/openai/FFFFFF",
-    "antigravity": "https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg",
+    "codex": "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg",
+    "antigravity": "https://www.google.com/s2/favicons?domain=deepmind.google&sz=128",
     "github copilot": "https://cdn.simpleicons.org/githubcopilot/FFFFFF",
     "cursor": "https://cdn.simpleicons.org/cursor/FFFFFF",
-    "blender": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Blender_logo_no_text.svg"
+    "blender": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Blender_logo_no_text.svg",
+    "midjourney": "https://www.google.com/s2/favicons?domain=midjourney.com&sz=128",
+    "shapr3d": "https://www.google.com/s2/favicons?domain=shapr3d.com&sz=128",
+    "capcut": "https://www.google.com/s2/favicons?domain=capcut.com&sz=128"
   };
 
   if (deviconUrls[normalized]) {
