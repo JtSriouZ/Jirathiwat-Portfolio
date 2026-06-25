@@ -27,7 +27,23 @@
       "Java",
       "Customer Satisfaction",
       "Sales"
-    ]
+    ],
+    "headings": {
+      "homeProjectsTitle": "Featured Projects",
+      "homeProjectsDesc": "A showcase of my recent work in software engineering, AI, and full-stack development.",
+      "homeUpdatesTitle": "Recent Updates",
+      "homeUpdatesDesc": "The latest news and insights.",
+      "projectsTitle": "Projects",
+      "projectsDesc": "A collection of side projects, experiments, and open source contributions.",
+      "certificatesTitle": "Licenses & Certifications",
+      "certificatesDesc": "A collection of my professional licenses, certificates, and achievements.",
+      "skillsTitle": "Skills & Technologies",
+      "skillsDesc": "A comprehensive overview of my technical expertise, tools, and languages.",
+      "aboutExperienceTitle": "Work history",
+      "aboutEducationTitle": "Academic path",
+      "blogTitle": "Latest posts",
+      "blogDesc": "Thoughts, news, and technical articles."
+    }
   },
   "expertise": [
     {

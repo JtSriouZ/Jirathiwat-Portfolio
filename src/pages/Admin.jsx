@@ -55,6 +55,16 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
   const [message, setMessage] = useState("");
   const canSave = canEdit && Boolean(adminToken);
 
+  const updateHeading = (key, value) => {
+    setProfile({
+      ...profile,
+      headings: {
+        ...(profile.headings || {}),
+        [key]: value
+      }
+    });
+  };
+
   useEffect(() => {
     const safeSkills = Array.isArray(content.profile.skills)
       ? content.profile.skills
@@ -229,6 +239,31 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
               </div>
             </div>
             <TextArea label="Headline" value={profile.headline} onChange={(headline) => setProfile({ ...profile, headline })} />
+          </div>
+        </section>
+
+        <section className="editor-panel wide-panel">
+          <div className="panel-title">
+            <h2>Page Headings & Descriptions</h2>
+            <button className="primary-button" onClick={saveProfile} disabled={!canSave || saving === "profile"}>
+              <Save size={18} /> Save
+            </button>
+          </div>
+          <div className="form-grid">
+            <TextInput label="Home - Projects Title" value={profile.headings?.homeProjectsTitle || ""} onChange={(v) => updateHeading("homeProjectsTitle", v)} />
+            <TextInput label="Home - Projects Description" value={profile.headings?.homeProjectsDesc || ""} onChange={(v) => updateHeading("homeProjectsDesc", v)} />
+            <TextInput label="Home - Updates Title" value={profile.headings?.homeUpdatesTitle || ""} onChange={(v) => updateHeading("homeUpdatesTitle", v)} />
+            <TextInput label="Home - Updates Description" value={profile.headings?.homeUpdatesDesc || ""} onChange={(v) => updateHeading("homeUpdatesDesc", v)} />
+            <TextInput label="Projects Page Title" value={profile.headings?.projectsTitle || ""} onChange={(v) => updateHeading("projectsTitle", v)} />
+            <TextInput label="Projects Page Description" value={profile.headings?.projectsDesc || ""} onChange={(v) => updateHeading("projectsDesc", v)} />
+            <TextInput label="Certificates Page Title" value={profile.headings?.certificatesTitle || ""} onChange={(v) => updateHeading("certificatesTitle", v)} />
+            <TextInput label="Certificates Page Description" value={profile.headings?.certificatesDesc || ""} onChange={(v) => updateHeading("certificatesDesc", v)} />
+            <TextInput label="Skills Page Title" value={profile.headings?.skillsTitle || ""} onChange={(v) => updateHeading("skillsTitle", v)} />
+            <TextInput label="Skills Page Description" value={profile.headings?.skillsDesc || ""} onChange={(v) => updateHeading("skillsDesc", v)} />
+            <TextInput label="Blog Page Title" value={profile.headings?.blogTitle || ""} onChange={(v) => updateHeading("blogTitle", v)} />
+            <TextInput label="Blog Page Description" value={profile.headings?.blogDesc || ""} onChange={(v) => updateHeading("blogDesc", v)} />
+            <TextInput label="About - Work History Title" value={profile.headings?.aboutExperienceTitle || ""} onChange={(v) => updateHeading("aboutExperienceTitle", v)} />
+            <TextInput label="About - Education Title" value={profile.headings?.aboutEducationTitle || ""} onChange={(v) => updateHeading("aboutEducationTitle", v)} />
           </div>
         </section>
 

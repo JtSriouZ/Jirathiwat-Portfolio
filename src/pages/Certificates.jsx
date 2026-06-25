@@ -14,7 +14,8 @@ export default function Certificates({ content }) {
               <Award size={18} />
               Archive
             </div>
-            <h2>Certificates</h2>
+            <h2>{profile.headings?.certificatesTitle || "Certificates"}</h2>
+            <p className="section-note">{profile.headings?.certificatesDesc || "A collection of my professional licenses, certificates, and achievements."}</p>
           </div>
         </div>
         <div className="certificate-grid">

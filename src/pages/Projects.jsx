@@ -14,7 +14,8 @@ export default function Projects({ content }) {
               <Github size={18} />
               GitHub
             </div>
-            <h2>Projects</h2>
+            <h2>{profile.headings?.projectsTitle || "Projects"}</h2>
+            <p className="section-note">{profile.headings?.projectsDesc || "A collection of side projects, experiments, and open source contributions."}</p>
           </div>
           <a className="ghost-button" href={profile.github} target="_blank" rel="noreferrer">
             <ExternalLink size={16} />

@@ -168,8 +168,8 @@ export default function Home({ content, language }) {
             Interactive Preview
           </div>
           <div className="section-heading">
-            <h2>Featured Projects</h2>
-            <p className="section-note">A showcase of my recent work in software engineering, AI, and full-stack development.</p>
+            <h2>{profile.headings?.homeProjectsTitle || "Featured Projects"}</h2>
+            <p className="section-note">{profile.headings?.homeProjectsDesc || "A showcase of my recent work in software engineering, AI, and full-stack development."}</p>
           </div>
 
           <div className={isPreviewPaused ? "project-autoplay is-paused" : "project-autoplay"}>
@@ -241,8 +241,8 @@ export default function Home({ content, language }) {
           Explore
         </div>
         <div className="section-heading">
-          <h2>Quick shortcuts</h2>
-          <p className="section-note">Jump directly into the parts of the portfolio people usually want first.</p>
+          <h2>{profile.headings?.homeUpdatesTitle || "Quick shortcuts"}</h2>
+          <p className="section-note">{profile.headings?.homeUpdatesDesc || "Jump directly into the parts of the portfolio people usually want first."}</p>
         </div>
         <div className="quick-grid">
           {internalLinks.map((link) => (

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { resolveMediaUrl, getYoutubeEmbedUrl } from "../utils";
 
 export default function Blog({ content }) {
-  const { posts = [] } = content;
+  const { posts = [], profile = {} } = content;
 
   return (
     <div className="page-content">
@@ -14,7 +14,8 @@ export default function Blog({ content }) {
               <Newspaper size={18} />
               News
             </div>
-            <h2>Latest posts</h2>
+            <h2>{profile.headings?.blogTitle || "Latest posts"}</h2>
+            <p className="section-note">{profile.headings?.blogDesc || "Thoughts, news, and technical articles."}</p>
           </div>
         </div>
         <div className="post-grid">

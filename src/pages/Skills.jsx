@@ -56,9 +56,9 @@ export default function Skills({ content }) {
               <Code size={18} />
               Expertise
             </div>
-            <h2 style={{ fontSize: "2.5rem" }}>Skills & Technologies</h2>
+            <h2 style={{ fontSize: "2.5rem" }}>{profile.headings?.skillsTitle || "Skills & Technologies"}</h2>
             <p style={{ maxWidth: "600px", margin: "1rem auto 0", color: "var(--text-muted)" }}>
-              A comprehensive overview of my technical stack, frameworks, and core competencies.
+              {profile.headings?.skillsDesc || "A comprehensive overview of my technical stack, frameworks, and core competencies."}
             </p>
           </div>
         </div>

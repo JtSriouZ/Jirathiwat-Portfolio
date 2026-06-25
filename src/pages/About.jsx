@@ -97,7 +97,7 @@ export default function About({ content }) {
               <BriefcaseBusiness size={18} />
               Experience
             </div>
-            <h2>Work history</h2>
+            <h2>{profile.headings?.aboutExperienceTitle || "Work history"}</h2>
           </div>
         </div>
         <div className="timeline">
@@ -122,7 +122,7 @@ export default function About({ content }) {
               <GraduationCap size={18} />
               Education
             </div>
-            <h2>Academic path</h2>
+            <h2>{profile.headings?.aboutEducationTitle || "Academic path"}</h2>
           </div>
         </div>
         <div className="education-grid">
