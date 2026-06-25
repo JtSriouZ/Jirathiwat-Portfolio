@@ -101,7 +101,19 @@ export function getSkillIconUrl(skillName) {
     'yolo': 'yolo',
     'hugging face': 'huggingface',
     'mlops': 'mlflow',
-    'render': 'render'
+    'render': 'render',
+    'claude': 'anthropic',
+    'claude code': 'anthropic',
+    'antigravity': 'google',
+    'codex': 'openai',
+    'chatgpt': 'openai',
+    'gemini': 'googlegemini',
+    'shapr3d': 'shapr3d',
+    'adobe premiere pro': 'adobepremierepro',
+    'adobe photoshop': 'adobephotoshop',
+    'adobe lightroom': 'adobelightroom',
+    'davinci resolve': 'davinciresolve',
+    'github copilot': 'githubcopilot'
   };
   
   const slug = simpleIconsMapping[normalized] || normalized.replace(/[^a-z0-9]/g, '');
