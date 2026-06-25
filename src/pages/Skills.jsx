@@ -45,7 +45,7 @@ function SkillCard({ skill }) {
 }
 
 export default function Skills({ content }) {
-  const { expertise = [] } = content;
+  const { expertise = [], profile = {} } = content;
 
   return (
     <div className="page-content">

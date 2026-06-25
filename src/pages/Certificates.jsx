@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { normalizeList, resolveMediaUrl } from "../utils";
 
 export default function Certificates({ content }) {
-  const { certificates = [] } = content;
+  const { certificates = [], profile = {} } = content;
 
   return (
     <div className="page-content">
