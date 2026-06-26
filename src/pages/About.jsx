@@ -17,7 +17,9 @@ function AboutRackBackdrop() {
     if (!wrap || !canvas) return undefined;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 100);
+    scene.fog = new THREE.FogExp2(0x030810, 0.04);
+
+    const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
     const renderer = new THREE.WebGLRenderer({
       canvas,
       alpha: true,
@@ -27,118 +29,127 @@ function AboutRackBackdrop() {
     renderer.setClearColor(0x000000, 0);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
 
-    const rackContainer = new THREE.Group();
     const rack = new THREE.Group();
     const neon = new THREE.Group();
-    rackContainer.add(rack, neon);
-    
-    scene.add(rackContainer);
+    const dustGroup = new THREE.Group();
+    scene.add(rack, neon, dustGroup);
 
-    const metal = new THREE.MeshStandardMaterial({
-      color: 0x08101a,
-      roughness: 0.2,
-      metalness: 0.88,
-    });
-    const darkMetal = new THREE.MeshStandardMaterial({
-      color: 0x030508,
-      roughness: 0.45,
-      metalness: 0.9,
-    });
+    /* --- Materials --- */
+    const metal = new THREE.MeshStandardMaterial({ color: 0x0a1420, roughness: 0.18, metalness: 0.92 });
+    const darkMetal = new THREE.MeshStandardMaterial({ color: 0x040810, roughness: 0.35, metalness: 0.94 });
     const glass = new THREE.MeshPhysicalMaterial({
-      color: 0x77e8ff,
-      transparent: true,
-      opacity: 0.22,
-      roughness: 0.05,
-      metalness: 0.15,
-      transmission: 0.1,
-      thickness: 0.18,
+      color: 0x88eeff, transparent: true, opacity: 0.18,
+      roughness: 0.02, metalness: 0.2, transmission: 0.15,
+      thickness: 0.2, clearcoat: 0.8, clearcoatRoughness: 0.1,
     });
-    const bladeMaterial = new THREE.MeshStandardMaterial({
-      color: 0x111b2a,
-      roughness: 0.32,
-      metalness: 0.72,
-    });
-    const cyanLight = new THREE.MeshBasicMaterial({ color: 0x65e8ff });
-    const amberLight = new THREE.MeshBasicMaterial({ color: 0xffaa00 });
-    const greenLight = new THREE.MeshBasicMaterial({ color: 0x91ffcf });
-    const magentaLight = new THREE.MeshBasicMaterial({ color: 0xff6fd8 });
-    const cableMaterial = new THREE.MeshStandardMaterial({
-      color: 0x53f0d4,
-      roughness: 0.28,
-      metalness: 0.25,
-      emissive: 0x0e4c43,
-      emissiveIntensity: 0.7,
+    const bladeMat = new THREE.MeshStandardMaterial({ color: 0x0e1824, roughness: 0.28, metalness: 0.78 });
+    const handleMat = new THREE.MeshStandardMaterial({ color: 0x1a2a3e, roughness: 0.15, metalness: 0.95 });
+    const cyanG = new THREE.MeshBasicMaterial({ color: 0x65e8ff });
+    const amberG = new THREE.MeshBasicMaterial({ color: 0xffaa00 });
+    const greenG = new THREE.MeshBasicMaterial({ color: 0x91ffcf });
+    const magentaG = new THREE.MeshBasicMaterial({ color: 0xff6fd8 });
+    const cableMat = new THREE.MeshStandardMaterial({
+      color: 0x44eebb, roughness: 0.22, metalness: 0.3,
+      emissive: 0x0e6c55, emissiveIntensity: 0.9,
     });
 
-    const addBox = (name, size, position, material, parent = rack) => {
-      const mesh = new THREE.Mesh(new THREE.BoxGeometry(...size), material);
-      mesh.name = name;
-      mesh.position.set(...position);
-      parent.add(mesh);
-      return mesh;
+    const addBox = (name, size, pos, mat, parent = rack) => {
+      const m = new THREE.Mesh(new THREE.BoxGeometry(...size), mat);
+      m.name = name; m.position.set(...pos); parent.add(m); return m;
     };
 
-    addBox("rack-shell", [2.28, 5.4, 1.08], [0, 0, 0], darkMetal);
-    addBox("rack-back-glow", [2.04, 4.92, 0.05], [0, 0.08, -0.57], new THREE.MeshBasicMaterial({ color: 0x14233a, transparent: true, opacity: 0.62 }));
-    addBox("left-rail", [0.12, 5.72, 1.28], [-1.22, 0, 0], metal);
-    addBox("right-rail", [0.12, 5.72, 1.28], [1.22, 0, 0], metal);
-    addBox("top-cap", [2.52, 0.14, 1.28], [0, 2.86, 0], metal);
-    addBox("bottom-cap", [2.52, 0.16, 1.28], [0, -2.86, 0], metal);
-    addBox("glass-door", [2.02, 4.86, 0.055], [0, 0.05, 0.66], glass);
+    /* --- Rack frame --- */
+    addBox("shell", [2.28, 5.4, 1.08], [0, 0, 0], darkMetal);
+    addBox("back-glow", [2.04, 4.92, 0.04], [0, 0.08, -0.56],
+      new THREE.MeshBasicMaterial({ color: 0x0a1e38, transparent: true, opacity: 0.75 }));
 
-    for (let index = 0; index < 12; index += 1) {
-      const y = 2.25 - index * 0.38;
-      const blade = addBox(`server-blade-${index}`, [1.78, 0.24, 0.18], [0, y, 0.48], bladeMaterial);
-      blade.rotation.x = 0.01;
-      addBox(`blade-line-${index}`, [1.2, 0.018, 0.02], [-0.18, y + 0.015, 0.59], new THREE.MeshBasicMaterial({ color: 0x65e8ff, transparent: true, opacity: 0.22 }), rack);
+    // Side glow strips
+    const sideG = new THREE.MeshBasicMaterial({ color: 0x65e8ff, transparent: true, opacity: 0.12 });
+    addBox("l-strip", [0.02, 5.2, 0.04], [-1.16, 0, 0.64], sideG);
+    addBox("r-strip", [0.02, 5.2, 0.04], [1.16, 0, 0.64], sideG);
 
-      for (let led = 0; led < 5; led += 1) {
-        const material = [cyanLight, greenLight, amberLight, magentaLight][(index + led) % 4];
-        const dot = new THREE.Mesh(new THREE.SphereGeometry(0.026, 12, 12), material);
-        dot.position.set(0.68 + led * 0.14, y + 0.015, 0.61);
-        dot.userData = { pulse: index * 0.42 + led * 0.7 };
+    // Rails & caps
+    addBox("l-rail", [0.12, 5.72, 1.28], [-1.22, 0, 0], metal);
+    addBox("r-rail", [0.12, 5.72, 1.28], [1.22, 0, 0], metal);
+    addBox("top", [2.52, 0.14, 1.28], [0, 2.86, 0], metal);
+    addBox("bot", [2.52, 0.16, 1.28], [0, -2.86, 0], metal);
+
+    // Glass door + frame
+    addBox("door", [2.02, 4.86, 0.045], [0, 0.05, 0.66], glass);
+    addBox("dtop", [2.08, 0.06, 0.08], [0, 2.48, 0.66], metal);
+    addBox("dbot", [2.08, 0.06, 0.08], [0, -2.38, 0.66], metal);
+
+    /* --- Server blades --- */
+    for (let i = 0; i < 12; i++) {
+      const y = 2.25 - i * 0.38;
+      const b = addBox(`bl-${i}`, [1.78, 0.24, 0.18], [0, y, 0.48], bladeMat);
+      b.rotation.x = 0.01;
+      addBox(`hd-${i}`, [0.24, 0.08, 0.04], [-0.72, y, 0.60], handleMat);
+      const lc = i % 3 === 0 ? 0xff6fd8 : i % 2 === 0 ? 0xffaa00 : 0x65e8ff;
+      addBox(`ln-${i}`, [1.2, 0.016, 0.015], [-0.18, y + 0.014, 0.59],
+        new THREE.MeshBasicMaterial({ color: lc, transparent: true, opacity: 0.2 }), rack);
+      for (let j = 0; j < 5; j++) {
+        const gm = [cyanG, greenG, amberG, magentaG][(i + j) % 4];
+        const dot = new THREE.Mesh(new THREE.SphereGeometry(0.028, 12, 12), gm);
+        dot.position.set(0.68 + j * 0.14, y + 0.015, 0.62);
+        dot.userData = { pulse: i * 0.42 + j * 0.7 };
         neon.add(dot);
       }
     }
 
-    for (let col = 0; col < 2; col += 1) {
-      for (let row = 0; row < 6; row += 1) {
-        addBox(`vent-${col}-${row}`, [0.42, 0.03, 0.025], [-0.76 + col * 0.38, 1.96 - row * 0.17, 0.62], new THREE.MeshBasicMaterial({ color: 0x9fb4ff, transparent: true, opacity: 0.24 }), rack);
+    /* --- Vents --- */
+    for (let c = 0; c < 3; c++) {
+      for (let r = 0; r < 8; r++) {
+        addBox(`v-${c}-${r}`, [0.32, 0.022, 0.02], [-0.82 + c * 0.34, 2.1 - r * 0.14, 0.63],
+          new THREE.MeshBasicMaterial({ color: 0x8baeff, transparent: true, opacity: 0.18 }), rack);
       }
     }
 
-    const cableCurves = [
-      [[-0.68, 0.1, 0.63], [-0.38, -0.34, 0.92], [0.38, -0.22, 0.86], [0.72, -0.68, 0.63]],
-      [[-0.58, -0.65, 0.63], [-0.1, -1.02, 0.94], [0.58, -0.92, 0.78], [0.8, -1.28, 0.63]],
-      [[0.62, 0.85, 0.63], [0.18, 0.45, 0.9], [-0.44, 0.52, 0.84], [-0.78, 0.22, 0.63]],
+    /* --- Cables --- */
+    const curves = [
+      [[-0.68,0.1,0.63],[-0.38,-0.34,0.92],[0.38,-0.22,0.86],[0.72,-0.68,0.63]],
+      [[-0.58,-0.65,0.63],[-0.1,-1.02,0.94],[0.58,-0.92,0.78],[0.8,-1.28,0.63]],
+      [[0.62,0.85,0.63],[0.18,0.45,0.9],[-0.44,0.52,0.84],[-0.78,0.22,0.63]],
+      [[0.45,1.6,0.63],[0.82,1.1,0.88],[0.92,0.4,0.82],[0.78,-0.1,0.63]],
     ];
-    cableCurves.forEach((points, index) => {
-      const curve = new THREE.CatmullRomCurve3(points.map(([x, y, z]) => new THREE.Vector3(x, y, z)));
-      const cable = new THREE.Mesh(new THREE.TubeGeometry(curve, 36, 0.018 + index * 0.004, 8, false), cableMaterial);
-      rack.add(cable);
+    curves.forEach((pts, i) => {
+      const cv = new THREE.CatmullRomCurve3(pts.map(([x,y,z]) => new THREE.Vector3(x,y,z)));
+      rack.add(new THREE.Mesh(new THREE.TubeGeometry(cv, 42, 0.016 + i * 0.003, 8, false), cableMat));
     });
 
-    const ringGeometry = new THREE.TorusGeometry(1.72, 0.006, 8, 96);
-    const ringMaterial = new THREE.MeshBasicMaterial({ color: 0x65e8ff, transparent: true, opacity: 0.28 });
-    const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-    ring.rotation.x = Math.PI * 0.5;
-    ring.position.set(0, 0, 0.72);
-    neon.add(ring);
+    /* --- Neon rings --- */
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0x65e8ff, transparent: true, opacity: 0.24 });
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(1.72, 0.005, 8, 96), ringMat);
+    ring.rotation.x = Math.PI * 0.5; ring.position.set(0, 0, 0.72); neon.add(ring);
 
-    scene.add(new THREE.AmbientLight(0xaecbff, 0.6));
-    const key = new THREE.DirectionalLight(0xffffff, 2.2);
-    key.position.set(3, 5, 4);
-    scene.add(key);
-    const cyan = new THREE.PointLight(0x65e8ff, 4.5, 7);
-    cyan.position.set(-1.6, 1.8, 2.2);
-    scene.add(cyan);
-    const warm = new THREE.PointLight(0xffaa00, 3.8, 8);
-    warm.position.set(1.8, -1.2, 2.4);
-    scene.add(warm);
-    const rim = new THREE.DirectionalLight(0xff6fd8, 4.2);
-    rim.position.set(5, 3, -4);
-    scene.add(rim);
+    const ring2Mat = new THREE.MeshBasicMaterial({ color: 0xff6fd8, transparent: true, opacity: 0.14 });
+    const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.1, 0.003, 8, 96), ring2Mat);
+    ring2.rotation.x = Math.PI * 0.5; ring2.position.set(0, 0, 0.5); neon.add(ring2);
+
+    /* --- Floating dust --- */
+    const dustCount = 50;
+    const dArr = [];
+    for (let i = 0; i < dustCount; i++) dArr.push((Math.random()-0.5)*8, (Math.random()-0.5)*8, (Math.random()-0.5)*4+1);
+    const dGeo = new THREE.BufferGeometry();
+    dGeo.setAttribute("position", new THREE.Float32BufferAttribute(dArr, 3));
+    const dMat = new THREE.PointsMaterial({ color: 0x65e8ff, size: 0.025, transparent: true, opacity: 0.3, sizeAttenuation: true });
+    dustGroup.add(new THREE.Points(dGeo, dMat));
+
+    /* --- Floor reflection --- */
+    const floorMat = new THREE.MeshStandardMaterial({ color: 0x060e18, roughness: 0.15, metalness: 0.95, transparent: true, opacity: 0.5 });
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(12, 12), floorMat);
+    floor.rotation.x = -Math.PI / 2; floor.position.y = -3.1; scene.add(floor);
+
+    /* --- Lighting --- */
+    scene.add(new THREE.AmbientLight(0xaecbff, 0.5));
+    const kl = new THREE.DirectionalLight(0xffffff, 2.0); kl.position.set(3, 5, 4); scene.add(kl);
+    const cl = new THREE.PointLight(0x65e8ff, 5.0, 9); cl.position.set(-2, 2, 2.5); scene.add(cl);
+    const wl = new THREE.PointLight(0xffaa00, 3.5, 8); wl.position.set(2, -1.5, 2.4); scene.add(wl);
+    const rl = new THREE.DirectionalLight(0xff6fd8, 3.0); rl.position.set(4, 2, -4); scene.add(rl);
+    const bl = new THREE.PointLight(0x65e8ff, 2.0, 6); bl.position.set(0, -3.5, 1.5); scene.add(bl);
 
     let frameId = 0;
     let width = 0;
@@ -154,7 +165,7 @@ function AboutRackBackdrop() {
     };
 
     const animate = (time = 0) => {
-      const seconds = time * 0.001;
+      const sec = time * 0.001;
       const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
       const progress = clamp(window.scrollY / maxScroll, 0, 1);
       const sway = Math.sin(progress * Math.PI * 2.35);
@@ -164,20 +175,31 @@ function AboutRackBackdrop() {
       wrap.style.setProperty("--about-rack-sway", sway.toFixed(3));
       wrap.style.setProperty("--about-rack-lift", lift.toFixed(3));
 
-      rack.rotation.y = -0.38 + sway * 0.32 + progress * 0.22 + Math.sin(seconds * 0.38) * 0.045;
-      rack.rotation.x = 0.06 + lift * 0.045;
-      rack.rotation.z = -0.025 + Math.sin(seconds * 0.28) * 0.018;
+      rack.rotation.y = -0.32 + sway * 0.24 + progress * 0.18 + Math.sin(sec * 0.32) * 0.035;
+      rack.rotation.x = 0.04 + lift * 0.035;
+      rack.rotation.z = -0.018 + Math.sin(sec * 0.22) * 0.012;
       neon.rotation.copy(rack.rotation);
-      ring.rotation.z = seconds * 0.28;
-      ringMaterial.opacity = 0.2 + Math.sin(seconds * 1.4) * 0.05;
 
-      neon.children.forEach((dot) => {
-        const pulse = 0.85 + Math.sin(seconds * 4.2 + dot.userData.pulse) * 0.45;
-        dot.scale.setScalar(pulse);
+      ring.rotation.z = sec * 0.22;
+      ringMat.opacity = 0.18 + Math.sin(sec * 1.2) * 0.06;
+      ring2.rotation.z = -sec * 0.15;
+      ring2Mat.opacity = 0.1 + Math.sin(sec * 0.9 + 1.5) * 0.04;
+
+      neon.children.forEach((ch) => {
+        if (ch.userData.pulse !== undefined) {
+          ch.scale.setScalar(0.8 + Math.sin(sec * 3.8 + ch.userData.pulse) * 0.4);
+        }
       });
 
-      camera.position.set(sway * 0.72, 0.22 + lift * 0.28, 14.5 - progress * 1.25);
-      camera.lookAt(0, -0.1, 0.18);
+      // Dust drift
+      const dp = dGeo.attributes.position;
+      for (let i = 0; i < dustCount; i++) dp.setY(i, dp.getY(i) + Math.sin(sec * 0.5 + i) * 0.001);
+      dp.needsUpdate = true;
+      dMat.opacity = 0.22 + Math.sin(sec * 0.8) * 0.08;
+
+      // Camera: rack appears on the RIGHT side of the viewport
+      camera.position.set(2.8 + sway * 0.3, 0.25 + lift * 0.2, 10.0 - progress * 0.8);
+      camera.lookAt(0.8, -0.1, 0);
 
       renderer.render(scene, camera);
       wrap.classList.add("is-ready");
@@ -192,10 +214,7 @@ function AboutRackBackdrop() {
       cancelAnimationFrame(frameId);
       window.removeEventListener("resize", resize);
       renderer.dispose();
-      scene.traverse((object) => {
-        if (!object.isMesh) return;
-        object.geometry?.dispose?.();
-      });
+      scene.traverse((obj) => { if (obj.isMesh) obj.geometry?.dispose?.(); });
     };
   }, []);
 

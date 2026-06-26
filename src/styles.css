@@ -583,9 +583,7 @@ button[aria-busy="true"] {
   opacity: 0;
   background: transparent;
   filter: brightness(1.04) contrast(1.12) saturate(1.12);
-  transform:
-    translate3d(calc(var(--about-rack-sway, 0) * 1.45rem + 25vw), calc(var(--about-rack-lift, 0) * -0.7rem), 0)
-    scale(1);
+  transform: none;
   transform-origin: center;
   transition: opacity 900ms ease;
 }
@@ -3317,9 +3315,7 @@ body {
   }
 
   .about-rack-canvas {
-    transform:
-      translate3d(calc(var(--about-rack-sway, 0) * 1rem + 8vw), calc(var(--about-rack-lift, 0) * -0.45rem), 0)
-      scale(1);
+    transform: none;
   }
 
   .topbar {
