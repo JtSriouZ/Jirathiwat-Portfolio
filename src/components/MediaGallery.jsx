@@ -4,12 +4,19 @@ import { getUrlLabel, getYoutubeEmbedUrl, isImageUrl, resolveMediaUrl } from "..
 export default function MediaGallery({ urls = [], title = "Media Gallery", itemTitle = "Media" }) {
   if (!urls.length) return null;
 
+  const mediaItems = urls
+    .map((url, idx) => {
+      const ytEmbed = getYoutubeEmbedUrl(url);
+      const isVideo = Boolean(ytEmbed) || /\.(mp4|webm|ogg)(\?.*)?$/i.test(url);
+      return { url, idx, ytEmbed, isVideo };
+    })
+    .sort((a, b) => Number(b.isVideo) - Number(a.isVideo) || a.idx - b.idx);
+
   return (
     <>
       <h3>{title}</h3>
       <div className="media-gallery">
-        {urls.map((url, idx) => {
-          const ytEmbed = getYoutubeEmbedUrl(url);
+        {mediaItems.map(({ url, idx, ytEmbed, isVideo }) => {
           const resolvedUrl = resolveMediaUrl(url);
 
           if (ytEmbed) {
@@ -25,9 +32,9 @@ export default function MediaGallery({ urls = [], title = "Media Gallery", itemT
             );
           }
 
-          if (/\.(mp4|webm|ogg)(\?.*)?$/i.test(url)) {
+          if (isVideo) {
             return (
-              <div className="media-frame" key={`${url}-${idx}`}>
+              <div className="media-frame video-media" key={`${url}-${idx}`}>
                 <video src={resolvedUrl} controls />
               </div>
             );

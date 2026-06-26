@@ -473,16 +473,22 @@
         "Hidden Gem Radar and interactive Plotly 3D discovery explorer"
       ],
       "fullDescription": "",
-      "mediaUrls": []
+      "mediaUrls": [
+        "/projects/cinematch-2-01.png",
+        "/projects/cinematch-2-02.png",
+        "/projects/cinematch-2-03.png",
+        "/projects/cinematch-2-04.png",
+        "/projects/cinematch-2-05.png"
+      ]
     },
     {
       "id": "project-boonsonclon",
       "name": "BoonSonClon Premium Furniture Store",
-      "description": "A high-performance full-stack e-commerce platform designed for premium furniture retail, featuring a hybrid database system, production deployment, and a responsive mobile-first shopping experience.",
+      "description": "A high-performance full-stack e-commerce platform designed for premium furniture retail, featuring storefront browsing, product filtering, cart and order flows, admin product management, order inspection, member management, contact forms, and responsive UI pages.",
       "language": "JavaScript",
       "repoUrl": "https://github.com/JirathiwatSun/ITCS223_WebDev",
       "liveUrl": "https://boonsonclon-furniture.onrender.com",
-      "imageUrl": "https://i.postimg.cc/pVDP7S8d/Screenshot-2026-06-16-121823.png",
+      "imageUrl": "projects/boonsonclon-banner.jpg",
       "updated": "2026-04-28",
       "featuredRank": 3,
       "period": "2026",
@@ -491,26 +497,40 @@
         "Web Applications",
         "Full-Stack Development",
         "JavaScript",
-        "Responsive Design"
+        "Responsive Design",
+        "E-Commerce",
+        "Admin Dashboard"
       ],
       "highlights": [
         "Premium furniture e-commerce platform",
         "Hybrid database system",
-        "Fully responsive mobile-first design",
+        "Storefront product catalog, category filters, cart, and order flow",
+        "Admin dashboard for products, orders, members, messages, and order status updates",
+        "Fully responsive customer and admin pages",
         "Live production deployment on Render"
       ],
-      "fullDescription": "",
-      "mediaUrls": []
+      "fullDescription": "BoonSonClon is a full-stack premium furniture e-commerce platform built for the ITCS223 Web Development course. The project covers the complete shopping lifecycle: storefront browsing, product categories, filtering by price/category/color, product detail pages, cart and order checkout flows, contact forms, and customer-facing pages.\n\nThe backend and admin experience include product management, order history, order inspection, order status updates, member management, contact/message management, synchronized data views, and dashboard metrics for revenue, members, and orders.\n\nThe interface was designed around a clean premium furniture retail aesthetic with large product imagery, catalog browsing, admin operations, and responsive layouts across desktop and application pages.",
+      "mediaUrls": [
+        "projects/boonsonclon-banner.jpg",
+        "projects/boonsonclon-desktop-overview.jpg",
+        "projects/boonsonclon-shop-grid.jpg",
+        "projects/boonsonclon-team-about.jpg",
+        "projects/boonsonclon-contact-map.jpg",
+        "projects/boonsonclon-admin-products.jpg",
+        "projects/boonsonclon-admin-products-empty.jpg",
+        "projects/boonsonclon-admin-orders.jpg",
+        "projects/boonsonclon-admin-order-detail.jpg"
+      ]
     },
     {
       "id": "project-homelab",
       "name": "Personal Home Lab Server",
-      "description": "A custom-built home lab server infrastructure running on a compact 10-inch rack mini PC setup. Powered by Proxmox for efficient virtualization, it serves as a robust environment for self-hosting applications, experimenting with advanced network configurations, and managing personal data.",
-      "fullDescription": "Building a Personal Home Lab Server is an ongoing journey of creating a private, self-hosted cloud environment from scratch. To achieve a balance between high performance and physical footprint, the hardware is centered around a compact 10-inch rack housing a powerful mini PC setup. This ensures low power consumption and quiet operation while providing enough compute power to run dozens of services simultaneously.\n\nThe core of the infrastructure is powered by Proxmox VE, an enterprise-grade open-source bare-metal hypervisor. By installing Proxmox directly on the mini PC, the hardware resources are efficiently partitioned into multiple Virtual Machines (VMs) and lightweight LXC (Linux Containers). This isolates different environments—such as dedicated Ubuntu servers for Docker deployments, testing environments for new software, and dedicated database instances.\n\nNetworking and security are handled using Tailscale, a zero-config VPN built on WireGuard. Instead of exposing vulnerable ports to the public internet via port forwarding, Tailscale creates a secure, encrypted mesh network. This allows seamless, secure remote access to all home lab services and dashboards from any device, anywhere in the world, as if they were on the same local network.\n\nCurrently, the lab serves as the backbone for personal data management, media streaming, and development workflows. Docker is heavily utilized to deploy and orchestrate self-hosted applications, ensuring that every service is containerized, reproducible, and easy to update. This project is a testament to continuous learning in DevOps, system administration, and infrastructure as code.",
+      "description": "A real compact home lab server rack running a Proxmox VE 9.2.3 cluster with LXC containers and virtual machines for networking, self-hosting, storage, automation, media, AI experiments, and infrastructure monitoring.",
+      "fullDescription": "Building a Personal Home Lab Server is an ongoing journey of creating a private, self-hosted cloud environment from real hardware. The setup is built around a compact 10-inch rack with managed switching, structured patch cabling, mini PC hardware, and HP server hardware, giving the lab a practical footprint while still supporting multiple always-on services.\n\nThe core of the infrastructure is powered by Proxmox VE 9.2.3. The cluster currently uses pve1 and pve2 nodes, with lightweight LXC containers and virtual machines for services such as AdGuard, InfluxDB, Grafana, Immich, Jellyfin, Ollama, Seerr, Radarr, Prowlarr, Open WebUI, Hermes Agent, Home Assistant, Ubuntu, and other automation or media workloads.\n\nNetworking and security are handled with a self-hosted network stack and Tailscale-enabled remote access. This keeps services reachable through an encrypted private network while reducing the need to expose home infrastructure directly to the public internet.\n\nThe lab serves as a learning and production-style environment for system administration, virtualization, Docker-based services, monitoring, media hosting, local AI experimentation, storage, and infrastructure operations. It connects physical hardware design with practical DevOps workflows and real service maintenance.",
       "language": "Infrastructure",
       "repoUrl": "",
       "liveUrl": "",
-      "imageUrl": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=1600",
+      "imageUrl": "projects/homelab-real-banner.jpg",
       "updated": "2026-06-25",
       "featuredRank": 4,
       "period": "2026 - Present",
@@ -520,16 +540,66 @@
         "Proxmox",
         "Docker",
         "Ubuntu",
-        "Tailscale"
+        "Tailscale",
+        "AdGuard",
+        "Grafana",
+        "Jellyfin",
+        "Ollama",
+        "Home Assistant"
       ],
       "highlights": [
-        "Architected custom bare-metal setup in a 10-inch rack using mini PCs",
-        "Powered by Proxmox VE for lightweight and scalable virtualization",
-        "Implemented secure remote access and networking protocols",
-        "Self-hosted essential development and lifestyle applications"
+        "Built a real compact rack with managed switching, patch cabling, mini PC hardware, and HP server hardware",
+        "Runs a Proxmox VE 9.2.3 cluster with pve1 and pve2 nodes",
+        "Hosts LXC containers and VMs for AdGuard, Grafana, Jellyfin, Ollama, Home Assistant, Ubuntu, and media automation",
+        "Used for secure remote access, DNS/network services, monitoring, media hosting, local AI, storage, and self-hosted application experiments"
       ],
       "mediaUrls": [
+        "projects/homelab-real-banner.jpg",
+        "projects/homelab-real-02.jpg",
+        "projects/homelab-real-01.jpg",
+        "projects/homelab-real-05.jpg",
+        "projects/homelab-real-06.jpg",
+        "projects/homelab-real-03.jpg",
+        "projects/homelab-real-04.jpg",
+        "projects/homelab-proxmox-cluster.jpg",
         "https://www.youtube.com/watch?v=v-FKrwwSFXo"
+      ]
+    },
+    {
+      "id": "project-bf-connect",
+      "name": "BF Connect Android Application",
+      "description": "An Android application for breastfeeding support and clinical follow-up that connects mothers, nurses, and administrators through role-based dashboards, feeding and pumping logs, consultations, community moderation, knowledge content, and Firebase-backed data sync.",
+      "fullDescription": "BF Connect is a production-oriented Android application for breastfeeding support, care coordination, and clinical follow-up. The app is designed around three primary roles: mothers, nurses, and administrators, each with dedicated workflows and dashboards.\n\nFor mothers, the application supports profile management, breastfeeding and pumping logs, goal tracking, EPDS mental-health screening, consultation requests, community questions, and educational content. For nurses, it provides patient monitoring views, mother detail pages, consultation replies, community moderation, schedule support, and case follow-up. For administrators, it includes nurse approval, knowledge/news/quiz management, reporting, notifications, role oversight, and system setup.\n\nThe backend is configured with Firebase Authentication, Google sign-in, Cloud Firestore, Firebase Storage for images/PDFs/videos, Firebase Cloud Messaging for role notifications, Firebase Crashlytics, Firebase Remote Config, and Cloud Functions v2. The project also includes production launch documentation, Play Store build notes, data-safety drafts, and Firebase deployment rules.",
+      "language": "Java / Android",
+      "repoUrl": "https://github.com/JirathiwatSun/BF-Connect",
+      "liveUrl": "",
+      "imageUrl": "projects/bf-connect-banner.png",
+      "updated": "2026-06-26",
+      "featuredRank": 5,
+      "period": "Jun 2026 - Present",
+      "associated": "Android Application Project",
+      "skills": [
+        "Android",
+        "Java",
+        "Firebase",
+        "Cloud Firestore",
+        "Firebase Auth",
+        "Firebase Storage",
+        "Cloud Functions",
+        "Mobile UI"
+      ],
+      "highlights": [
+        "Role-based dashboards for mothers, nurses, and administrators",
+        "Breastfeeding and pumping log workflows with clinical follow-up support",
+        "EPDS screening, consultation, community, knowledge, and moderation modules",
+        "Firebase-backed sync with authentication, storage, messaging, Crashlytics, Remote Config, and Cloud Functions"
+      ],
+      "mediaUrls": [
+        "projects/bf-connect-home.png",
+        "projects/bf-connect-feed-log.png",
+        "projects/bf-connect-nurse-dashboard.png",
+        "projects/bf-connect-nurse-list.png",
+        "projects/bf-connect-ward-empty.png"
       ]
     },
     {
@@ -542,7 +612,7 @@
       "liveUrl": "",
       "imageUrl": "projects/server-rack-shapr3d-frame.png",
       "updated": "2026-06-08",
-      "featuredRank": 5,
+      "featuredRank": 6,
       "period": "Jun 2026",
       "associated": "Personal Home Lab Project",
       "skills": [
