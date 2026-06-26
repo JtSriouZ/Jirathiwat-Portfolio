@@ -10,6 +10,7 @@
   --green: #91ffcf;
   --pink: #ff6fd8;
   --gold: #ffd36a;
+  --orange: #ff9f43;
   --violet: #a78bfa;
   --electric: #2af7ff;
   --deep: #070a18;
@@ -932,7 +933,7 @@ p {
 
 .about-metric strong {
   display: block;
-  color: var(--cyan);
+  color: var(--gold);
   font-size: 1.8rem;
   line-height: 1;
 }
@@ -1611,14 +1612,14 @@ p {
 
 .timeline-item span,
 .education-card span {
-  color: var(--gold);
+  color: var(--cyan);
   font-size: 0.86rem;
   font-weight: 800;
 }
 
 .company {
   margin-bottom: 0.55rem;
-  color: var(--cyan);
+  color: var(--orange);
   font-weight: 800;
 }
 
