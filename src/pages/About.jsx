@@ -170,7 +170,7 @@ function AboutRackBackdrop() {
         dot.scale.setScalar(pulse);
       });
 
-      camera.position.set(0.7 + sway * 0.72, 0.22 + lift * 0.28, 8.2 - progress * 1.25);
+      camera.position.set(-2.5 + sway * 0.72, 0.22 + lift * 0.28, 14.5 - progress * 1.25);
       camera.lookAt(0, -0.1, 0.18);
 
       renderer.render(scene, camera);
