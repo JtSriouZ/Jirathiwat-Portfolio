@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Code2, BriefcaseBusiness, GraduationCap, MapPin, Sparkles, Github, Linkedin, Instagram, Mail } from "lucide-react";
+import * as THREE from "three";
 import { normalizeList, resolveMediaUrl } from "../utils";
-
-const ABOUT_RACK_MODEL_URL = "https://raw.githubusercontent.com/SethiShreya/3D-Server-Rack/main/server_rack.glb";
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
@@ -10,70 +9,193 @@ function clamp(value, min, max) {
 
 function AboutRackBackdrop() {
   const wrapRef = useRef(null);
-  const modelRef = useRef(null);
+  const canvasRef = useRef(null);
 
   useEffect(() => {
     const wrap = wrapRef.current;
-    const model = modelRef.current;
-    if (!wrap || !model) return undefined;
+    const canvas = canvasRef.current;
+    if (!wrap || !canvas) return undefined;
 
-    let frameId = 0;
-    let readyFallbackId = 0;
-    const markReady = () => {
-      wrap.classList.add("is-ready");
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 100);
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      alpha: true,
+      antialias: true,
+      powerPreference: "high-performance",
+    });
+    renderer.setClearColor(0x000000, 0);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+    const rack = new THREE.Group();
+    const neon = new THREE.Group();
+    scene.add(rack, neon);
+
+    const metal = new THREE.MeshStandardMaterial({
+      color: 0x08101a,
+      roughness: 0.2,
+      metalness: 0.88,
+    });
+    const darkMetal = new THREE.MeshStandardMaterial({
+      color: 0x030508,
+      roughness: 0.45,
+      metalness: 0.9,
+    });
+    const glass = new THREE.MeshPhysicalMaterial({
+      color: 0x77e8ff,
+      transparent: true,
+      opacity: 0.22,
+      roughness: 0.05,
+      metalness: 0.15,
+      transmission: 0.1,
+      thickness: 0.18,
+    });
+    const bladeMaterial = new THREE.MeshStandardMaterial({
+      color: 0x111b2a,
+      roughness: 0.32,
+      metalness: 0.72,
+    });
+    const cyanLight = new THREE.MeshBasicMaterial({ color: 0x65e8ff });
+    const amberLight = new THREE.MeshBasicMaterial({ color: 0xffaa00 });
+    const greenLight = new THREE.MeshBasicMaterial({ color: 0x91ffcf });
+    const magentaLight = new THREE.MeshBasicMaterial({ color: 0xff6fd8 });
+    const cableMaterial = new THREE.MeshStandardMaterial({
+      color: 0x53f0d4,
+      roughness: 0.28,
+      metalness: 0.25,
+      emissive: 0x0e4c43,
+      emissiveIntensity: 0.7,
+    });
+
+    const addBox = (name, size, position, material, parent = rack) => {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(...size), material);
+      mesh.name = name;
+      mesh.position.set(...position);
+      parent.add(mesh);
+      return mesh;
     };
 
-    const update = () => {
+    addBox("rack-shell", [2.28, 5.4, 1.08], [0, 0, 0], darkMetal);
+    addBox("rack-back-glow", [2.04, 4.92, 0.05], [0, 0.08, -0.57], new THREE.MeshBasicMaterial({ color: 0x14233a, transparent: true, opacity: 0.62 }));
+    addBox("left-rail", [0.12, 5.72, 1.28], [-1.22, 0, 0], metal);
+    addBox("right-rail", [0.12, 5.72, 1.28], [1.22, 0, 0], metal);
+    addBox("top-cap", [2.52, 0.14, 1.28], [0, 2.86, 0], metal);
+    addBox("bottom-cap", [2.52, 0.16, 1.28], [0, -2.86, 0], metal);
+    addBox("glass-door", [2.02, 4.86, 0.055], [0, 0.05, 0.66], glass);
+
+    for (let index = 0; index < 12; index += 1) {
+      const y = 2.25 - index * 0.38;
+      const blade = addBox(`server-blade-${index}`, [1.78, 0.24, 0.18], [0, y, 0.48], bladeMaterial);
+      blade.rotation.x = 0.01;
+      addBox(`blade-line-${index}`, [1.2, 0.018, 0.02], [-0.18, y + 0.015, 0.59], new THREE.MeshBasicMaterial({ color: 0x65e8ff, transparent: true, opacity: 0.22 }), rack);
+
+      for (let led = 0; led < 5; led += 1) {
+        const material = [cyanLight, greenLight, amberLight, magentaLight][(index + led) % 4];
+        const dot = new THREE.Mesh(new THREE.SphereGeometry(0.026, 12, 12), material);
+        dot.position.set(0.68 + led * 0.14, y + 0.015, 0.61);
+        dot.userData = { pulse: index * 0.42 + led * 0.7 };
+        neon.add(dot);
+      }
+    }
+
+    for (let col = 0; col < 2; col += 1) {
+      for (let row = 0; row < 6; row += 1) {
+        addBox(`vent-${col}-${row}`, [0.42, 0.03, 0.025], [-0.76 + col * 0.38, 1.96 - row * 0.17, 0.62], new THREE.MeshBasicMaterial({ color: 0x9fb4ff, transparent: true, opacity: 0.24 }), rack);
+      }
+    }
+
+    const cableCurves = [
+      [[-0.68, 0.1, 0.63], [-0.38, -0.34, 0.92], [0.38, -0.22, 0.86], [0.72, -0.68, 0.63]],
+      [[-0.58, -0.65, 0.63], [-0.1, -1.02, 0.94], [0.58, -0.92, 0.78], [0.8, -1.28, 0.63]],
+      [[0.62, 0.85, 0.63], [0.18, 0.45, 0.9], [-0.44, 0.52, 0.84], [-0.78, 0.22, 0.63]],
+    ];
+    cableCurves.forEach((points, index) => {
+      const curve = new THREE.CatmullRomCurve3(points.map(([x, y, z]) => new THREE.Vector3(x, y, z)));
+      const cable = new THREE.Mesh(new THREE.TubeGeometry(curve, 36, 0.018 + index * 0.004, 8, false), cableMaterial);
+      rack.add(cable);
+    });
+
+    const ringGeometry = new THREE.TorusGeometry(1.72, 0.006, 8, 96);
+    const ringMaterial = new THREE.MeshBasicMaterial({ color: 0x65e8ff, transparent: true, opacity: 0.28 });
+    const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+    ring.rotation.x = Math.PI * 0.5;
+    ring.position.set(0, 0, 0.72);
+    neon.add(ring);
+
+    scene.add(new THREE.AmbientLight(0xaecbff, 0.6));
+    const key = new THREE.DirectionalLight(0xffffff, 2.2);
+    key.position.set(3, 5, 4);
+    scene.add(key);
+    const cyan = new THREE.PointLight(0x65e8ff, 4.5, 7);
+    cyan.position.set(-1.6, 1.8, 2.2);
+    scene.add(cyan);
+    const warm = new THREE.PointLight(0xffaa00, 3.8, 8);
+    warm.position.set(1.8, -1.2, 2.4);
+    scene.add(warm);
+
+    let frameId = 0;
+    let width = 0;
+    let height = 0;
+
+    const resize = () => {
+      const rect = wrap.getBoundingClientRect();
+      width = Math.max(1, Math.floor(rect.width));
+      height = Math.max(1, Math.floor(rect.height));
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    };
+
+    const animate = (time = 0) => {
+      const seconds = time * 0.001;
       const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
       const progress = clamp(window.scrollY / maxScroll, 0, 1);
       const sway = Math.sin(progress * Math.PI * 2.35);
       const lift = Math.cos(progress * Math.PI * 2.05);
-      const orbit = 34 + sway * 18 + progress * 18;
-      const elevation = 68 + lift * 8 - progress * 6;
-      const radius = 8.4 - progress * 1.8;
-      const fov = 30 - progress * 5;
 
       wrap.style.setProperty("--about-rack-progress", progress.toFixed(3));
       wrap.style.setProperty("--about-rack-sway", sway.toFixed(3));
       wrap.style.setProperty("--about-rack-lift", lift.toFixed(3));
-      model.setAttribute("camera-orbit", `${orbit.toFixed(2)}deg ${elevation.toFixed(2)}deg ${radius.toFixed(2)}m`);
-      model.setAttribute("field-of-view", `${fov.toFixed(2)}deg`);
-      frameId = requestAnimationFrame(update);
+
+      rack.rotation.y = -0.38 + sway * 0.32 + progress * 0.22 + Math.sin(seconds * 0.38) * 0.045;
+      rack.rotation.x = 0.06 + lift * 0.045;
+      rack.rotation.z = -0.025 + Math.sin(seconds * 0.28) * 0.018;
+      neon.rotation.copy(rack.rotation);
+      ring.rotation.z = seconds * 0.28;
+      ringMaterial.opacity = 0.2 + Math.sin(seconds * 1.4) * 0.05;
+
+      neon.children.forEach((dot) => {
+        const pulse = 0.85 + Math.sin(seconds * 4.2 + dot.userData.pulse) * 0.45;
+        dot.scale.setScalar(pulse);
+      });
+
+      camera.position.set(0.7 + sway * 0.72, 0.22 + lift * 0.28, 8.2 - progress * 1.25);
+      camera.lookAt(0, -0.1, 0.18);
+
+      renderer.render(scene, camera);
+      wrap.classList.add("is-ready");
+      frameId = requestAnimationFrame(animate);
     };
 
-    frameId = requestAnimationFrame(update);
-    model.addEventListener("load", markReady);
-    readyFallbackId = window.setTimeout(() => {
-      wrap.classList.add("is-ready");
-    }, 4200);
+    resize();
+    frameId = requestAnimationFrame(animate);
+    window.addEventListener("resize", resize);
 
     return () => {
       cancelAnimationFrame(frameId);
-      window.clearTimeout(readyFallbackId);
-      model.removeEventListener("load", markReady);
+      window.removeEventListener("resize", resize);
+      renderer.dispose();
+      scene.traverse((object) => {
+        if (!object.isMesh) return;
+        object.geometry?.dispose?.();
+      });
     };
   }, []);
 
   return (
     <div className="about-rack-backdrop" ref={wrapRef} aria-hidden="true">
-      <model-viewer
-        ref={modelRef}
-        class="about-rack-model"
-        title="Decorative 3D data center rack"
-        src={ABOUT_RACK_MODEL_URL}
-        camera-orbit="34deg 68deg 8.4m"
-        field-of-view="30deg"
-        auto-rotate
-        auto-rotate-delay="0"
-        rotation-per-second="6deg"
-        shadow-intensity="0.72"
-        exposure="0.9"
-        environment-image="neutral"
-        interaction-prompt="none"
-        disable-zoom
-        disable-pan
-        tabIndex="-1"
-      />
+      <canvas ref={canvasRef} className="about-rack-canvas" />
     </div>
   );
 }
