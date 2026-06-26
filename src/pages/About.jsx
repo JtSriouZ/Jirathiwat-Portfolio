@@ -28,9 +28,12 @@ function AboutRackBackdrop() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
 
+    const rackContainer = new THREE.Group();
     const rack = new THREE.Group();
     const neon = new THREE.Group();
-    scene.add(rack, neon);
+    rackContainer.add(rack, neon);
+    
+    scene.add(rackContainer);
 
     const metal = new THREE.MeshStandardMaterial({
       color: 0x08101a,
@@ -133,6 +136,9 @@ function AboutRackBackdrop() {
     const warm = new THREE.PointLight(0xffaa00, 3.8, 8);
     warm.position.set(1.8, -1.2, 2.4);
     scene.add(warm);
+    const rim = new THREE.DirectionalLight(0xff6fd8, 4.2);
+    rim.position.set(5, 3, -4);
+    scene.add(rim);
 
     let frameId = 0;
     let width = 0;
@@ -170,7 +176,7 @@ function AboutRackBackdrop() {
         dot.scale.setScalar(pulse);
       });
 
-      camera.position.set(-2.5 + sway * 0.72, 0.22 + lift * 0.28, 14.5 - progress * 1.25);
+      camera.position.set(sway * 0.72, 0.22 + lift * 0.28, 14.5 - progress * 1.25);
       camera.lookAt(0, -0.1, 0.18);
 
       renderer.render(scene, camera);
