@@ -157,7 +157,23 @@
         "SQLite",
         "Mobile UI/UX",
         "App Store Connect",
-        "Google Play Console"
+        "Google Play Console",
+        "Expo",
+        "SwiftUI",
+        "Jetpack Compose",
+        "Ionic",
+        "Electron",
+        "Tauri",
+        "Java",
+        "Objective-C",
+        "Core Data",
+        "Room",
+        "Realm",
+        "Fastlane",
+        "TestFlight",
+        "REST APIs",
+        "GraphQL",
+        "WebSockets"
       ]
     },
     {
