@@ -17,7 +17,7 @@ function AboutRackBackdrop() {
     if (!wrap || !canvas) return undefined;
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x030810, 0.04);
+    scene.fog = new THREE.FogExp2(0x050c18, 0.02);
 
     const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
     const renderer = new THREE.WebGLRenderer({
@@ -30,7 +30,7 @@ function AboutRackBackdrop() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
+    renderer.toneMappingExposure = 2.0;
 
     const rack = new THREE.Group();
     const neon = new THREE.Group();
@@ -38,22 +38,23 @@ function AboutRackBackdrop() {
     scene.add(rack, neon, dustGroup);
 
     /* --- Materials --- */
-    const metal = new THREE.MeshStandardMaterial({ color: 0x0a1420, roughness: 0.18, metalness: 0.92 });
-    const darkMetal = new THREE.MeshStandardMaterial({ color: 0x040810, roughness: 0.35, metalness: 0.94 });
+    const metal = new THREE.MeshStandardMaterial({ color: 0x1a2e44, roughness: 0.15, metalness: 0.88, emissive: 0x0a1520, emissiveIntensity: 0.15 });
+    const darkMetal = new THREE.MeshStandardMaterial({ color: 0x0e1a2a, roughness: 0.28, metalness: 0.9, emissive: 0x060e18, emissiveIntensity: 0.1 });
     const glass = new THREE.MeshPhysicalMaterial({
-      color: 0x88eeff, transparent: true, opacity: 0.18,
-      roughness: 0.02, metalness: 0.2, transmission: 0.15,
-      thickness: 0.2, clearcoat: 0.8, clearcoatRoughness: 0.1,
+      color: 0xaaf4ff, transparent: true, opacity: 0.25,
+      roughness: 0.02, metalness: 0.15, transmission: 0.2,
+      thickness: 0.2, clearcoat: 1.0, clearcoatRoughness: 0.05,
+      emissive: 0x1a4455, emissiveIntensity: 0.3,
     });
-    const bladeMat = new THREE.MeshStandardMaterial({ color: 0x0e1824, roughness: 0.28, metalness: 0.78 });
-    const handleMat = new THREE.MeshStandardMaterial({ color: 0x1a2a3e, roughness: 0.15, metalness: 0.95 });
-    const cyanG = new THREE.MeshBasicMaterial({ color: 0x65e8ff });
-    const amberG = new THREE.MeshBasicMaterial({ color: 0xffaa00 });
-    const greenG = new THREE.MeshBasicMaterial({ color: 0x91ffcf });
-    const magentaG = new THREE.MeshBasicMaterial({ color: 0xff6fd8 });
+    const bladeMat = new THREE.MeshStandardMaterial({ color: 0x182840, roughness: 0.22, metalness: 0.72, emissive: 0x0a1520, emissiveIntensity: 0.12 });
+    const handleMat = new THREE.MeshStandardMaterial({ color: 0x2a4060, roughness: 0.12, metalness: 0.92 });
+    const cyanG = new THREE.MeshBasicMaterial({ color: 0x88f4ff });
+    const amberG = new THREE.MeshBasicMaterial({ color: 0xffcc44 });
+    const greenG = new THREE.MeshBasicMaterial({ color: 0xaaffe0 });
+    const magentaG = new THREE.MeshBasicMaterial({ color: 0xff88e8 });
     const cableMat = new THREE.MeshStandardMaterial({
-      color: 0x44eebb, roughness: 0.22, metalness: 0.3,
-      emissive: 0x0e6c55, emissiveIntensity: 0.9,
+      color: 0x66ffcc, roughness: 0.18, metalness: 0.25,
+      emissive: 0x22aa88, emissiveIntensity: 1.5,
     });
 
     const addBox = (name, size, pos, mat, parent = rack) => {
@@ -64,12 +65,12 @@ function AboutRackBackdrop() {
     /* --- Rack frame --- */
     addBox("shell", [2.28, 5.4, 1.08], [0, 0, 0], darkMetal);
     addBox("back-glow", [2.04, 4.92, 0.04], [0, 0.08, -0.56],
-      new THREE.MeshBasicMaterial({ color: 0x0a1e38, transparent: true, opacity: 0.75 }));
+      new THREE.MeshBasicMaterial({ color: 0x1a3a5a, transparent: true, opacity: 0.85 }));
 
-    // Side glow strips
-    const sideG = new THREE.MeshBasicMaterial({ color: 0x65e8ff, transparent: true, opacity: 0.12 });
-    addBox("l-strip", [0.02, 5.2, 0.04], [-1.16, 0, 0.64], sideG);
-    addBox("r-strip", [0.02, 5.2, 0.04], [1.16, 0, 0.64], sideG);
+    // Side glow strips (bright cyan edges)
+    const sideG = new THREE.MeshBasicMaterial({ color: 0x65e8ff, transparent: true, opacity: 0.45 });
+    addBox("l-strip", [0.025, 5.2, 0.05], [-1.16, 0, 0.64], sideG);
+    addBox("r-strip", [0.025, 5.2, 0.05], [1.16, 0, 0.64], sideG);
 
     // Rails & caps
     addBox("l-rail", [0.12, 5.72, 1.28], [-1.22, 0, 0], metal);
@@ -88,13 +89,13 @@ function AboutRackBackdrop() {
       const b = addBox(`bl-${i}`, [1.78, 0.24, 0.18], [0, y, 0.48], bladeMat);
       b.rotation.x = 0.01;
       addBox(`hd-${i}`, [0.24, 0.08, 0.04], [-0.72, y, 0.60], handleMat);
-      const lc = i % 3 === 0 ? 0xff6fd8 : i % 2 === 0 ? 0xffaa00 : 0x65e8ff;
-      addBox(`ln-${i}`, [1.2, 0.016, 0.015], [-0.18, y + 0.014, 0.59],
-        new THREE.MeshBasicMaterial({ color: lc, transparent: true, opacity: 0.2 }), rack);
+      const lc = i % 3 === 0 ? 0xff88e8 : i % 2 === 0 ? 0xffcc44 : 0x88f4ff;
+      addBox(`ln-${i}`, [1.2, 0.02, 0.018], [-0.18, y + 0.014, 0.59],
+        new THREE.MeshBasicMaterial({ color: lc, transparent: true, opacity: 0.45 }), rack);
       for (let j = 0; j < 5; j++) {
         const gm = [cyanG, greenG, amberG, magentaG][(i + j) % 4];
-        const dot = new THREE.Mesh(new THREE.SphereGeometry(0.028, 12, 12), gm);
-        dot.position.set(0.68 + j * 0.14, y + 0.015, 0.62);
+        const dot = new THREE.Mesh(new THREE.SphereGeometry(0.038, 12, 12), gm);
+        dot.position.set(0.68 + j * 0.14, y + 0.015, 0.64);
         dot.userData = { pulse: i * 0.42 + j * 0.7 };
         neon.add(dot);
       }
@@ -104,7 +105,7 @@ function AboutRackBackdrop() {
     for (let c = 0; c < 3; c++) {
       for (let r = 0; r < 8; r++) {
         addBox(`v-${c}-${r}`, [0.32, 0.022, 0.02], [-0.82 + c * 0.34, 2.1 - r * 0.14, 0.63],
-          new THREE.MeshBasicMaterial({ color: 0x8baeff, transparent: true, opacity: 0.18 }), rack);
+          new THREE.MeshBasicMaterial({ color: 0xaaccff, transparent: true, opacity: 0.35 }), rack);
       }
     }
 
@@ -121,12 +122,12 @@ function AboutRackBackdrop() {
     });
 
     /* --- Neon rings --- */
-    const ringMat = new THREE.MeshBasicMaterial({ color: 0x65e8ff, transparent: true, opacity: 0.24 });
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(1.72, 0.005, 8, 96), ringMat);
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0x88f4ff, transparent: true, opacity: 0.4 });
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(1.72, 0.008, 8, 96), ringMat);
     ring.rotation.x = Math.PI * 0.5; ring.position.set(0, 0, 0.72); neon.add(ring);
 
-    const ring2Mat = new THREE.MeshBasicMaterial({ color: 0xff6fd8, transparent: true, opacity: 0.14 });
-    const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.1, 0.003, 8, 96), ring2Mat);
+    const ring2Mat = new THREE.MeshBasicMaterial({ color: 0xff88e8, transparent: true, opacity: 0.3 });
+    const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.1, 0.006, 8, 96), ring2Mat);
     ring2.rotation.x = Math.PI * 0.5; ring2.position.set(0, 0, 0.5); neon.add(ring2);
 
     /* --- Floating dust --- */
@@ -139,13 +140,14 @@ function AboutRackBackdrop() {
     dustGroup.add(new THREE.Points(dGeo, dMat));
 
 
-    /* --- Lighting --- */
-    scene.add(new THREE.AmbientLight(0xaecbff, 0.5));
-    const kl = new THREE.DirectionalLight(0xffffff, 2.0); kl.position.set(3, 5, 4); scene.add(kl);
-    const cl = new THREE.PointLight(0x65e8ff, 5.0, 9); cl.position.set(-2, 2, 2.5); scene.add(cl);
-    const wl = new THREE.PointLight(0xffaa00, 3.5, 8); wl.position.set(2, -1.5, 2.4); scene.add(wl);
-    const rl = new THREE.DirectionalLight(0xff6fd8, 3.0); rl.position.set(4, 2, -4); scene.add(rl);
-    const bl = new THREE.PointLight(0x65e8ff, 2.0, 6); bl.position.set(0, -3.5, 1.5); scene.add(bl);
+    /* --- Lighting (much brighter) --- */
+    scene.add(new THREE.AmbientLight(0xccddff, 1.2));
+    const kl = new THREE.DirectionalLight(0xffffff, 3.5); kl.position.set(3, 5, 4); scene.add(kl);
+    const cl = new THREE.PointLight(0x65e8ff, 8.0, 14); cl.position.set(-2, 2, 3); scene.add(cl);
+    const wl = new THREE.PointLight(0xffaa00, 6.0, 12); wl.position.set(2, -1.5, 3); scene.add(wl);
+    const rl = new THREE.DirectionalLight(0xff6fd8, 4.5); rl.position.set(4, 2, -4); scene.add(rl);
+    const bl = new THREE.PointLight(0x65e8ff, 4.0, 10); bl.position.set(0, -3.5, 2); scene.add(bl);
+    const fl = new THREE.PointLight(0xffffff, 3.0, 15); fl.position.set(0, 0, 6); scene.add(fl);
 
     let frameId = 0;
     let width = 0;
