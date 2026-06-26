@@ -126,7 +126,10 @@ export function getSkillIconUrls(skillName) {
     "server & networking",
     "software engineering",
     "unit testing",
-    "web applications"
+    "web applications",
+    "data structures",
+    "algorithms",
+    "system design"
   ]);
 
   if (conceptualSkills.has(key)) {

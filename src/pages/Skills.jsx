@@ -15,6 +15,7 @@ function getCategoryIcon(categoryId) {
 
 function getFallbackIcon(skill) {
   const s = skill.toLowerCase();
+  if (s.includes("system design")) return <Network size={32} strokeWidth={1.5} />;
   if (s.includes("ui") || s.includes("ux") || s.includes("design")) return <Layout size={32} strokeWidth={1.5} />;
   if (s.includes("3d") || s.includes("model")) return <Cuboid size={32} strokeWidth={1.5} />;
   if (s.includes("prompt") || s.includes("generative")) return <Sparkles size={32} strokeWidth={1.5} />;
