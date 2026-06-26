@@ -197,9 +197,9 @@ function AboutRackBackdrop() {
       dp.needsUpdate = true;
       dMat.opacity = 0.22 + Math.sin(sec * 0.8) * 0.08;
 
-      // Camera: rack appears on the RIGHT side of the viewport
-      camera.position.set(2.8 + sway * 0.3, 0.25 + lift * 0.2, 10.0 - progress * 0.8);
-      camera.lookAt(0.8, -0.1, 0);
+      // Camera: pull far back and to the right so rack is small and in the corner
+      camera.position.set(6.5 + sway * 0.2, 0.2 + lift * 0.15, 18.0 - progress * 0.6);
+      camera.lookAt(3.5, -0.1, 0);
 
       renderer.render(scene, camera);
       wrap.classList.add("is-ready");

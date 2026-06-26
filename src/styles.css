@@ -567,7 +567,7 @@ button[aria-busy="true"] {
 }
 
 .about-rack-backdrop.is-ready {
-  opacity: calc(0.96 - var(--about-rack-progress, 0) * 0.08);
+  opacity: calc(0.55 - var(--about-rack-progress, 0) * 0.08);
 }
 
 .about-rack-backdrop::before,
