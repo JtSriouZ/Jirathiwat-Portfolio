@@ -199,6 +199,10 @@ function AboutRackBackdrop() {
       camera.position.set(-4.5 + sway * 0.2, 0.2 + lift * 0.15, 16.0 - progress * 0.6);
       camera.lookAt(-1.5, -0.1, 0);
 
+      // Hide in first section, fade in after scrolling past profile
+      const fadeIn = clamp((progress - 0.08) / 0.06, 0, 1);
+      canvas.style.opacity = fadeIn.toFixed(3);
+
       renderer.render(scene, camera);
       wrap.classList.add("is-ready");
       frameId = requestAnimationFrame(animate);
