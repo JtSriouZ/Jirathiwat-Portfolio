@@ -52,10 +52,14 @@ function AboutRackBackdrop() {
     const amberG = new THREE.MeshBasicMaterial({ color: 0xffcc44 });
     const greenG = new THREE.MeshBasicMaterial({ color: 0xaaffe0 });
     const magentaG = new THREE.MeshBasicMaterial({ color: 0xff88e8 });
-    const cableMat = new THREE.MeshStandardMaterial({
-      color: 0x66ffcc, roughness: 0.18, metalness: 0.25,
-      emissive: 0x22aa88, emissiveIntensity: 1.5,
-    });
+    
+    // Fiber optic cable materials
+    const cableMats = [
+      new THREE.MeshBasicMaterial({ color: 0xff44aa }), // Pink
+      new THREE.MeshBasicMaterial({ color: 0x44ffaa }), // Green
+      new THREE.MeshBasicMaterial({ color: 0x44aaff }), // Blue
+      new THREE.MeshBasicMaterial({ color: 0xffaa44 })  // Orange
+    ];
 
     const addBox = (name, size, pos, mat, parent = rack) => {
       const m = new THREE.Mesh(new THREE.BoxGeometry(...size), mat);
@@ -95,7 +99,8 @@ function AboutRackBackdrop() {
       for (let j = 0; j < 5; j++) {
         const gm = [cyanG, greenG, amberG, magentaG][(i + j) % 4];
         const dot = new THREE.Mesh(new THREE.SphereGeometry(0.038, 12, 12), gm);
-        dot.position.set(0.68 + j * 0.14, y + 0.015, 0.64);
+        // Positioned safely inside the right side of the blade (x=0.2 to x=0.68)
+        dot.position.set(0.2 + j * 0.12, y + 0.015, 0.64);
         dot.userData = { pulse: i * 0.42 + j * 0.7 };
         neon.add(dot);
       }
@@ -109,7 +114,7 @@ function AboutRackBackdrop() {
       }
     }
 
-    /* --- Cables --- */
+    /* --- Fiber Optic Cables --- */
     const curves = [
       [[-0.68,0.1,0.63],[-0.38,-0.34,0.92],[0.38,-0.22,0.86],[0.72,-0.68,0.63]],
       [[-0.58,-0.65,0.63],[-0.1,-1.02,0.94],[0.58,-0.92,0.78],[0.8,-1.28,0.63]],
@@ -118,7 +123,8 @@ function AboutRackBackdrop() {
     ];
     curves.forEach((pts, i) => {
       const cv = new THREE.CatmullRomCurve3(pts.map(([x,y,z]) => new THREE.Vector3(x,y,z)));
-      rack.add(new THREE.Mesh(new THREE.TubeGeometry(cv, 42, 0.016 + i * 0.003, 8, false), cableMat));
+      // Thinner tube, bright neon material
+      rack.add(new THREE.Mesh(new THREE.TubeGeometry(cv, 64, 0.008 + (i % 2) * 0.003, 8, false), cableMats[i % cableMats.length]));
     });
 
     /* --- Neon rings --- */
