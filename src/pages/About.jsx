@@ -41,10 +41,9 @@ function AboutRackBackdrop() {
     const metal = new THREE.MeshStandardMaterial({ color: 0x1a2e44, roughness: 0.15, metalness: 0.88, emissive: 0x0a1520, emissiveIntensity: 0.15 });
     const darkMetal = new THREE.MeshStandardMaterial({ color: 0x0e1a2a, roughness: 0.28, metalness: 0.9, emissive: 0x060e18, emissiveIntensity: 0.1 });
     const glass = new THREE.MeshPhysicalMaterial({
-      color: 0xaaf4ff, transparent: true, opacity: 0.25,
-      roughness: 0.02, metalness: 0.15, transmission: 0.2,
-      thickness: 0.2, clearcoat: 1.0, clearcoatRoughness: 0.05,
-      emissive: 0x1a4455, emissiveIntensity: 0.3,
+      color: 0xffffff, transparent: true, opacity: 0.08,
+      roughness: 0.02, metalness: 0.2,
+      clearcoat: 1.0, clearcoatRoughness: 0.05,
     });
     const bladeMat = new THREE.MeshStandardMaterial({ color: 0x182840, roughness: 0.22, metalness: 0.72, emissive: 0x0a1520, emissiveIntensity: 0.12 });
     const handleMat = new THREE.MeshStandardMaterial({ color: 0x2a4060, roughness: 0.12, metalness: 0.92 });
