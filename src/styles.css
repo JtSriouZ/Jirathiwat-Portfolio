@@ -429,6 +429,177 @@ button[aria-busy="true"] {
   display: none;
 }
 
+.home-cinematic-page {
+  position: relative;
+  isolation: isolate;
+}
+
+.home-cinematic-page > :not(.home-cinematic-background, .home-server-room) {
+  position: relative;
+  z-index: 3;
+}
+
+.home-cinematic-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.38;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.home-server-room {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+  filter:
+    saturate(1.14)
+    contrast(1.06)
+    drop-shadow(0 34px 90px rgba(0, 0, 0, 0.5))
+    drop-shadow(0 0 52px color-mix(in srgb, var(--page-accent) 22%, transparent));
+  transform:
+    translate3d(
+      calc(var(--room-sway, 0) * 2.4rem),
+      calc(var(--room-progress, 0) * 1.1rem + var(--room-lift, 0) * 1.1rem),
+      0
+    )
+    scale(calc(1.04 + var(--room-progress, 0) * 0.085));
+  transition: opacity 900ms ease;
+}
+
+.home-server-room.is-ready {
+  opacity: calc(0.84 - var(--room-progress, 0) * 0.05);
+}
+
+.home-server-room::before,
+.home-server-room::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  content: "";
+  pointer-events: none;
+}
+
+.home-server-room::before {
+  background:
+    radial-gradient(circle at 54% 42%, transparent 0 18rem, rgba(5, 7, 13, 0.05) 31rem),
+    linear-gradient(90deg, rgba(5, 7, 13, 0.34), transparent 38%, rgba(5, 7, 13, 0.22)),
+    linear-gradient(0deg, rgba(5, 7, 13, 0.96) 0, rgba(5, 7, 13, 0.72) 5.5rem, transparent 14rem, rgba(5, 7, 13, 0.2));
+  mix-blend-mode: multiply;
+}
+
+.home-server-room::after {
+  background:
+    radial-gradient(circle at 62% 48%, color-mix(in srgb, var(--page-accent) 14%, transparent), transparent 20rem),
+    linear-gradient(135deg, color-mix(in srgb, var(--page-accent-2) 7%, transparent), transparent 48%, color-mix(in srgb, var(--page-accent-3) 9%, transparent));
+  mix-blend-mode: screen;
+}
+
+.home-server-room iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  opacity: 0;
+  transform:
+    translate3d(calc(var(--room-sway, 0) * -1.4rem), calc(var(--room-lift, 0) * -0.65rem), 0)
+    scale(calc(1.2 + var(--room-progress, 0) * 0.035));
+  transform-origin: center;
+  transition: opacity 900ms ease;
+}
+
+.home-server-room.is-ready iframe {
+  opacity: 1;
+}
+
+.home-cinematic-page::after {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  content: "";
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 74% 44%, color-mix(in srgb, var(--page-accent) 10%, transparent), transparent 26rem),
+    linear-gradient(90deg, rgba(5, 7, 13, 0.91), rgba(5, 7, 13, 0.1) 48%, rgba(5, 7, 13, 0.38)),
+    linear-gradient(0deg, rgba(5, 7, 13, 0.62), transparent 42%, rgba(5, 7, 13, 0.34));
+}
+
+.about-cinematic-page {
+  position: relative;
+  isolation: auto;
+}
+
+.about-cinematic-page > .page-content {
+  position: relative;
+  z-index: 4;
+}
+
+.about-rack-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  filter:
+    brightness(1.08)
+    saturate(1.24)
+    contrast(1.22)
+    drop-shadow(0 34px 90px rgba(0, 0, 0, 0.54))
+    drop-shadow(0 0 52px rgba(255, 159, 67, 0.28))
+    drop-shadow(0 0 48px rgba(101, 232, 255, 0.14));
+  transform:
+    translate3d(
+      calc(var(--about-rack-sway, 0) * -1.2rem),
+      calc(var(--about-rack-progress, 0) * 0.8rem + var(--about-rack-lift, 0) * 0.55rem),
+      0
+    )
+    scale(calc(1.02 + var(--about-rack-progress, 0) * 0.04));
+  transition: opacity 900ms ease;
+}
+
+.about-rack-backdrop.is-ready {
+  opacity: calc(0.96 - var(--about-rack-progress, 0) * 0.08);
+}
+
+.about-rack-backdrop::before,
+.about-rack-backdrop::after {
+  display: none;
+  content: none;
+}
+
+.about-rack-backdrop iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  opacity: 0;
+  filter: brightness(0.92) contrast(1.24) saturate(1.16);
+  transform:
+    translate3d(calc(var(--about-rack-sway, 0) * 1.45rem + 24vw), calc(var(--about-rack-lift, 0) * -0.7rem - 2vh), 0)
+    scale(calc(1.62 + var(--about-rack-progress, 0) * 0.045));
+  transform-origin: center;
+  transition: opacity 900ms ease;
+}
+
+.about-rack-backdrop.is-ready iframe {
+  opacity: 1;
+}
+
+.about-cinematic-page::after {
+  display: none;
+  content: none;
+}
+
 .hero-section {
   position: relative;
   display: grid;
@@ -449,12 +620,25 @@ button[aria-busy="true"] {
 .hero-image {
   position: absolute;
   inset: 0;
-  z-index: -2;
+  z-index: -4;
   width: 100%;
   height: 100%;
+  opacity: 0.52;
   object-fit: cover;
   object-position: center;
+  filter: saturate(1.08) contrast(1.04);
   animation: heroFloat 15s ease-in-out infinite alternate;
+}
+
+.hero-cinematic {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  width: 100%;
+  height: 100%;
+  opacity: 0.88;
+  mix-blend-mode: screen;
+  pointer-events: none;
 }
 
 .hero-overlay {
@@ -462,9 +646,9 @@ button[aria-busy="true"] {
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(circle at 26% 42%, color-mix(in srgb, var(--page-accent) 12%, transparent), transparent 24rem),
-    linear-gradient(90deg, rgba(5, 7, 13, 0.98) 0%, rgba(5, 7, 13, 0.72) 42%, rgba(5, 7, 13, 0.36) 100%),
-    linear-gradient(0deg, var(--bg) 0%, transparent 32%, rgba(5, 7, 13, 0.42) 100%);
+    radial-gradient(circle at 64% 50%, color-mix(in srgb, var(--page-accent) 18%, transparent), transparent 26rem),
+    linear-gradient(90deg, rgba(5, 7, 13, 0.98) 0%, rgba(5, 7, 13, 0.74) 40%, rgba(5, 7, 13, 0.2) 100%),
+    linear-gradient(0deg, var(--bg) 0%, transparent 34%, rgba(5, 7, 13, 0.48) 100%);
 }
 
 .hero-content {
@@ -3120,6 +3304,23 @@ body {
 @media (max-width: 840px) {
   html {
     scroll-padding-top: 132px;
+  }
+
+  .home-server-room {
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0.3;
+  }
+
+  .about-rack-backdrop.is-ready {
+    opacity: 0.42;
+  }
+
+  .about-rack-backdrop iframe {
+    transform:
+      translate3d(calc(var(--about-rack-sway, 0) * 1rem + 8vw), calc(var(--about-rack-lift, 0) * -0.45rem), 0)
+      scale(calc(1.34 + var(--about-rack-progress, 0) * 0.035));
   }
 
   .topbar {
