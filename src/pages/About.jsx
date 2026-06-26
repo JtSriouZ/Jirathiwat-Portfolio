@@ -138,10 +138,6 @@ function AboutRackBackdrop() {
     const dMat = new THREE.PointsMaterial({ color: 0x65e8ff, size: 0.025, transparent: true, opacity: 0.3, sizeAttenuation: true });
     dustGroup.add(new THREE.Points(dGeo, dMat));
 
-    /* --- Floor reflection --- */
-    const floorMat = new THREE.MeshStandardMaterial({ color: 0x060e18, roughness: 0.15, metalness: 0.95, transparent: true, opacity: 0.5 });
-    const floor = new THREE.Mesh(new THREE.PlaneGeometry(12, 12), floorMat);
-    floor.rotation.x = -Math.PI / 2; floor.position.y = -3.1; scene.add(floor);
 
     /* --- Lighting --- */
     scene.add(new THREE.AmbientLight(0xaecbff, 0.5));
