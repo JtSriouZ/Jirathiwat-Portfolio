@@ -439,7 +439,7 @@
         "inference",
         "and telemetry write-backs"
       ],
-      "fullDescription": "",
+      "fullDescription": "The Iron Dome Missile Tracker v3.1 was built as a capstone-level project for the ITCS225 course, aiming to demonstrate how custom OS-level resource management can vastly improve the performance of deep learning inference. The system is engineered to handle high-definition video processing, object detection inference, and telemetry write-backs simultaneously without dropping a single frame.\\n\\nTo achieve this, the architecture utilizes custom system-level memory management, deterministic thread scheduling, and advanced synchronization techniques. This allows the application to maintain ultra-low latency and perfect frame-rate stability, even under heavy machine learning workloads. The project successfully met all time-critical constraints, achieving a perfect 16/16 grading rubric score.",
       "mediaUrls": []
     },
     {
@@ -472,7 +472,7 @@
         "and narrative complexity",
         "Hidden Gem Radar and interactive Plotly 3D discovery explorer"
       ],
-      "fullDescription": "",
+      "fullDescription": "CineMatch 2.0 was designed around a simple idea: people do not always search for movies by title, actor, or genre. Sometimes they search by mood, visual style, emotional impact, or narrative complexity.\\n\\nThe platform uses metadata soup, semantic embeddings, cosine similarity, and weighted statistical quality to recommend films that match the user intent. It also includes a Hidden Gem Radar to reduce blockbuster bias and surface interesting films that might otherwise be buried.\\n\\nFor me, this project is a strong example of how data science can become a real product experience when the model, ranking logic, and interface all work together.",
       "mediaUrls": [
         "/projects/cinematch-2-01.png",
         "/projects/cinematch-2-02.png",
