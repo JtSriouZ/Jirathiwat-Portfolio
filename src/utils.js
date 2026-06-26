@@ -72,7 +72,7 @@ function skillIconUrl(fileName) {
 }
 
 function faviconUrl(domain) {
-  return `https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://${domain}&size=128`;
+  return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
 }
 
 export function getSkillIconUrls(skillName) {
@@ -283,12 +283,12 @@ export function getSkillIconUrls(skillName) {
 
   const urls = [];
 
-  // 1. High-res Colored Favicons (Google Favicon V2 returns 404 cleanly)
-  urls.push(faviconUrl(`${urlSafe}.com`));
-  urls.push(faviconUrl(`${urlSafe}.io`));
-  urls.push(faviconUrl(`${urlSafe}.dev`));
-  urls.push(faviconUrl(`${urlSafe}.ai`));
-  urls.push(faviconUrl(`${urlSafe}.app`));
+  // 1. Try colored PNGs from Clearbit API first
+  urls.push(`https://logo.clearbit.com/${urlSafe}.com`);
+  urls.push(`https://logo.clearbit.com/${urlSafe}.io`);
+  urls.push(`https://logo.clearbit.com/${urlSafe}.dev`);
+  urls.push(`https://logo.clearbit.com/${urlSafe}.ai`);
+  urls.push(`https://logo.clearbit.com/${urlSafe}.app`);
 
   // 2. Exact matched SVGs (Devicon / Tandpfun)
   if (deviconUrls[key]) urls.push(deviconUrls[key]);
@@ -298,6 +298,13 @@ export function getSkillIconUrls(skillName) {
   urls.push(`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${urlSafe}/${urlSafe}-original.svg`);
   urls.push(`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${urlSafe}/${urlSafe}-plain.svg`);
   urls.push(`https://cdn.simpleicons.org/${urlSafe}`);
+
+  // 4. Favicon fallbacks
+  urls.push(`https://www.google.com/s2/favicons?domain=${urlSafe}.com&sz=128`);
+  urls.push(`https://www.google.com/s2/favicons?domain=${urlSafe}.dev&sz=128`);
+  urls.push(`https://www.google.com/s2/favicons?domain=${urlSafe}.io&sz=128`);
+  urls.push(`https://www.google.com/s2/favicons?domain=${urlSafe}.ai&sz=128`);
+  urls.push(`https://www.google.com/s2/favicons?domain=${urlSafe}.app&sz=128`);
 
   // Deduplicate and filter empty
   return [...new Set(urls.filter(Boolean))];
