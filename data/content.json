@@ -141,6 +141,26 @@
       ]
     },
     {
+      "id": "app-development",
+      "category": "App Development",
+      "description": "Building and designing cross-platform mobile and desktop applications with modern frameworks.",
+      "skills": [
+        "Flutter",
+        "Dart",
+        "React Native",
+        "Swift",
+        "Kotlin",
+        "Android Studio",
+        "Xcode",
+        "Firebase",
+        "Supabase",
+        "SQLite",
+        "Mobile UI/UX",
+        "App Store Connect",
+        "Google Play Console"
+      ]
+    },
+    {
       "id": "prompt-engineering",
       "category": "Prompt Engineering & AI Tools",
       "description": "Leveraging advanced language models to accelerate development, analyze data, and build intelligent workflows.",
