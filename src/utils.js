@@ -107,7 +107,8 @@ export function getSkillIconUrls(skillName) {
     "three": "three.js",
     "framer": "framer motion",
     "fusion360": "fusion 360",
-    "obs": "obs studio"
+    "obs": "obs studio",
+    "shapr 3d": "shapr3d"
   };
   const key = aliases[normalized] || normalized;
   const conceptualSkills = new Set([
