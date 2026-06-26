@@ -440,7 +440,12 @@
         "and telemetry write-backs"
       ],
       "fullDescription": "The Iron Dome Missile Tracker v3.1 was built as a capstone-level project for the ITCS225 course, aiming to demonstrate how custom OS-level resource management can vastly improve the performance of deep learning inference. The system is engineered to handle high-definition video processing, object detection inference, and telemetry write-backs simultaneously without dropping a single frame.\\n\\nTo achieve this, the architecture utilizes custom system-level memory management, deterministic thread scheduling, and advanced synchronization techniques. This allows the application to maintain ultra-low latency and perfect frame-rate stability, even under heavy machine learning workloads. The project successfully met all time-critical constraints, achieving a perfect 16/16 grading rubric score.",
-      "mediaUrls": []
+      "mediaUrls": [
+        "/projects/iron-dome-01.png",
+        "/projects/iron-dome-02.png",
+        "/projects/iron-dome-03.png",
+        "/projects/iron-dome-04.png"
+      ]
     },
     {
       "id": "project-cinematch",
