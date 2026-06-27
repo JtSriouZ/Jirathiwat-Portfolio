@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { ExternalLink, ArrowLeft, Calendar, Award } from "lucide-react";
 import CertificateVisual from "../components/CertificateVisual";
 import MediaGallery from "../components/MediaGallery";
+import RichContent, { getInlineMediaUsage } from "../components/RichContent";
 import { normalizeList } from "../utils";
 
 export default function CertificateDetail({ content }) {
@@ -25,7 +26,8 @@ export default function CertificateDetail({ content }) {
   const mediaUrls = normalizeList(certificate.mediaUrls);
   
   const descriptionText = certificate.fullDescription || certificate.description;
-  const descriptionParagraphs = descriptionText ? descriptionText.split('\n').filter(p => p.trim() !== '') : [];
+  const { usedIndexes, usedUrls } = getInlineMediaUsage(descriptionText, mediaUrls);
+  const remainingMediaUrls = mediaUrls.filter((url, index) => !usedIndexes.has(index) && !usedUrls.has(url));
 
   return (
     <div className="page-content">
@@ -63,13 +65,9 @@ export default function CertificateDetail({ content }) {
 
         <div className="project-detail-content" style={{ maxWidth: "800px", margin: "0 auto" }}>
           <h2>About the Certificate</h2>
-          <div style={{ marginBottom: "2rem" }}>
-            {descriptionParagraphs.map((para, idx) => (
-              <p key={idx} style={{ fontSize: "1.1rem", lineHeight: "1.8", marginBottom: "1rem" }}>{para}</p>
-            ))}
-          </div>
+          <RichContent text={descriptionText} mediaUrls={mediaUrls} itemTitle={certificate.title} />
 
-          <MediaGallery urls={mediaUrls} itemTitle="Certificate media" />
+          <MediaGallery urls={remainingMediaUrls} itemTitle="Certificate media" />
 
           {skills.length > 0 && (
             <>

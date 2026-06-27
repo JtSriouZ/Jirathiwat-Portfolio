@@ -2239,6 +2239,184 @@ p {
   border: 0;
 }
 
+.rich-content {
+  margin-bottom: 2rem;
+}
+
+.rich-content p {
+  margin: 0 0 1.15rem;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  line-height: 1.82;
+}
+
+.rich-content h2,
+.rich-content h3,
+.rich-content h4 {
+  margin: 2rem 0 0.85rem;
+  color: var(--text);
+  line-height: 1.15;
+}
+
+.rich-content h2 {
+  font-size: clamp(2rem, 4vw, 3.25rem);
+}
+
+.rich-content h3 {
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+}
+
+.rich-content h4 {
+  color: var(--page-accent-2);
+  font-size: 1.2rem;
+}
+
+.rich-content strong {
+  color: var(--text);
+  font-weight: 900;
+}
+
+.rich-content em {
+  color: var(--page-accent-2);
+  font-style: italic;
+}
+
+.rich-content code {
+  border: 1px solid color-mix(in srgb, var(--page-accent) 22%, transparent);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--page-accent-2);
+  font-size: 0.92em;
+  padding: 0.12rem 0.34rem;
+}
+
+.rich-content ul,
+.rich-content ol {
+  display: grid;
+  gap: 0.72rem;
+  margin: 0.4rem 0 1.4rem;
+  padding-left: 1.35rem;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+.rich-content li::marker {
+  color: var(--page-accent-2);
+  font-weight: 900;
+}
+
+.rich-content blockquote {
+  margin: 1.5rem 0;
+  border-left: 3px solid var(--page-accent-2);
+  border-radius: 0 10px 10px 0;
+  background: color-mix(in srgb, var(--page-accent) 9%, transparent);
+  color: var(--text);
+  font-size: 1.08rem;
+  font-weight: 800;
+  line-height: 1.7;
+  padding: 1rem 1.1rem;
+}
+
+.rich-content a {
+  color: var(--page-accent-2);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.rich-content a:hover {
+  color: var(--page-accent);
+}
+
+.rich-media-block {
+  position: relative;
+  overflow: hidden;
+  margin: 2rem 0;
+  border: 1px solid color-mix(in srgb, var(--page-accent) 28%, transparent);
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--page-accent) 14%, transparent), transparent 13rem),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015)),
+    rgba(5, 10, 20, 0.68);
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.rich-media-block img,
+.rich-media-block video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.rich-media-video {
+  aspect-ratio: 16 / 9;
+}
+
+.rich-media-video iframe,
+.rich-media-video video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+}
+
+.rich-media-block figcaption {
+  position: relative;
+  z-index: 2;
+  padding: 0.8rem 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--page-accent) 18%, transparent);
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+  background: rgba(5, 10, 20, 0.72);
+}
+
+.rich-link-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.85rem;
+  align-items: center;
+  min-height: 92px;
+  margin: 1.5rem 0 2rem;
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, var(--page-accent) 24%, transparent);
+  border-radius: 10px;
+  color: inherit;
+  text-decoration: none;
+  background:
+    radial-gradient(circle at 15% 12%, color-mix(in srgb, var(--page-accent) 12%, transparent), transparent 10rem),
+    rgba(5, 10, 20, 0.62);
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    background 220ms ease;
+}
+
+.rich-link-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--page-accent) 55%, transparent);
+  background:
+    radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--page-accent) 18%, transparent), transparent 12rem),
+    rgba(5, 10, 20, 0.74);
+}
+
+.rich-link-card strong,
+.rich-link-card small {
+  display: block;
+}
+
+.rich-link-card small {
+  overflow: hidden;
+  margin-top: 0.2rem;
+  color: var(--text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .media-gallery {
   display: block;
   column-count: 2;
@@ -3080,6 +3258,218 @@ body {
 .field textarea {
   min-height: 124px;
   resize: vertical;
+}
+
+.rich-editor-field {
+  grid-column: 1 / -1;
+}
+
+.rich-editor-field textarea {
+  min-height: 220px;
+}
+
+.rich-editor-toolbar {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.85rem;
+  border: 1px solid rgba(152, 241, 255, 0.18);
+  border-radius: 10px;
+  background:
+    linear-gradient(135deg, rgba(101, 232, 255, 0.09), rgba(255, 181, 72, 0.06)),
+    rgba(255, 255, 255, 0.035);
+}
+
+.rich-editor-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.rich-editor-formatbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid rgba(152, 241, 255, 0.12);
+}
+
+.rich-editor-button {
+  border: 1px solid rgba(152, 241, 255, 0.25);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 900;
+  padding: 0.55rem 0.75rem;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.rich-editor-button.square {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  padding: 0;
+}
+
+.rich-editor-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 211, 106, 0.72);
+  background: rgba(255, 211, 106, 0.13);
+  box-shadow: 0 10px 24px rgba(255, 181, 72, 0.1);
+}
+
+.rich-editor-button.accent,
+.rich-editor-button.media-chip {
+  color: #0a1018;
+  border-color: rgba(255, 211, 106, 0.78);
+  background: linear-gradient(135deg, #67e8f9, #ffd36a);
+}
+
+.rich-editor-media-strip {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.rich-editor-media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.75rem;
+}
+
+.rich-editor-media-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(152, 241, 255, 0.22);
+  border-radius: 10px;
+  background: rgba(5, 10, 20, 0.48);
+  color: var(--text);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.rich-editor-media-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 211, 106, 0.72);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
+}
+
+.rich-editor-media-insert {
+  display: grid;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  text-align: left;
+}
+
+.rich-editor-media-remove {
+  position: absolute;
+  top: 0.42rem;
+  right: 0.42rem;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(255, 118, 118, 0.42);
+  border-radius: 999px;
+  background: rgba(22, 6, 10, 0.78);
+  color: #ff9a9a;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(-3px);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease;
+}
+
+.rich-editor-media-card:hover .rich-editor-media-remove,
+.rich-editor-media-remove:focus-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.rich-editor-media-remove:hover {
+  border-color: rgba(255, 118, 118, 0.86);
+  background: rgba(105, 18, 29, 0.9);
+}
+
+.rich-editor-preview {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(101, 232, 255, 0.16), transparent 9rem),
+    rgba(255, 255, 255, 0.04);
+  color: var(--page-accent-2);
+}
+
+.rich-editor-preview img,
+.rich-editor-preview video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rich-editor-media-meta {
+  display: grid;
+  gap: 0.18rem;
+  padding: 0.62rem 0.72rem 0.72rem;
+}
+
+.rich-editor-media-meta strong {
+  color: var(--text);
+  font-size: 0.82rem;
+}
+
+.rich-editor-media-meta small {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.rich-editor-media-strip > span {
+  color: var(--mint);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rich-editor-note {
+  color: var(--muted);
+}
+
+.field-help {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1.55;
 }
 
 .field input:focus,

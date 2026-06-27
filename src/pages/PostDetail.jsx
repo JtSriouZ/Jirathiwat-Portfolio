@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, Calendar, FileText, ExternalLink } from "lucide-react";
 import { resolveMediaUrl, getYoutubeEmbedUrl, normalizeList } from "../utils";
 import MediaGallery from "../components/MediaGallery";
+import RichContent, { getInlineMediaUsage } from "../components/RichContent";
 
 export default function PostDetail({ content }) {
   const { id } = useParams();
@@ -23,7 +24,8 @@ export default function PostDetail({ content }) {
   const mediaUrls = normalizeList(post.mediaUrls);
   
   const descriptionText = post.fullDescription || post.summary;
-  const descriptionParagraphs = descriptionText ? descriptionText.split('\n').filter(p => p.trim() !== '') : [];
+  const { usedIndexes, usedUrls } = getInlineMediaUsage(descriptionText, mediaUrls);
+  const remainingMediaUrls = mediaUrls.filter((url, index) => !usedIndexes.has(index) && !usedUrls.has(url));
   
   // Check if we need to show youtube first
   const mainYoutubeEmbed = post.youtubeUrl ? getYoutubeEmbedUrl(post.youtubeUrl) : null;
@@ -71,13 +73,9 @@ export default function PostDetail({ content }) {
         ) : null}
 
         <div className="project-detail-content" style={{ maxWidth: "800px", margin: "0 auto" }}>
-          <div style={{ marginBottom: "2rem" }}>
-            {descriptionParagraphs.map((para, idx) => (
-              <p key={idx} style={{ fontSize: "1.1rem", lineHeight: "1.8", marginBottom: "1rem" }}>{para}</p>
-            ))}
-          </div>
+          <RichContent text={descriptionText} mediaUrls={mediaUrls} itemTitle={post.title} />
 
-          <MediaGallery urls={mediaUrls} itemTitle="Post media" />
+          <MediaGallery urls={remainingMediaUrls} itemTitle="Post media" />
         </div>
       </section>
     </div>

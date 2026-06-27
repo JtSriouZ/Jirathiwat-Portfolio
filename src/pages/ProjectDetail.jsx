@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { Github, ExternalLink, ArrowLeft, Calendar, Building2, Code2 } from "lucide-react";
 import { normalizeList, resolveMediaUrl } from "../utils";
 import MediaGallery from "../components/MediaGallery";
+import RichContent, { getInlineMediaUsage } from "../components/RichContent";
 
 export default function ProjectDetail({ content }) {
   const { id } = useParams();
@@ -24,9 +25,9 @@ export default function ProjectDetail({ content }) {
   const skills = normalizeList(project.skills);
   const mediaUrls = normalizeList(project.mediaUrls);
   
-  // Split full description by newlines to render multiple paragraphs, fallback to short description
   const descriptionText = project.fullDescription || project.description;
-  const descriptionParagraphs = descriptionText.split('\n').filter(p => p.trim() !== '');
+  const { usedIndexes, usedUrls } = getInlineMediaUsage(descriptionText, mediaUrls);
+  const remainingMediaUrls = mediaUrls.filter((url, index) => !usedIndexes.has(index) && !usedUrls.has(url));
 
   return (
     <div className="page-content">
@@ -84,11 +85,7 @@ export default function ProjectDetail({ content }) {
 
         <div className="project-detail-content" style={{ maxWidth: "800px", margin: "0 auto" }}>
           <h2>About the Project</h2>
-          <div style={{ marginBottom: "2rem" }}>
-            {descriptionParagraphs.map((para, idx) => (
-              <p key={idx} style={{ fontSize: "1.1rem", lineHeight: "1.8", marginBottom: "1rem" }}>{para}</p>
-            ))}
-          </div>
+          <RichContent text={descriptionText} mediaUrls={mediaUrls} itemTitle={project.name} />
           
           {highlights.length > 0 && (
             <>
@@ -101,7 +98,7 @@ export default function ProjectDetail({ content }) {
             </>
           )}
 
-          <MediaGallery urls={mediaUrls} itemTitle="Project media" />
+          <MediaGallery urls={remainingMediaUrls} itemTitle="Project media" />
 
           {skills.length > 0 && (
             <>

@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import { Edit3, Save, Trash2, Plus, GripVertical } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Bold, Code2, Edit3, Heading2, Image as ImageIcon, Italic, Link as LinkIcon, List, Quote, Save, Trash2, Plus, GripVertical, Video, Youtube } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { resolveMediaUrl, normalizeList } from "../utils";
+import { getUrlLabel, getYoutubeEmbedUrl, isImageUrl, resolveMediaUrl, normalizeList } from "../utils";
 
 const blankPost = { title: "", category: "News", date: new Date().toISOString().slice(0, 10), summary: "", fullDescription: "", imageUrl: "", mediaUrls: "", youtubeUrl: "", externalUrl: "" };
 const blankExperience = { role: "", company: "", period: "", description: "" };
@@ -9,6 +9,7 @@ const blankEducation = { school: "", program: "", period: "", description: "", s
 const blankCertificate = { title: "", issuer: "", date: "", credentialUrl: "", imageUrl: "", mediaUrls: "", description: "", fullDescription: "", skills: "" };
 const blankProject = { title: "", description: "", fullDescription: "", language: "", repoUrl: "", liveUrl: "", imageUrl: "", mediaUrls: "", updated: "", period: "", associated: "", skills: "", highlights: "", featuredRank: "" };
 const blankExpertise = { category: "", description: "", skills: "" };
+const richContentHelp = "Click a button to insert media at the cursor. Media 1 uses the first Additional Media URL, Media 2 uses the second, and so on.";
 
 export const StrictModeDroppable = ({ children, ...props }) => {
   const [enabled, setEnabled] = useState(false);
@@ -519,11 +520,11 @@ function EditablePost({ post, canEdit, onSave, onDelete, saving, dragHandleProps
         <TextInput label="Category" value={draft.category} onChange={(category) => setDraft({ ...draft, category })} />
         <TextInput label="Date" type="date" value={draft.date} onChange={(date) => setDraft({ ...draft, date })} />
         <TextArea label="Summary" value={draft.summary} onChange={(summary) => setDraft({ ...draft, summary })} />
-        <TextArea label="Full Content (Optional)" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft({ ...draft, fullDescription })} />
         <TextInput label="Image URL" value={draft.imageUrl || ""} onChange={(imageUrl) => setDraft({ ...draft, imageUrl })} />
         <TextInput label="YouTube URL" value={draft.youtubeUrl || ""} onChange={(youtubeUrl) => setDraft({ ...draft, youtubeUrl })} />
         <TextInput label="External Link (Optional)" value={draft.externalUrl || ""} onChange={(externalUrl) => setDraft({ ...draft, externalUrl })} />
         <TextInput label="Additional Media URLs (Comma separated)" value={draft.mediaUrls || ""} onChange={(mediaUrls) => setDraft({ ...draft, mediaUrls })} />
+        <RichTextArea label="Full Content (Optional)" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft({ ...draft, fullDescription })} mediaUrls={draft.mediaUrls} onMediaUrlsChange={(mediaUrls) => setDraft({ ...draft, mediaUrls })} youtubeUrl={draft.youtubeUrl} />
       </div>
       <RecordActions onSave={() => onSave(draft)} onDelete={() => onDelete(draft.id)} disabled={!canEdit || saving === `post-${draft.id}` || saving === `post-delete-${draft.id}`} />
     </article>
@@ -570,8 +571,8 @@ function EditableCertificate({ certificate, canEdit, onSave, onDelete, saving, d
         <TextInput label="Image URL" value={draft.imageUrl || ""} onChange={(imageUrl) => setDraft({ ...draft, imageUrl })} />
         <TextInput label="Skills" value={draft.skills || ""} onChange={(skills) => setDraft({ ...draft, skills })} />
         <TextArea label="Description" value={draft.description || ""} onChange={(description) => setDraft({ ...draft, description })} />
-        <TextArea label="Full Description (Optional)" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft({ ...draft, fullDescription })} />
         <TextInput label="Additional Media URLs (Comma separated)" value={draft.mediaUrls || ""} onChange={(mediaUrls) => setDraft({ ...draft, mediaUrls })} />
+        <RichTextArea label="Full Description (Optional)" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft({ ...draft, fullDescription })} mediaUrls={draft.mediaUrls} onMediaUrlsChange={(mediaUrls) => setDraft({ ...draft, mediaUrls })} />
       </div>
       <RecordActions onSave={() => onSave(draft)} onDelete={() => onDelete(draft.id)} disabled={!canEdit || saving === `certificate-${draft.id}` || saving === `certificate-delete-${draft.id}`} />
     </article>
@@ -600,9 +601,9 @@ function EditableProject({ project, canEdit, onSave, onDelete, saving, dragHandl
         <TextInput label="Featured Rank" value={draft.featuredRank ?? ""} onChange={(featuredRank) => setDraft({ ...draft, featuredRank })} />
         <TextInput label="Skills" value={draft.skills || ""} onChange={(skills) => setDraft({ ...draft, skills })} />
         <TextArea label="Description" value={draft.description || ""} onChange={(description) => setDraft({ ...draft, description })} />
-        <TextArea label="Full Description (Optional)" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft({ ...draft, fullDescription })} />
         <TextArea label="Highlights" value={draft.highlights || ""} onChange={(highlights) => setDraft({ ...draft, highlights })} />
         <TextInput label="Additional Media URLs (Comma separated)" value={draft.mediaUrls || ""} onChange={(mediaUrls) => setDraft({ ...draft, mediaUrls })} />
+        <RichTextArea label="Full Description (Optional)" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft({ ...draft, fullDescription })} mediaUrls={draft.mediaUrls} onMediaUrlsChange={(mediaUrls) => setDraft({ ...draft, mediaUrls })} />
       </div>
       <RecordActions onSave={() => onSave(draft)} onDelete={() => onDelete(draft.id)} disabled={!canEdit || saving === `project-${draft.id}` || saving === `project-delete-${draft.id}`} />
     </article>
@@ -643,6 +644,204 @@ function RecordActions({ onSave, onDelete, disabled }) {
   );
 }
 
+function buildMediaDirective(type, url, caption = "") {
+  const cleanUrl = String(url || "").trim();
+  const cleanCaption = String(caption || "").trim();
+  return `[${type}: ${cleanUrl}${cleanCaption ? ` | ${cleanCaption}` : ""}]`;
+}
+
+function getYoutubeThumbnail(url) {
+  const embedUrl = getYoutubeEmbedUrl(url);
+  const match = embedUrl.match(/\/embed\/([^?]+)/);
+  return match?.[1] ? `https://img.youtube.com/vi/${match[1]}/mqdefault.jpg` : "";
+}
+
+function getMediaPreviewType(url) {
+  if (getYoutubeEmbedUrl(url)) return "youtube";
+  if (/\.(mp4|webm|ogg)(\?.*)?$/i.test(url || "")) return "video";
+  if (isImageUrl(url)) return "image";
+  return "link";
+}
+
+function MediaPreviewCard({ url, index, onInsert, onRemove }) {
+  const type = getMediaPreviewType(url);
+  const resolvedUrl = resolveMediaUrl(url);
+  const youtubeThumb = type === "youtube" ? getYoutubeThumbnail(url) : "";
+
+  return (
+    <div className="rich-editor-media-card" title={url}>
+      <button type="button" className="rich-editor-media-insert" onClick={onInsert} aria-label={`Insert media ${index + 1}`}>
+        <span className="rich-editor-preview">
+          {type === "image" && <img src={resolvedUrl} alt="" loading="lazy" />}
+          {type === "youtube" && youtubeThumb && <img src={youtubeThumb} alt="" loading="lazy" />}
+          {type === "video" && <video src={resolvedUrl} muted preload="metadata" />}
+          {type === "link" && <LinkIcon size={22} />}
+        </span>
+        <span className="rich-editor-media-meta">
+          <strong>Media {index + 1}</strong>
+          <small>{type === "link" ? getUrlLabel(url) : type}</small>
+        </span>
+      </button>
+      <button type="button" className="rich-editor-media-remove" onClick={onRemove} aria-label={`Remove media ${index + 1}`}>
+        <Trash2 size={14} />
+      </button>
+    </div>
+  );
+}
+
+function RichTextArea({ label, value, onChange, mediaUrls = "", onMediaUrlsChange, youtubeUrl = "" }) {
+  const textareaRef = useRef(null);
+  const mediaList = normalizeList(mediaUrls);
+
+  const insertBlock = (block) => {
+    const current = value || "";
+    const textarea = textareaRef.current;
+    const start = textarea?.selectionStart ?? current.length;
+    const end = textarea?.selectionEnd ?? current.length;
+    const before = current.slice(0, start);
+    const after = current.slice(end);
+    const prefix = before && !before.endsWith("\n\n") ? (before.endsWith("\n") ? "\n" : "\n\n") : "";
+    const suffix = after && !after.startsWith("\n\n") ? (after.startsWith("\n") ? "\n" : "\n\n") : "\n\n";
+    const nextValue = `${before}${prefix}${block}${suffix}${after}`;
+
+    onChange(nextValue);
+    requestAnimationFrame(() => {
+      const cursor = `${before}${prefix}${block}`.length;
+      textareaRef.current?.focus();
+      textareaRef.current?.setSelectionRange(cursor, cursor);
+    });
+  };
+
+  const removeMedia = (removeIndex) => {
+    if (!onMediaUrlsChange) return;
+
+    const nextMediaList = mediaList.filter((_, index) => index !== removeIndex);
+    const nextContent = String(value || "")
+      .split(/\r?\n/)
+      .map((line) => {
+        const match = line.trim().match(/^\[media:\s*(\d+)(\s*\|[^\]]*)?\]$/i);
+        if (!match) return line;
+
+        const mediaNumber = Number(match[1]);
+        const caption = match[2] || "";
+        if (mediaNumber === removeIndex + 1) return "";
+        if (mediaNumber > removeIndex + 1) return `[media: ${mediaNumber - 1}${caption}]`;
+        return line;
+      })
+      .join("\n")
+      .replace(/\n{3,}/g, "\n\n");
+
+    onMediaUrlsChange(nextMediaList.join(", "));
+    onChange(nextContent);
+  };
+
+  const promptAndInsert = (type) => {
+    const labels = {
+      image: "Image URL",
+      youtube: "YouTube URL",
+      video: "Video URL",
+      link: "Link URL"
+    };
+    const url = window.prompt(labels[type] || "URL");
+    if (!url) return;
+    const caption = window.prompt(type === "link" ? "Link label (optional)" : "Caption (optional)") || "";
+    insertBlock(buildMediaDirective(type, url, caption));
+  };
+
+  const wrapSelection = (startMarker, endMarker = startMarker, fallback = "text") => {
+    const current = value || "";
+    const textarea = textareaRef.current;
+    const start = textarea?.selectionStart ?? current.length;
+    const end = textarea?.selectionEnd ?? current.length;
+    const selected = current.slice(start, end) || fallback;
+    const nextValue = `${current.slice(0, start)}${startMarker}${selected}${endMarker}${current.slice(end)}`;
+
+    onChange(nextValue);
+    requestAnimationFrame(() => {
+      const selectionStart = start + startMarker.length;
+      const selectionEnd = selectionStart + selected.length;
+      textareaRef.current?.focus();
+      textareaRef.current?.setSelectionRange(selectionStart, selectionEnd);
+    });
+  };
+
+  const prefixSelectionLines = (prefix, fallback = "Text") => {
+    const current = value || "";
+    const textarea = textareaRef.current;
+    const start = textarea?.selectionStart ?? current.length;
+    const end = textarea?.selectionEnd ?? current.length;
+    const selected = current.slice(start, end) || fallback;
+    const replacement = selected
+      .split(/\r?\n/)
+      .map((line) => `${prefix}${line}`)
+      .join("\n");
+    const nextValue = `${current.slice(0, start)}${replacement}${current.slice(end)}`;
+
+    onChange(nextValue);
+    requestAnimationFrame(() => {
+      textareaRef.current?.focus();
+      textareaRef.current?.setSelectionRange(start, start + replacement.length);
+    });
+  };
+
+  return (
+    <label className="field rich-editor-field">
+      <span>{label}</span>
+      <textarea ref={textareaRef} value={value} onChange={(event) => onChange(event.target.value)} rows={10} />
+      <div className="rich-editor-toolbar" aria-label="Inline media tools">
+        <div className="rich-editor-formatbar">
+          <button type="button" className="rich-editor-button square" title="Bold" onClick={() => wrapSelection("**", "**", "bold text")}>
+            <Bold size={16} />
+          </button>
+          <button type="button" className="rich-editor-button square" title="Italic" onClick={() => wrapSelection("*", "*", "italic text")}>
+            <Italic size={16} />
+          </button>
+          <button type="button" className="rich-editor-button square" title="Heading" onClick={() => prefixSelectionLines("## ", "Heading")}>
+            <Heading2 size={16} />
+          </button>
+          <button type="button" className="rich-editor-button square" title="Bullet list" onClick={() => prefixSelectionLines("- ", "List item")}>
+            <List size={16} />
+          </button>
+          <button type="button" className="rich-editor-button square" title="Quote" onClick={() => prefixSelectionLines("> ", "Quote")}>
+            <Quote size={16} />
+          </button>
+          <button type="button" className="rich-editor-button square" title="Inline code" onClick={() => wrapSelection("`", "`", "code")}>
+            <Code2 size={16} />
+          </button>
+        </div>
+        <div className="rich-editor-group">
+          <button type="button" className="rich-editor-button" onClick={() => promptAndInsert("image")}><ImageIcon size={15} /> Image</button>
+          <button type="button" className="rich-editor-button" onClick={() => promptAndInsert("youtube")}><Youtube size={15} /> YouTube</button>
+          <button type="button" className="rich-editor-button" onClick={() => promptAndInsert("video")}><Video size={15} /> Video</button>
+          <button type="button" className="rich-editor-button" onClick={() => promptAndInsert("link")}><LinkIcon size={15} /> Link</button>
+          {youtubeUrl && (
+            <button type="button" className="rich-editor-button accent" onClick={() => insertBlock(buildMediaDirective("youtube", youtubeUrl))}>
+              Use YouTube URL
+            </button>
+          )}
+        </div>
+        {mediaList.length > 0 && (
+          <div className="rich-editor-media-strip">
+            <span>Insert gallery media with preview</span>
+            <div className="rich-editor-media-grid">
+              {mediaList.map((url, index) => (
+                <MediaPreviewCard
+                  key={`${url}-${index}`}
+                  url={url}
+                  index={index}
+                  onInsert={() => insertBlock(`[media: ${index + 1}]`)}
+                  onRemove={() => removeMedia(index)}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+        <small className="field-help rich-editor-note">{richContentHelp}</small>
+      </div>
+    </label>
+  );
+}
+
 function TextInput({ label, value, onChange, type = "text" }) {
   return (
     <label className="field">
@@ -652,11 +851,12 @@ function TextInput({ label, value, onChange, type = "text" }) {
   );
 }
 
-function TextArea({ label, value, onChange }) {
+function TextArea({ label, value, onChange, help, rows = 4 }) {
   return (
     <label className="field">
       <span>{label}</span>
-      <textarea value={value} onChange={(event) => onChange(event.target.value)} rows={4} />
+      <textarea value={value} onChange={(event) => onChange(event.target.value)} rows={rows} />
+      {help && <small className="field-help">{help}</small>}
     </label>
   );
 }
