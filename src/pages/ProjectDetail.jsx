@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { Github, ExternalLink, ArrowLeft, Calendar, Building2, Code2 } from "lucide-react";
 import { normalizeList, resolveMediaUrl } from "../utils";
 import MediaGallery from "../components/MediaGallery";
-import RichContent, { getInlineMediaUsage } from "../components/RichContent";
+import RichContent from "../components/RichContent";
 
 export default function ProjectDetail({ content }) {
   const { id } = useParams();
@@ -26,8 +26,6 @@ export default function ProjectDetail({ content }) {
   const mediaUrls = normalizeList(project.mediaUrls);
   
   const descriptionText = project.fullDescription || project.description;
-  const { usedIndexes, usedUrls } = getInlineMediaUsage(descriptionText, mediaUrls);
-  const remainingMediaUrls = mediaUrls.filter((url, index) => !usedIndexes.has(index) && !usedUrls.has(url));
 
   return (
     <div className="page-content">
@@ -98,7 +96,7 @@ export default function ProjectDetail({ content }) {
             </>
           )}
 
-          <MediaGallery urls={remainingMediaUrls} itemTitle="Project media" />
+          <MediaGallery urls={mediaUrls} itemTitle="Project media" />
 
           {skills.length > 0 && (
             <>

@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { ExternalLink, ArrowLeft, Calendar, Award } from "lucide-react";
 import CertificateVisual from "../components/CertificateVisual";
 import MediaGallery from "../components/MediaGallery";
-import RichContent, { getInlineMediaUsage } from "../components/RichContent";
+import RichContent from "../components/RichContent";
 import { normalizeList } from "../utils";
 
 export default function CertificateDetail({ content }) {
@@ -26,8 +26,6 @@ export default function CertificateDetail({ content }) {
   const mediaUrls = normalizeList(certificate.mediaUrls);
   
   const descriptionText = certificate.fullDescription || certificate.description;
-  const { usedIndexes, usedUrls } = getInlineMediaUsage(descriptionText, mediaUrls);
-  const remainingMediaUrls = mediaUrls.filter((url, index) => !usedIndexes.has(index) && !usedUrls.has(url));
 
   return (
     <div className="page-content">
@@ -67,7 +65,7 @@ export default function CertificateDetail({ content }) {
           <h2>About the Certificate</h2>
           <RichContent text={descriptionText} mediaUrls={mediaUrls} itemTitle={certificate.title} />
 
-          <MediaGallery urls={remainingMediaUrls} itemTitle="Certificate media" />
+          <MediaGallery urls={mediaUrls} itemTitle="Certificate media" />
 
           {skills.length > 0 && (
             <>

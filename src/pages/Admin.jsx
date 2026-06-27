@@ -9,7 +9,7 @@ const blankEducation = { school: "", program: "", period: "", description: "", s
 const blankCertificate = { title: "", issuer: "", date: "", credentialUrl: "", imageUrl: "", mediaUrls: "", description: "", fullDescription: "", skills: "" };
 const blankProject = { title: "", description: "", fullDescription: "", language: "", repoUrl: "", liveUrl: "", imageUrl: "", mediaUrls: "", updated: "", period: "", associated: "", skills: "", highlights: "", featuredRank: "" };
 const blankExpertise = { category: "", description: "", skills: "" };
-const richContentHelp = "Click a button to insert media at the cursor. Media 1 uses the first Additional Media URL, Media 2 uses the second, and so on.";
+const richContentHelp = "Cards in Media library show in the page gallery. Click a card to also place it in the text. Use the small text button to remove only from text, or the trash button to remove from the gallery.";
 
 export const StrictModeDroppable = ({ children, ...props }) => {
   const [enabled, setEnabled] = useState(false);
@@ -663,14 +663,75 @@ function getMediaPreviewType(url) {
   return "link";
 }
 
-function MediaPreviewCard({ url, index, onInsert, onRemove }) {
-  const type = getMediaPreviewType(url);
+function splitEditorValueAndCaption(value = "") {
+  const [urlPart, ...captionParts] = String(value).split("|");
+  return {
+    url: urlPart.trim(),
+    caption: captionParts.join("|").trim()
+  };
+}
+
+function parseInlineEditorMedia(text = "", mediaList = []) {
+  const blocks = [];
+
+  String(text || "").split(/\r?\n/).forEach((line, lineIndex) => {
+    const trimmed = line.trim();
+    if (!trimmed) return;
+
+    const markdownImage = trimmed.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+    if (markdownImage) {
+      blocks.push({
+        url: markdownImage[2].trim(),
+        caption: markdownImage[1].trim(),
+        lineIndex,
+        label: `Inline image ${blocks.length + 1}`,
+        type: "image"
+      });
+      return;
+    }
+
+    const directive = trimmed.match(/^\[(media|image|video|youtube|link):\s*(.+)\]$/i);
+    if (directive) {
+      const directiveType = directive[1].toLowerCase();
+      const { url: rawUrl, caption } = splitEditorValueAndCaption(directive[2]);
+      const mediaNumber = directiveType === "media" ? Number(rawUrl) : null;
+      const url = directiveType === "media" ? mediaList[mediaNumber - 1] || "" : rawUrl;
+      if (!url) return;
+      blocks.push({
+        url,
+        caption,
+        lineIndex,
+        galleryIndex: directiveType === "media" && Number.isFinite(mediaNumber) ? mediaNumber - 1 : null,
+        label: directiveType === "media" ? `Media ${mediaNumber}` : `Inline ${directiveType} ${blocks.length + 1}`,
+        type: directiveType === "media" ? getMediaPreviewType(url) : directiveType
+      });
+      return;
+    }
+
+    const isStandaloneMedia = getYoutubeEmbedUrl(trimmed) || /\.(mp4|webm|ogg|avif|bmp|gif|ico|jpe?g|png|svg|webp)(\?.*)?$/i.test(trimmed);
+    if (isStandaloneMedia) {
+      blocks.push({
+        url: trimmed,
+        caption: "",
+        lineIndex,
+        label: `Inline media ${blocks.length + 1}`,
+        type: getMediaPreviewType(trimmed)
+      });
+    }
+  });
+
+  return blocks;
+}
+
+function MediaPreviewCard({ url, index, onInsert, onRemove, onUnplace, label, typeOverride, isPlaced = false }) {
+  const type = typeOverride || getMediaPreviewType(url);
   const resolvedUrl = resolveMediaUrl(url);
   const youtubeThumb = type === "youtube" ? getYoutubeThumbnail(url) : "";
+  const cardLabel = label || `Media ${index + 1}`;
 
   return (
-    <div className="rich-editor-media-card" title={url}>
-      <button type="button" className="rich-editor-media-insert" onClick={onInsert} aria-label={`Insert media ${index + 1}`}>
+    <div className={`rich-editor-media-card${isPlaced ? " is-placed" : ""}`} title={url}>
+      <button type="button" className="rich-editor-media-insert" onClick={onInsert} aria-label={`Insert ${cardLabel}`}>
         <span className="rich-editor-preview">
           {type === "image" && <img src={resolvedUrl} alt="" loading="lazy" />}
           {type === "youtube" && youtubeThumb && <img src={youtubeThumb} alt="" loading="lazy" />}
@@ -678,13 +739,20 @@ function MediaPreviewCard({ url, index, onInsert, onRemove }) {
           {type === "link" && <LinkIcon size={22} />}
         </span>
         <span className="rich-editor-media-meta">
-          <strong>Media {index + 1}</strong>
-          <small>{type === "link" ? getUrlLabel(url) : type}</small>
+          <strong>{cardLabel}</strong>
+          <small>{isPlaced ? "Placed in text" : type === "link" ? getUrlLabel(url) : type}</small>
         </span>
       </button>
-      <button type="button" className="rich-editor-media-remove" onClick={onRemove} aria-label={`Remove media ${index + 1}`}>
-        <Trash2 size={14} />
-      </button>
+      {onRemove && (
+        <button type="button" className="rich-editor-media-remove" onClick={onRemove} aria-label={`Remove ${cardLabel}`}>
+          <Trash2 size={14} />
+        </button>
+      )}
+      {isPlaced && onUnplace && (
+        <button type="button" className="rich-editor-media-unplace" onClick={onUnplace}>
+          Remove from text
+        </button>
+      )}
     </div>
   );
 }
@@ -692,6 +760,13 @@ function MediaPreviewCard({ url, index, onInsert, onRemove }) {
 function RichTextArea({ label, value, onChange, mediaUrls = "", onMediaUrlsChange, youtubeUrl = "" }) {
   const textareaRef = useRef(null);
   const mediaList = normalizeList(mediaUrls);
+  const inlineBlocks = parseInlineEditorMedia(value, mediaList);
+  const placedGalleryIndexes = new Set(
+    inlineBlocks
+      .map((block) => block.galleryIndex)
+      .filter((index) => Number.isInteger(index) && index >= 0)
+  );
+  const manualInlineBlocks = inlineBlocks.filter((block) => !Number.isInteger(block.galleryIndex));
 
   const insertBlock = (block) => {
     const current = value || "";
@@ -732,6 +807,29 @@ function RichTextArea({ label, value, onChange, mediaUrls = "", onMediaUrlsChang
       .replace(/\n{3,}/g, "\n\n");
 
     onMediaUrlsChange(nextMediaList.join(", "));
+    onChange(nextContent);
+  };
+
+  const removeInlineBlock = (lineIndex) => {
+    const nextContent = String(value || "")
+      .split(/\r?\n/)
+      .filter((_, index) => index !== lineIndex)
+      .join("\n")
+      .replace(/\n{3,}/g, "\n\n");
+
+    onChange(nextContent);
+  };
+
+  const removeGalleryMediaFromText = (galleryIndex) => {
+    const nextContent = String(value || "")
+      .split(/\r?\n/)
+      .filter((line) => {
+        const match = line.trim().match(/^\[media:\s*(\d+)(\s*\|[^\]]*)?\]$/i);
+        return !match || Number(match[1]) !== galleryIndex + 1;
+      })
+      .join("\n")
+      .replace(/\n{3,}/g, "\n\n");
+
     onChange(nextContent);
   };
 
@@ -820,17 +918,36 @@ function RichTextArea({ label, value, onChange, mediaUrls = "", onMediaUrlsChang
             </button>
           )}
         </div>
-        {mediaList.length > 0 && (
+        {(mediaList.length > 0 || manualInlineBlocks.length > 0) && (
           <div className="rich-editor-media-strip">
-            <span>Insert gallery media with preview</span>
+            <span>Media library</span>
             <div className="rich-editor-media-grid">
               {mediaList.map((url, index) => (
                 <MediaPreviewCard
                   key={`${url}-${index}`}
                   url={url}
                   index={index}
+                  isPlaced={placedGalleryIndexes.has(index)}
                   onInsert={() => insertBlock(`[media: ${index + 1}]`)}
                   onRemove={() => removeMedia(index)}
+                  onUnplace={() => removeGalleryMediaFromText(index)}
+                />
+              ))}
+              {manualInlineBlocks.map((block) => (
+                <MediaPreviewCard
+                  key={`${block.lineIndex}-${block.url}`}
+                  url={block.url}
+                  index={block.lineIndex}
+                  label={block.caption || block.label}
+                  typeOverride={block.type}
+                  isPlaced
+                  onInsert={() => {
+                    textareaRef.current?.focus();
+                    const lines = String(value || "").split(/\r?\n/);
+                    const cursor = lines.slice(0, block.lineIndex + 1).join("\n").length;
+                    textareaRef.current?.setSelectionRange(cursor, cursor);
+                  }}
+                  onRemove={() => removeInlineBlock(block.lineIndex)}
                 />
               ))}
             </div>

@@ -566,7 +566,7 @@
         "Fully responsive customer and admin pages",
         "Live production deployment on Render"
       ],
-      "fullDescription": "BoonSonClon is a high-performance, full-stack e-commerce platform designed exclusively for premium furniture retail, developed as the final project for the ITCS223 Web Development course. \n\n[media: 2]\n\nThe platform features a robust Hybrid Database System compatible with both PostgreSQL and SQLite, and a fully responsive Mobile-First card-based layout optimized for all viewports from mobile devices to desktop monitors.\\n\\nThe system is built with a clear separation of concerns, featuring a dedicated RESTful web service API and a polished storefront frontend. \n\n[media: 3]\n\n\nIt supports advanced e-commerce features, including clean server-side URL routing, dynamic product grids, and a comprehensive Admin Panel with secure JWT and session-based authentication for order and inventory management. The platform is designed for a seamless developer experience, featuring fully automated database seeding upon initialization, ensuring rapid deployment and testing environments.\n\n[media: 7]\n\n",
+      "fullDescription": "[image: https://i.postimg.cc/c4T5THY2/Screenshot-2026-06-27-172948.png]\n\nBoonSonClon is a high-performance, full-stack e-commerce platform designed exclusively for premium furniture retail, developed as the final project for the ITCS223 Web Development course. \n\n[media: 2]\n\nThe platform features a robust Hybrid Database System compatible with both PostgreSQL and SQLite, and a fully responsive Mobile-First card-based layout optimized for all viewports from mobile devices to desktop monitors.\\n\\nThe system is built with a clear separation of concerns, featuring a dedicated RESTful web service API and a polished storefront frontend. \n\n[media: 3]\n\nIt supports advanced e-commerce features, including clean server-side URL routing, dynamic product grids, and a comprehensive Admin Panel with secure JWT and session-based authentication for order and inventory management. The platform is designed for a seamless developer experience, featuring fully automated database seeding upon initialization, ensuring rapid deployment and testing environments.\n\n[media: 7]\n\n\n",
       "mediaUrls": [
         "projects/boonsonclon-banner.jpg",
         "projects/boonsonclon-desktop-overview.jpg",
@@ -583,7 +583,7 @@
       "id": "project-homelab",
       "name": "Personal Home Lab Server",
       "description": "A real compact home lab server rack running a Proxmox VE 9.2.3 cluster with LXC containers and virtual machines for networking, self-hosting, storage, automation, media, AI experiments, and infrastructure monitoring.",
-      "fullDescription": "Building a Personal Home Lab Server is an ongoing journey of creating a private, self-hosted cloud environment from real hardware. The setup is built around a compact 10-inch rack with managed switching, structured patch cabling, mini PC hardware, and HP server hardware, giving the lab a practical footprint while still supporting multiple always-on services.\n\nThe core of the infrastructure is powered by Proxmox VE 9.2.3. The cluster currently uses pve1 and pve2 nodes, with lightweight LXC containers and virtual machines for services such as AdGuard, InfluxDB, Grafana, Immich, Jellyfin, Ollama, Seerr, Radarr, Prowlarr, Open WebUI, Hermes Agent, Home Assistant, Ubuntu, and other automation or media workloads.\n\nNetworking and security are handled with a self-hosted network stack and Tailscale-enabled remote access. This keeps services reachable through an encrypted private network while reducing the need to expose home infrastructure directly to the public internet.\n\nThe lab serves as a learning and production-style environment for system administration, virtualization, Docker-based services, monitoring, media hosting, local AI experimentation, storage, and infrastructure operations. It connects physical hardware design with practical DevOps workflows and real service maintenance.",
+      "fullDescription": "Building a Personal Home Lab Server is an ongoing journey of creating a private, self-hosted cloud environment from real hardware. The setup is built around a compact 10-inch rack with managed switching, structured patch cabling, mini PC hardware, and HP server hardware, giving the lab a practical footprint while still supporting multiple always-on services.\n\n[media: 2]\n\n\nThe core of the infrastructure is powered by Proxmox VE 9.2.3. The cluster currently uses pve1 and pve2 nodes, with lightweight LXC containers and virtual machines for services such as AdGuard, InfluxDB, Grafana, Immich, Jellyfin, Ollama, Seerr, Radarr, Prowlarr, Open WebUI, Hermes Agent, Home Assistant, Ubuntu, and other automation or media workloads.\n\n[media: 6]\n\n\n\nNetworking and security are handled with a self-hosted network stack and Tailscale-enabled remote access. This keeps services reachable through an encrypted private network while reducing the need to expose home infrastructure directly to the public internet.\n\nThe lab serves as a learning and production-style environment for system administration, virtualization, Docker-based services, monitoring, media hosting, local AI experimentation, storage, and infrastructure operations. It connects physical hardware design with practical DevOps workflows and real service maintenance.",
       "language": "Infrastructure",
       "repoUrl": "",
       "liveUrl": "",
@@ -605,10 +605,25 @@
         "Home Assistant"
       ],
       "highlights": [
-        "Built a real compact rack with managed switching, patch cabling, mini PC hardware, and HP server hardware",
+        "Built a real compact rack with managed switching",
+        "patch cabling",
+        "mini PC hardware",
+        "and HP server hardware",
         "Runs a Proxmox VE 9.2.3 cluster with pve1 and pve2 nodes",
-        "Hosts LXC containers and VMs for AdGuard, Grafana, Jellyfin, Ollama, Home Assistant, Ubuntu, and media automation",
-        "Used for secure remote access, DNS/network services, monitoring, media hosting, local AI, storage, and self-hosted application experiments"
+        "Hosts LXC containers and VMs for AdGuard",
+        "Grafana",
+        "Jellyfin",
+        "Ollama",
+        "Home Assistant",
+        "Ubuntu",
+        "and media automation",
+        "Used for secure remote access",
+        "DNS/network services",
+        "monitoring",
+        "media hosting",
+        "local AI",
+        "storage",
+        "and self-hosted application experiments"
       ],
       "mediaUrls": [
         "projects/homelab-real-banner.jpg",
@@ -627,7 +642,7 @@
       "id": "project-bf-connect",
       "name": "BF Connect Android Application",
       "description": "An Android application for breastfeeding support and clinical follow-up that connects mothers, nurses, and administrators through role-based dashboards, feeding and pumping logs, consultations, community moderation, knowledge content, and Firebase-backed data sync.",
-      "fullDescription": "BF Connect is a production-oriented Android application for breastfeeding support, care coordination, and clinical follow-up. The app is designed around three primary roles: mothers, nurses, and administrators, each with dedicated workflows and dashboards.\n\nFor mothers, the application supports profile management, breastfeeding and pumping logs, goal tracking, EPDS mental-health screening, consultation requests, community questions, and educational content. For nurses, it provides patient monitoring views, mother detail pages, consultation replies, community moderation, schedule support, and case follow-up. For administrators, it includes nurse approval, knowledge/news/quiz management, reporting, notifications, role oversight, and system setup.\n\nThe backend is configured with Firebase Authentication, Google sign-in, Cloud Firestore, Firebase Storage for images/PDFs/videos, Firebase Cloud Messaging for role notifications, Firebase Crashlytics, Firebase Remote Config, and Cloud Functions v2. The project also includes production launch documentation, Play Store build notes, data-safety drafts, and Firebase deployment rules.",
+      "fullDescription": "BF Connect is a production-oriented Android application for breastfeeding support, care coordination, and clinical follow-up. The app is designed around three primary roles: mothers, nurses, and administrators, each with dedicated workflows and dashboards.\n\n[media: 2]\n\nFor mothers, the application supports profile management, breastfeeding and pumping logs, goal tracking, EPDS mental-health screening, consultation requests, community questions, and educational content. For nurses, it provides patient monitoring views, mother detail pages, consultation replies, community moderation, schedule support, and case follow-up. For administrators, it includes nurse approval, knowledge/news/quiz management, reporting, notifications, role oversight, and system setup.\n\n[media: 4]\n\n\nThe backend is configured with Firebase Authentication, Google sign-in, Cloud Firestore, Firebase Storage for images/PDFs/videos, Firebase Cloud Messaging for role notifications, Firebase Crashlytics, Firebase Remote Config, and Cloud Functions v2. The project also includes production launch documentation, Play Store build notes, data-safety drafts, and Firebase deployment rules.",
       "language": "Java / Android",
       "repoUrl": "https://github.com/JirathiwatSun/BF-Connect",
       "liveUrl": "",
