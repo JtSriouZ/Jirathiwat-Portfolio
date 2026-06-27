@@ -104,11 +104,21 @@ export function getSkillIconUrls(skillName) {
     "bolt.new": "bolt",
     "socketio": "socket.io",
     "socket io": "socket.io",
+    "rest apis": "restful apis",
+    "rest api": "restful apis",
+    "websockets": "websocket",
     "three": "three.js",
     "framer": "framer motion",
     "fusion360": "fusion 360",
     "obs": "obs studio",
-    "shapr 3d": "shapr3d"
+    "shapr 3d": "shapr3d",
+    "react native": "react.js",
+    "swiftui": "swift",
+    "jetpack compose": "jetpack compose",
+    "google play": "google play console",
+    "app store": "app store connect",
+    "test flight": "testflight",
+    "objective c": "objective-c"
   };
   const key = aliases[normalized] || normalized;
   const conceptualSkills = new Set([
@@ -128,6 +138,8 @@ export function getSkillIconUrls(skillName) {
     "software engineering",
     "unit testing",
     "web applications",
+    "websocket",
+    "mobile ui/ux",
     "data structures",
     "algorithms",
     "system design"
@@ -163,7 +175,7 @@ export function getSkillIconUrls(skillName) {
     "roboflow": faviconUrl("roboflow.com"),
     "ultralytics": "https://raw.githubusercontent.com/ultralytics/assets/main/logo/Ultralytics_Logotype_Original.svg",
     "java": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg",
-    "c": skillIconUrl("C"),
+    "c": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/c/c-original.svg",
     "c++": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg",
     "c/c++": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg",
     "git": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg",
@@ -201,6 +213,25 @@ export function getSkillIconUrls(skillName) {
     "nginx": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nginx/nginx-original.svg",
     "heroku": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/heroku/heroku-original.svg",
     "postman": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg",
+    "flutter": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg",
+    "dart": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/dart/dart-original.svg",
+    "swift": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/swift/swift-original.svg",
+    "kotlin": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kotlin/kotlin-original.svg",
+    "android studio": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/androidstudio/androidstudio-original.svg",
+    "xcode": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/xcode/xcode-original.svg",
+    "expo": faviconUrl("expo.dev"),
+    "jetpack compose": "https://cdn.simpleicons.org/jetpackcompose/4285F4",
+    "ionic": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/ionic/ionic-original.svg",
+    "electron": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/electron/electron-original.svg",
+    "tauri": faviconUrl("tauri.app"),
+    "objective-c": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/objectivec/objectivec-plain.svg",
+    "core data": faviconUrl("developer.apple.com"),
+    "room": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/android/android-original.svg",
+    "realm": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/realm/realm-original.svg",
+    "fastlane": "https://cdn.simpleicons.org/fastlane/00F200",
+    "testflight": "https://cdn.simpleicons.org/testflight/0D96F6",
+    "app store connect": "https://cdn.simpleicons.org/appstore/0D96F6",
+    "google play console": "https://cdn.simpleicons.org/googleplay/34A853",
     "html5": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg",
     "css3": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg",
     "javascript": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg",
@@ -238,7 +269,7 @@ export function getSkillIconUrls(skillName) {
     "claude code": "https://cdn.simpleicons.org/anthropic",
     "gemini": "https://cdn.simpleicons.org/googlegemini",
     "codex": "https://cdn.simpleicons.org/openai",
-    "antigravity": faviconUrl("deepmind.google"),
+    "antigravity": faviconUrl("antigravity.google"),
     "ubuntu": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/ubuntu/ubuntu-original.svg",
     "github copilot": "https://cdn.simpleicons.org/githubcopilot",
     "cursor": "https://cdn.simpleicons.org/cursor",
@@ -268,8 +299,7 @@ export function getSkillIconUrls(skillName) {
     "virtualbox": "https://cdn.simpleicons.org/virtualbox",
     "vmware": "https://cdn.simpleicons.org/vmware",
     "socket.io": "https://cdn.simpleicons.org/socketdotio",
-    "jwt": "https://cdn.simpleicons.org/jsonwebtokens",
-    "websocket": ""
+    "jwt": "https://cdn.simpleicons.org/jsonwebtokens"
   };
 
   const simpleIconsMapping = {
@@ -283,23 +313,17 @@ export function getSkillIconUrls(skillName) {
 
   const urls = [];
 
-  // 1. Try colored PNGs from Clearbit API first
-  urls.push(`https://logo.clearbit.com/${urlSafe}.com`);
-  urls.push(`https://logo.clearbit.com/${urlSafe}.io`);
-  urls.push(`https://logo.clearbit.com/${urlSafe}.dev`);
-  urls.push(`https://logo.clearbit.com/${urlSafe}.ai`);
-  urls.push(`https://logo.clearbit.com/${urlSafe}.app`);
-
-  // 2. Exact matched SVGs (Devicon / Tandpfun)
+  // 1. Exact matched logos first. This avoids Vercel rendering unrelated
+  // domain favicons for short names like C, Java, Room, or V0.
   if (deviconUrls[key]) urls.push(deviconUrls[key]);
   if (simpleIconsMapping[key]) urls.push(simpleIconsMapping[key]);
 
-  // 3. General SVGs
+  // 2. General SVG libraries with deterministic package paths.
   urls.push(`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${urlSafe}/${urlSafe}-original.svg`);
   urls.push(`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${urlSafe}/${urlSafe}-plain.svg`);
   urls.push(`https://cdn.simpleicons.org/${urlSafe}`);
 
-  // 4. Favicon fallbacks
+  // 3. Favicon fallbacks only after exact mappings and known logo CDNs fail.
   urls.push(`https://www.google.com/s2/favicons?domain=${urlSafe}.com&sz=128`);
   urls.push(`https://www.google.com/s2/favicons?domain=${urlSafe}.dev&sz=128`);
   urls.push(`https://www.google.com/s2/favicons?domain=${urlSafe}.io&sz=128`);

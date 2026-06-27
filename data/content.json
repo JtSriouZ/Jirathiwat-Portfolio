@@ -454,7 +454,7 @@
       "language": "Python",
       "repoUrl": "https://github.com/JirathiwatSun/missile-detection-static-main",
       "liveUrl": "",
-      "imageUrl": "https://github.com/JirathiwatSun/missile-detection-static-main/raw/main/data/images/image-1.png",
+      "imageUrl": "projects/iron-dome-banner.jpg",
       "updated": "2026-04-25",
       "featuredRank": 1,
       "period": "Mar 2026 - Present",
@@ -477,10 +477,11 @@
       ],
       "fullDescription": "The Iron Dome Missile Tracker v3.1 is a production-ready system demonstrating practical applications of Operating Systems concepts in a high-performance real-time environment. Built as a capstone-level project for the ITCS225 course, it achieved a perfect 16/16 grading rubric score. The system seamlessly integrates four major OS components—Synchronization, Memory Management, Task Scheduling, and File I/O—into a functional object detection pipeline that sustains 60fps performance without dropping frames.\\n\\nPowered by a custom-trained YOLOv8 AI engine fine-tuned on a curated Roboflow dataset of over 9,200 missile images, the tracker handles high-definition video processing, deep learning inference, and telemetry write-backs simultaneously. To achieve this deterministic execution, the architecture utilizes custom system-level memory management, strict thread scheduling, and advanced synchronization techniques. The application is cross-platform, offering native CPU tracking on all operating systems alongside GPU-accelerated CUDA support on Windows and Metal support on macOS.",
       "mediaUrls": [
-        "/projects/iron-dome-01.png",
-        "/projects/iron-dome-02.png",
-        "/projects/iron-dome-03.png",
-        "/projects/iron-dome-04.png"
+        "projects/iron-dome-banner.jpg",
+        "projects/iron-dome-03.png",
+        "projects/iron-dome-04.png",
+        "projects/iron-dome-01.png",
+        "projects/iron-dome-02.png"
       ]
     },
     {
@@ -490,7 +491,7 @@
       "language": "Jupyter Notebook",
       "repoUrl": "https://github.com/JirathiwatSun/Movie-Recommendation",
       "liveUrl": "",
-      "imageUrl": "https://i.postimg.cc/9QS3zPTv/Screenshot-2026-04-20-013012.png",
+      "imageUrl": "projects/cinematch-banner.jpg",
       "updated": "2026-04-16",
       "featuredRank": 2,
       "period": "2026",
@@ -515,15 +516,17 @@
       ],
       "fullDescription": "CineMatch 2.0 is a production-grade movie discovery platform designed for the ITCS227 Data Science course. It transcends simple keyword matching by understanding the 'Soul' and 'Vibe' of over 436,000 movies using high-dimensional embeddings and a custom Hybrid Scoring Engine. The platform features an advanced architecture encompassing data engineering (processing datasets into a 'Metadata Soup' fingerprint using Title, Overview, Genre, Keywords, and Era Tags), an AI Core utilizing the all-MiniLM-L6-v2 model for GPU-accelerated vectorization, and a modern Streamlit web interface.\\n\\nUnlike standard search engines, CineMatch uses a 50/50 Hybrid Score. It combines Semantic Similarity—measured using Cosine Similarity of query embeddings—with a Weighted Statistical Quality based on the IMDB rating formula. The system also features a Mood Fusion Intent Parser that automatically detects if a query matches Visual Styles (e.g., Neon, Noir), Emotional Impacts, or Narrative Complexity to adjust scoring weights on the fly. Finally, a Hidden Gem Radar specifically surfaces highly-rated independent films with lower vote counts to prevent blockbuster bias, while a Plotly 3D network graph allows users to visually explore cinematic relationships.",
       "mediaUrls": [
-        "/projects/cinematch-2-01.png",
-        "/projects/cinematch-2-02.png",
-        "/projects/cinematch-2-03.png",
-        "/projects/cinematch-2-04.png",
-        "/projects/cinematch-2-05.png",
-        "/projects/cinematch-2-06.png",
-        "/projects/cinematch-2-07.png",
-        "/projects/cinematch-2-08.png",
-        "/projects/cinematch-2-09.png"
+        "projects/cinematch-banner.jpg",
+        "projects/cinematch-oracle-filters.jpg",
+        "projects/cinematch-semantic-search.jpg",
+        "projects/cinematch-movie-detail-space-race.jpg",
+        "projects/cinematch-movie-detail-wintering.jpg",
+        "projects/cinematch-dashboard-genres.jpg",
+        "projects/cinematch-dashboard-ratings.jpg",
+        "projects/cinematch-dashboard-timeline.jpg",
+        "projects/cinematch-dashboard-revenue.jpg",
+        "projects/cinematch-oracle-learning-matrix.png",
+        "projects/cinematch-engine-loading.jpg"
       ]
     },
     {
@@ -606,6 +609,7 @@
         "projects/homelab-real-06.jpg",
         "projects/homelab-real-03.jpg",
         "projects/homelab-real-04.jpg",
+        "projects/homelab-proxmox-live-cluster.jpg",
         "projects/homelab-proxmox-cluster.jpg",
         "https://www.youtube.com/watch?v=v-FKrwwSFXo"
       ]
