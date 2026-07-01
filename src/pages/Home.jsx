@@ -398,13 +398,18 @@ export default function Home({ content, language }) {
   const previewDelay = 4200;
 
   const typingPhrases = useMemo(
-    () => [
-      profile.role,
-      "Real-time AI systems builder",
-      "Full-stack web application developer",
-      "Computer vision and data science creator",
-    ],
-    [profile.role]
+    () => {
+      if (profile.roles && profile.roles.length > 0) {
+        return [profile.role, ...profile.roles];
+      }
+      return [
+        profile.role,
+        "Real-time AI systems builder",
+        "Full-stack web application developer",
+        "Computer vision and data science creator",
+      ];
+    },
+    [profile.role, profile.roles]
   );
 
   const featuredProjects = useMemo(

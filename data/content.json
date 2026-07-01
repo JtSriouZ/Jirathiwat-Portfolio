@@ -43,7 +43,12 @@
       "aboutEducationTitle": "Academic path",
       "blogTitle": "Latest posts",
       "blogDesc": "Thoughts, news, and technical articles."
-    }
+    },
+    "roles": [
+      "Real-time AI systems builder",
+      "Full-stack web application developer",
+      "Computer vision and data science creator"
+    ]
   },
   "expertise": [
     {

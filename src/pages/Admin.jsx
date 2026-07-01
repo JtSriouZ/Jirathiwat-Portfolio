@@ -260,6 +260,7 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
           <div className="form-grid">
             <TextInput label="Name" value={profile.name} onChange={(name) => setProfile({ ...profile, name })} />
             <TextInput label="Role" value={profile.role} onChange={(role) => setProfile({ ...profile, role })} />
+            <TextInput label="Sub-roles (comma separated, for typing animation)" value={(profile.roles || []).join(", ")} onChange={(roles) => setProfile({ ...profile, roles: roles.split(",").map(r => r.trim()).filter(Boolean) })} />
             <TextInput label="Location" value={profile.location} onChange={(location) => setProfile({ ...profile, location })} />
             <TextInput label="Email" value={profile.email} onChange={(email) => setProfile({ ...profile, email })} />
             <TextInput label="GitHub" value={profile.github} onChange={(github) => setProfile({ ...profile, github })} />
