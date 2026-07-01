@@ -4324,20 +4324,3 @@ body {
   }
 
 }
-.route-projects-project-homelab {
-  --page-accent: #ff4d4d;
-  --page-accent-2: #ff9f43;
-  --page-accent-3: #ffd36a;
-  --nav-accent: #ff6b4a;
-  --nav-accent-2: #40141f;
-  --nav-accent-3: #ffd36a;
-}
-
-.route-projects-project-shapr3d-server-rack {
-  --page-accent: #65e8ff;
-  --page-accent-2: #91ffcf;
-  --page-accent-3: #a78bfa;
-  --nav-accent: #65e8ff;
-  --nav-accent-2: #1d2b7a;
-  --nav-accent-3: #a78bfa;
-}
