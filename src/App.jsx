@@ -38,42 +38,53 @@ function getHashCharacter() {
 }
 
 function scrambleTextElement(element) {
-  if (!element || element.dataset.scrambling === "true") return;
+  if (!element || element.dataset.scrambling === "true" || element.dataset.scrambled === "true") return;
   if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
 
   const finalText = element.dataset.scrambleText || element.textContent || "";
   if (!finalText.trim()) return;
 
+  if (element._scrambleFrame) {
+    window.cancelAnimationFrame(element._scrambleFrame);
+  }
+
   element.dataset.scrambleText = finalText;
   element.dataset.scrambling = "true";
+  element.dataset.scrambled = "false";
   element.classList.remove("scramble-complete");
   element.classList.add("is-scrambling");
 
-  let frame = 0;
-  const maxFrames = Math.max(22, Math.min(48, finalText.length * 1.45));
-  const hashFrames = 5;
+  const start = performance.now();
+  const duration = Math.max(760, Math.min(1500, finalText.length * 44));
+  const hashDuration = 140;
 
-  const timer = window.setInterval(() => {
-    const progress = Math.max(0, (frame - hashFrames) / (maxFrames - hashFrames));
+  const draw = (now) => {
+    const elapsed = now - start;
+    const progress = Math.max(0, Math.min(1, (elapsed - hashDuration) / (duration - hashDuration)));
     const settledCount = Math.floor(finalText.length * progress);
 
     element.textContent = Array.from(finalText)
       .map((character, index) => {
         if (character === " " || index < settledCount) return character;
-        if (frame < hashFrames) return getHashCharacter();
+        if (elapsed < hashDuration) return getHashCharacter();
         return getRandomCharacter(index);
       })
       .join("");
 
-    frame += 1;
-    if (frame > maxFrames) {
-      window.clearInterval(timer);
+    if (progress >= 1) {
       element.textContent = finalText;
       element.dataset.scrambling = "false";
+      element.dataset.scrambled = "true";
       element.classList.remove("is-scrambling");
       element.classList.add("scramble-complete");
+      element._scrambleFrame = null;
+      return;
     }
-  }, 28);
+
+    element._scrambleFrame = window.requestAnimationFrame(draw);
+  };
+
+  element._scrambleFrame = window.requestAnimationFrame(draw);
 }
 
 function runScramble(root) {
@@ -82,6 +93,26 @@ function runScramble(root) {
     : Array.from(root.querySelectorAll("h1, h2, .project-count"));
 
   targets.forEach((target) => scrambleTextElement(target));
+}
+
+function resetScramble(root) {
+  const targets = root.matches?.("h1, h2, .project-count")
+    ? [root]
+    : Array.from(root.querySelectorAll("h1, h2, .project-count"));
+
+  targets.forEach((target) => {
+    if (target._scrambleFrame) {
+      window.cancelAnimationFrame(target._scrambleFrame);
+      target._scrambleFrame = null;
+    }
+
+    if (target.dataset.scrambleText) {
+      target.textContent = target.dataset.scrambleText;
+    }
+    target.dataset.scrambling = "false";
+    target.dataset.scrambled = "false";
+    target.classList.remove("is-scrambling", "scramble-complete");
+  });
 }
 
 function AnimatedBackgroundCanvas({ routeKey }) {
@@ -403,17 +434,23 @@ function App() {
   useEffect(() => {
     window.googleTranslateElementInit = () => {
       const target = document.getElementById("google_translate_element");
-      if (!target || target.dataset.ready === "true" || !window.google?.translate) return;
+      const TranslateElement = window.google?.translate?.TranslateElement;
+      if (!target || target.dataset.ready === "true" || typeof TranslateElement !== "function") return;
 
       target.dataset.ready = "true";
-      new window.google.translate.TranslateElement(
-        {
-          pageLanguage: "en",
-          autoDisplay: false,
-          layout: window.google?.translate?.TranslateElement?.InlineLayout?.SIMPLE || 1,
-        },
-        "google_translate_element"
-      );
+      try {
+        new TranslateElement(
+          {
+            pageLanguage: "en",
+            autoDisplay: false,
+            layout: TranslateElement.InlineLayout?.SIMPLE || 1,
+          },
+          "google_translate_element"
+        );
+      } catch (err) {
+        target.dataset.ready = "false";
+        console.warn("Google Translate widget failed to initialize", err);
+      }
     };
 
     const existingScript = document.querySelector('script[src*="translate_a/element.js"]');
@@ -460,6 +497,7 @@ function App() {
         if (element.classList.contains("is-visible")) {
           element.classList.remove("is-visible");
           element.classList.add("is-reveal-reset");
+          resetScramble(element);
         }
       };
 
@@ -467,8 +505,10 @@ function App() {
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              entry.target.classList.remove("is-reveal-reset");
-              revealElement(entry.target);
+              if (!entry.target.classList.contains("is-visible")) {
+                entry.target.classList.remove("is-reveal-reset");
+                revealElement(entry.target);
+              }
             } else if (entry.intersectionRatio === 0) {
               resetElement(entry.target);
             }
@@ -484,8 +524,10 @@ function App() {
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              entry.target.classList.remove("is-card-reset");
-              entry.target.classList.add("is-card-visible");
+              if (!entry.target.classList.contains("is-card-visible")) {
+                entry.target.classList.remove("is-card-reset");
+                entry.target.classList.add("is-card-visible");
+              }
             } else if (entry.intersectionRatio === 0) {
               entry.target.classList.remove("is-card-visible");
               entry.target.classList.add("is-card-reset");
