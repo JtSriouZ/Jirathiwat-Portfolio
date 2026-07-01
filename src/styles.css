@@ -713,6 +713,11 @@ p {
   color: var(--cyan);
   font-size: clamp(1.1rem, 2.4vw, 1.6rem);
   font-weight: 800;
+  transition: color 0.3s ease;
+}
+
+.hero-role.sub-role {
+  color: var(--pink);
 }
 
 .typing-line {
@@ -726,6 +731,11 @@ p {
 .typing-line span {
   min-width: min(100%, 21ch);
   text-shadow: 0 0 22px rgba(101, 232, 255, 0.38);
+  transition: text-shadow 0.3s ease;
+}
+
+.hero-role.sub-role span {
+  text-shadow: 0 0 22px rgba(255, 111, 216, 0.38);
 }
 
 .typing-line i {

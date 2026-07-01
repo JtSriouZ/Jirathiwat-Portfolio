@@ -507,7 +507,7 @@ export default function Home({ content, language }) {
               : "Hello, I am Jirathiwat"}
           </p>
           <h1>{profile.name}</h1>
-          <p className="hero-role typing-line" aria-label={profile.role}>
+          <p className={`hero-role typing-line ${typingIndex > 0 ? 'sub-role' : ''}`} aria-label={profile.role}>
             <span>{typedText || " "}</span>
             <i aria-hidden="true" />
           </p>
