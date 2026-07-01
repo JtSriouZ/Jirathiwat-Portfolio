@@ -393,6 +393,7 @@ export default function Home({ content, language }) {
   const safePosts = actualRecords(posts);
   const [typedText, setTypedText] = useState("");
   const [typingIndex, setTypingIndex] = useState(0);
+  const [isDeletingRole, setIsDeletingRole] = useState(false);
   const [activeProject, setActiveProject] = useState(0);
   const [isPreviewPaused, setIsPreviewPaused] = useState(false);
   const previewDelay = 4200;
@@ -400,17 +401,18 @@ export default function Home({ content, language }) {
   const typingPhrases = useMemo(
     () => {
       if (profile.roles && profile.roles.length > 0) {
-        return [profile.role, ...profile.roles];
+        return [profile.role, ...profile.roles].filter(Boolean);
       }
       return [
         profile.role,
         "Real-time AI systems builder",
         "Full-stack web application developer",
         "Computer vision and data science creator",
-      ];
+      ].filter(Boolean);
     },
     [profile.role, profile.roles]
   );
+  const currentTypingPhrase = typingPhrases[typingIndex % Math.max(typingPhrases.length, 1)] || "";
 
   const featuredProjects = useMemo(
     () =>
@@ -426,21 +428,33 @@ export default function Home({ content, language }) {
     : null;
 
   useEffect(() => {
-    const phrase = typingPhrases[typingIndex % typingPhrases.length] || "";
+    if (!currentTypingPhrase) return undefined;
 
-    if (typedText.length < phrase.length) {
+    if (!isDeletingRole && typedText.length < currentTypingPhrase.length) {
       const timer = setTimeout(() => {
-        setTypedText(phrase.slice(0, typedText.length + 1));
+        setTypedText(currentTypingPhrase.slice(0, typedText.length + 1));
       }, 42);
       return () => clearTimeout(timer);
     }
 
+    if (!isDeletingRole) {
+      const timer = setTimeout(() => setIsDeletingRole(true), 1300);
+      return () => clearTimeout(timer);
+    }
+
+    if (typedText.length > 0) {
+      const timer = setTimeout(() => {
+        setTypedText(currentTypingPhrase.slice(0, typedText.length - 1));
+      }, 24);
+      return () => clearTimeout(timer);
+    }
+
     const timer = setTimeout(() => {
-      setTypedText("");
       setTypingIndex((index) => (index + 1) % typingPhrases.length);
-    }, 1500);
+      setIsDeletingRole(false);
+    }, 180);
     return () => clearTimeout(timer);
-  }, [typedText, typingIndex, typingPhrases]);
+  }, [currentTypingPhrase, isDeletingRole, typedText, typingPhrases.length]);
 
   useEffect(() => {
     if (featuredProjects.length < 2 || isPreviewPaused) return undefined;
@@ -507,7 +521,7 @@ export default function Home({ content, language }) {
               : "Hello, I am Jirathiwat"}
           </p>
           <h1>{profile.name}</h1>
-          <p className={`hero-role typing-line ${typingIndex > 0 ? 'sub-role' : ''}`} aria-label={profile.role}>
+          <p className={`hero-role typing-line ${typingIndex > 0 ? 'sub-role' : ''}`} aria-label={currentTypingPhrase || profile.role}>
             <span>{typedText || " "}</span>
             <i aria-hidden="true" />
           </p>

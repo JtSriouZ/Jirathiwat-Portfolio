@@ -428,7 +428,7 @@ function App() {
     document.body.appendChild(script);
   }, []);
 
-  // Re-run reveal animation whenever the route changes
+  // Replay reveal animation whenever sections re-enter the viewport.
   useEffect(() => {
     let observer;
     // Scroll to top on page change
@@ -437,40 +437,97 @@ function App() {
     // Give React a frame to render the new page's DOM
     const timer = setTimeout(() => {
       const reveals = document.querySelectorAll(".reveal");
-      if (!reveals.length) return;
+      const revealCardSelector = [
+        ".quick-card",
+        ".home-post-card",
+        ".project-card",
+        ".certificate-card",
+        ".post-card",
+        ".timeline-item",
+        ".education-card",
+        ".skill-card",
+        ".project-stepper",
+      ].join(",");
+      const revealCards = document.querySelectorAll(revealCardSelector);
+      if (!reveals.length && !revealCards.length) return;
 
       const revealElement = (element) => {
         element.classList.add("is-visible");
         runScramble(element);
       };
 
+      const resetElement = (element) => {
+        if (element.classList.contains("is-visible")) {
+          element.classList.remove("is-visible");
+          element.classList.add("is-reveal-reset");
+        }
+      };
+
       observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
+              entry.target.classList.remove("is-reveal-reset");
               revealElement(entry.target);
-              observer.unobserve(entry.target);
+            } else if (entry.intersectionRatio === 0) {
+              resetElement(entry.target);
             }
           });
         },
-        { threshold: 0.08 }
+        {
+          threshold: [0, 0.12, 0.28],
+          rootMargin: "0px 0px -7% 0px",
+        }
+      );
+
+      const cardObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.remove("is-card-reset");
+              entry.target.classList.add("is-card-visible");
+            } else if (entry.intersectionRatio === 0) {
+              entry.target.classList.remove("is-card-visible");
+              entry.target.classList.add("is-card-reset");
+            }
+          });
+        },
+        {
+          threshold: [0, 0.18, 0.36],
+          rootMargin: "0px 0px -10% 0px",
+        }
       );
 
       reveals.forEach((el) => {
         el.classList.remove("is-visible"); // reset for re-entry
+        el.classList.add("is-reveal-reset");
         observer.observe(el);
 
         const rect = el.getBoundingClientRect();
         if (rect.top < window.innerHeight * 0.92 && rect.bottom > window.innerHeight * 0.08) {
+          el.classList.remove("is-reveal-reset");
           revealElement(el);
-          observer.unobserve(el);
         }
       });
 
+      revealCards.forEach((card) => {
+        card.classList.remove("is-card-visible");
+        card.classList.add("is-card-reset");
+        cardObserver.observe(card);
+
+        const rect = card.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.88 && rect.bottom > window.innerHeight * 0.12) {
+          card.classList.remove("is-card-reset");
+          card.classList.add("is-card-visible");
+        }
+      });
+
+      observer.cardObserver = cardObserver;
     }, 50);
 
     return () => {
       clearTimeout(timer);
+      observer?.cardObserver?.disconnect();
       observer?.disconnect();
     };
   }, [location.pathname]);
