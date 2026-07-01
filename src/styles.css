@@ -724,11 +724,11 @@ p {
 
 .typing-line span {
   min-width: min(100%, 21ch);
-  background: linear-gradient(135deg, var(--green) 10%, #d4ffeb 100%);
+  background: linear-gradient(135deg, #3b82f6 10%, var(--violet) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  color: var(--green); /* fallback */
-  text-shadow: 0 0 22px rgba(145, 255, 207, 0.38);
+  color: #3b82f6; /* fallback */
+  text-shadow: 0 0 22px rgba(59, 130, 246, 0.45);
 }
 
 .hero-role.sub-role span {
