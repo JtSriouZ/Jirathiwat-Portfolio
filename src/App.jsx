@@ -397,6 +397,7 @@ function App() {
   );
   const [error, setError] = useState(null);
   const [canEdit, setCanEdit] = useState(false);
+  const [canPublish, setCanPublish] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [language, setLanguage] = useState("en");
@@ -579,6 +580,7 @@ function App() {
       setContent(staticContent.default || staticContent);
       setError(null);
       setCanEdit(false);
+      setCanPublish(false);
       return;
     }
 
@@ -593,12 +595,19 @@ function App() {
       setContent(staticContent.default || staticContent);
       setError(null);
       setCanEdit(false);
+      setCanPublish(false);
     }
 
     fetch("/api/auth/status")
       .then((res) => res.json())
-      .then((data) => setCanEdit(data.canEdit === true))
-      .catch(() => setCanEdit(false));
+      .then((data) => {
+        setCanEdit(data.canEdit === true);
+        setCanPublish(data.canPublish === true);
+      })
+      .catch(() => {
+        setCanEdit(false);
+        setCanPublish(false);
+      });
   };
 
   useEffect(() => {
@@ -721,6 +730,7 @@ function App() {
               <Admin
                 content={content}
                 canEdit={canEdit}
+                canPublish={canPublish}
                 onRefresh={fetchContent}
                 onNavigate={(path) => navigate(path)}
               />

@@ -1,12 +1,15 @@
 import express from "express";
+import { execFile } from "node:child_process";
 import { existsSync, readFileSync, promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import crypto from "node:crypto";
+import { promisify } from "node:util";
 import { get, put } from "@vercel/blob";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const execFileAsync = promisify(execFile);
 const rootDir = path.resolve(__dirname, "..");
 const dataPath = path.join(rootDir, "data", "content.json");
 const distPath = path.join(rootDir, "dist");
@@ -128,6 +131,14 @@ function requireAdmin(req, res, next) {
   return res.status(401).json({ message: "Admin login required." });
 }
 
+async function runGit(args) {
+  const { stdout, stderr } = await execFileAsync("git", args, {
+    cwd: rootDir,
+    maxBuffer: 1024 * 1024 * 8
+  });
+  return `${stdout || ""}${stderr || ""}`;
+}
+
 app.get("/api/content", async (_req, res, next) => {
   try {
     const content = await readContent();
@@ -141,6 +152,7 @@ app.get("/api/content", async (_req, res, next) => {
 app.get("/api/auth/status", (_req, res) => {
   res.json({
     canEdit: !isVercelRuntime || hasBlobStorage,
+    canPublish: !isVercelRuntime,
     runtime: isVercelRuntime ? "vercel" : "local",
     storage: hasBlobStorage ? "vercel-blob" : "local-file"
   });
@@ -160,6 +172,56 @@ app.post("/api/auth/login", (req, res) => {
 
 app.post("/api/auth/logout", requireAdmin, (req, res) => {
   res.status(204).end();
+});
+
+app.post("/api/publish", requireAdmin, async (req, res) => {
+  if (isVercelRuntime) {
+    return res.status(403).json({ message: "Publishing from Git is available only on the local development server." });
+  }
+
+  try {
+    await runGit(["rev-parse", "--is-inside-work-tree"]);
+
+    const currentStatus = await runGit(["status", "--porcelain"]);
+    if (!currentStatus.trim()) {
+      return res.json({
+        published: false,
+        message: "No local changes to publish. Save an edit first, then publish."
+      });
+    }
+
+    await runGit(["add", "--all"]);
+    const stagedFiles = await runGit(["diff", "--cached", "--name-only"]);
+    const files = stagedFiles.split(/\r?\n/).map((file) => file.trim()).filter(Boolean);
+
+    if (!files.length) {
+      return res.json({
+        published: false,
+        message: "No publishable file changes were found."
+      });
+    }
+
+    const requestedMessage = String(req.body?.message || "").trim();
+    const timestamp = new Date().toISOString().replace("T", " ").slice(0, 19);
+    const commitMessage = requestedMessage || `Publish portfolio updates ${timestamp}`;
+    const commitOutput = await runGit(["commit", "-m", commitMessage]);
+    const branch = (await runGit(["branch", "--show-current"])).trim() || "HEAD";
+    const pushOutput = await runGit(["push"]);
+
+    res.json({
+      published: true,
+      message: `Published ${files.length} file${files.length === 1 ? "" : "s"} to GitHub on ${branch}.`,
+      branch,
+      files,
+      commitMessage,
+      output: `${commitOutput}\n${pushOutput}`.trim()
+    });
+  } catch (error) {
+    const detail = String(error?.stderr || error?.stdout || error?.message || "Git publish failed.").trim();
+    res.status(500).json({
+      message: detail || "Git publish failed."
+    });
+  }
 });
 
 app.put("/api/profile", requireAdmin, async (req, res, next) => {

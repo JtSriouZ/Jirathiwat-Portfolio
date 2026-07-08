@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Bold, Code2, Edit3, Heading2, Image as ImageIcon, Italic, Link as LinkIcon, List, Quote, Save, Trash2, Plus, GripVertical, Video, Youtube } from "lucide-react";
+import { Bold, Code2, Edit3, Heading2, Image as ImageIcon, Italic, Link as LinkIcon, List, Quote, Save, Trash2, Plus, GripVertical, Upload, Video, Youtube } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { getUrlLabel, getYoutubeEmbedUrl, isImageUrl, resolveMediaUrl, normalizeList } from "../utils";
 
@@ -48,7 +48,7 @@ export async function api(path, options = {}) {
   return response.json();
 }
 
-export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) {
+export default function AdminPanel({ content, canEdit, canPublish, onRefresh, onNavigate }) {
   const safeSkills = Array.isArray(content.profile.skills)
     ? content.profile.skills
     : String(content.profile.skills || "").split(",").map((s) => s.trim()).filter(Boolean);
@@ -217,6 +217,25 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
     }
   };
 
+  const publishSite = async () => {
+    if (!canSave) return setMessage("Admin login required");
+    if (!canPublish) return setMessage("Publishing is available only on the local development server.");
+
+    try {
+      setSaving("publish");
+      setMessage("Publishing to GitHub...");
+      const result = await api("/api/publish", {
+        method: "POST",
+        body: JSON.stringify({})
+      });
+      setMessage(result.message || "Published to GitHub");
+    } catch (err) {
+      setMessage(err.message || "Publish failed");
+    } finally {
+      setSaving("");
+    }
+  };
+
   return (
     <div className="admin-shell">
       <header className="admin-header">
@@ -231,6 +250,11 @@ export default function AdminPanel({ content, canEdit, onRefresh, onNavigate }) 
           {message && <p className="save-message">{message}</p>}
           {adminToken && (
             <button className="secondary-button" onClick={logout}>Lock admin</button>
+          )}
+          {adminToken && canPublish && (
+            <button className="primary-button" onClick={publishSite} disabled={!canSave || saving === "publish"} title="Commit and push local changes to GitHub">
+              <Upload size={18} /> Publish
+            </button>
           )}
           <button className="secondary-button" onClick={() => onNavigate("/")}>View site</button>
         </div>
