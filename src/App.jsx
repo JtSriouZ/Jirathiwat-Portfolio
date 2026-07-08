@@ -602,7 +602,7 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
         setCanEdit(data.canEdit === true);
-        setCanPublish(data.canPublish === true);
+        setCanPublish(data.canPublish === true || (data.runtime === "local" && data.canEdit === true));
       })
       .catch(() => {
         setCanEdit(false);
