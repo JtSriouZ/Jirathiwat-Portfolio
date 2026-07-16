@@ -3213,12 +3213,32 @@ body {
 }
 
 .admin-header {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
   scroll-margin-top: 120px;
   align-items: end;
-  justify-content: space-between;
-  gap: 1rem;
+  gap: 1rem 1.5rem;
   margin-bottom: 1.4rem;
+}
+
+.admin-header > div:first-child {
+  min-width: 0;
+}
+
+.admin-header .admin-actions {
+  justify-self: end;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+}
+
+.admin-header .save-message {
+  white-space: nowrap;
+}
+
+.admin-header .primary-button,
+.admin-header .secondary-button {
+  width: auto;
+  flex: 0 0 auto;
 }
 
 .admin-header span {
@@ -4019,6 +4039,26 @@ body {
     flex-direction: column;
   }
 
+  .admin-header {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-header .admin-actions {
+    width: 100%;
+    justify-self: start;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .admin-header .save-message {
+    white-space: normal;
+  }
+
+  .admin-header .primary-button,
+  .admin-header .secondary-button {
+    width: auto;
+  }
+
   .contact-band {
     padding: 1.3rem;
   }
@@ -4104,6 +4144,16 @@ body {
 
   .topbar-nav {
     gap: 0.45rem;
+  }
+
+  .admin-header .admin-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-header .primary-button,
+  .admin-header .secondary-button {
+    width: 100%;
   }
 
   .brand {
