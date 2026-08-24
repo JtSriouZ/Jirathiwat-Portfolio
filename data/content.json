@@ -458,7 +458,7 @@
       "id": "f9cb7cec-02d8-4f01-a959-ad32afdc594f",
       "name": "Cursor Build Salaya",
       "description": "Cursor Build Salaya Mini-Hackathon | Judges' Pick Award Winner (Team Lovedrop)\n\nCompeted in a fast-paced 2.5-hour coding challenge among 22 teams and 100+ participants to conceptualize, build, and pitch [Brief project description].\n\nAwarded the \"Judges' Pick\" and a grand prize of $8,000 in Cursor credits by official Cursor Community ambassadors and industry tech leads.\n\nApplied web development and user interface design principles to rapidly deliver a functional, well-designed prototype under strict time constraints.",
-      "fullDescription": "[media: 4]\n\nHad an amazing time this past Saturday at Cursor Build Salaya! Out of 22 teams and over 100 builders, I'm absolutely thrilled to share that our team, Lovedrop, won the Judges' Pick award, taking home an incredible $8,000 in Cursor credits!\n\n[media: 5]\n\n\n\nWe had exactly 2.5 hours to build and present [briefly describe what Lovedrop does, e.g., a web platform for...]. It was an intense but incredibly fun challenge, and a fantastic way to put my web development and UI design skills to the test under real time pressure.\n\n[media: 8]\n\n\n\nHuge thanks to Luis Romero and the Cursor Thailand community for bringing this event right here near the Mahidol campus at Clay, and to the judges for selecting our build out of so many great projects!\n\n[media: 10]\n\n",
+      "fullDescription": "Project: Lovedrop\nAward: Judges' Pick ($8,000 USD in Cursor credits)\nEvent: Cursor Build Salaya (August 2026)\n\n[media: 4]\n\nThe Challenge:\nCompeted in a fast-paced mini-hackathon featuring over 100 builders and 22 teams. We were challenged to conceptualize, develop, and present a functional application from scratch within a strict 2.5-hour time limit.\n\n[media: 8]\n\nTechnical Execution & Highlights:\n\nRapid Prototyping: Applied rapid web development and user interface design principles to deliver a clean, functional prototype before the countdown ended.\n\nCore Features: Successfully built and integrated [list 1-2 key technical features you worked on, e.g., interactive UI components, dynamic data rendering, API integration].\n\nThe Pitch: Delivered a high-pressure, 5-minute presentation to a judging panel of official Cursor Ambassadors and industry tech leads.\n\n[media: 9]\n\nResult: Stood out among 22 competing projects to win the Judges' Pick award and secure a massive platform grant for our build.\n\n[media: 5]\n\n",
       "language": "Cursor",
       "repoUrl": "https://github.com/PracticalRyan/Cursor-Salaya",
       "liveUrl": "https://digilovedrop.vercel.app/",
@@ -478,9 +478,14 @@
       "updated": "2026-08-24",
       "featuredRank": "",
       "period": "22 Aug 2026",
-      "associated": "",
+      "associated": "Cursor, Thailand",
       "skills": [],
-      "highlights": []
+      "highlights": [
+        "Judges' Pick Winner – Cursor Build Salaya 2026\nWon the Judges' Pick award and an $8",
+        "000 Cursor credit prize out of 22 teams. Collaborated under extreme time pressure to build and pitch Lovedrop",
+        "an application that [insert one-sentence description of what it does]",
+        "in exactly 2.5 hours."
+      ]
     },
     {
       "id": "project-iron-dome",
