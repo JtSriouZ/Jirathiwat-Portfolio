@@ -72,6 +72,7 @@ async function loadWikidata() {
     if (!id || !image || byItem.has(id)) continue;
     byItem.set(id, {
       src: `${image.replace(/^http:/, "https:")}?width=${COMMONS_WIDTH}`,
+      commonsFile: decodeURIComponent(image.split("/Special:FilePath/")[1] || ""),
       title: row.title?.value || "Untitled",
       artist: row.creator?.value || "",
       date: row.year?.value || "",
@@ -130,6 +131,33 @@ async function getPool(name) {
   return pending;
 }
 
+const commonsThumbs = new Map();
+
+async function resolveCommonsThumbs(items) {
+  const missing = [...new Set(items.map((item) => item.commonsFile).filter((file) => file && !commonsThumbs.has(file)))];
+  if (missing.length) {
+    try {
+      const titles = missing.slice(0, 50).map((file) => `File:${file}`).join("|");
+      const data = await fetchJson(
+        `https://commons.wikimedia.org/w/api.php?action=query&format=json&prop=imageinfo&iiprop=url&iiurlwidth=${COMMONS_WIDTH}&titles=${encodeURIComponent(titles)}`,
+        { timeout: 10000 }
+      );
+      const original = new Map((data?.query?.normalized || []).map((entry) => [entry.to, entry.from]));
+      for (const page of Object.values(data?.query?.pages || {})) {
+        const thumb = page.imageinfo?.[0]?.thumburl;
+        const title = original.get(page.title) || page.title;
+        if (thumb) commonsThumbs.set(title.replace(/^File:/, ""), thumb);
+      }
+    } catch (error) {
+      console.warn("Commons thumbnail lookup failed:", error.message);
+    }
+  }
+  return items.map(({ commonsFile, ...item }) => ({
+    ...item,
+    src: (commonsFile && commonsThumbs.get(commonsFile)) || item.src
+  }));
+}
+
 function sample(list, count) {
   const copy = [...list];
   const picked = [];
@@ -158,7 +186,7 @@ export async function getRandomMuseumArt(count = 12) {
     sample(entry.items, Math.ceil((count * weights[index]) / totalWeight))
   );
   return {
-    art: sample(picked, count),
+    art: await resolveCommonsThumbs(sample(picked, count)),
     sources: Object.fromEntries(available.map((entry) => [entry.name, entry.items.length]))
   };
 }

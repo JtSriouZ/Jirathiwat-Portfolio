@@ -1,5 +1,13 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
-import { createVisitArtMap, fetchMuseumArt, getArtRouteKey, keepLandscapeArt, preloadEuropeanArt } from "./europeanArt";
+import {
+  artBrightness,
+  createVisitArtMap,
+  fetchMuseumArt,
+  getArtRouteKey,
+  keepLandscapeArt,
+  measureArtLuma,
+  preloadEuropeanArt
+} from "./europeanArt";
 import { Routes, Route, Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { Landmark, Share2, Search, Globe, Edit3, X, Menu, Linkedin, Github, Instagram, Mail } from "lucide-react";
 import Home from "./pages/Home";
@@ -439,6 +447,7 @@ function App() {
   const artSeedRef = useRef(`${Date.now()}-${Math.random()}`);
   const shownArtRef = useRef({ key: "", routes: {} });
   const [museumArt, setMuseumArt] = useState([]);
+  const [artLight, setArtLight] = useState({ src: "", brightness: null });
   const museumEnabled = !isStaticSite && Boolean(content) && content.profile?.museumBackgrounds !== false;
   const backgroundKey = (content?.profile?.backgrounds || []).join("|");
   const museumKey = museumEnabled ? museumArt.map((item) => item.src).join("|") : "";
@@ -471,6 +480,17 @@ function App() {
       cancelled = true;
     };
   }, [museumEnabled]);
+
+  const currentArt = artMap[getArtRouteKey(location.pathname)] || artMap.home;
+  useEffect(() => {
+    let cancelled = false;
+    measureArtLuma(currentArt).then((luma) => {
+      if (!cancelled) setArtLight({ src: currentArt, brightness: artBrightness(luma) });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [currentArt]);
 
   useEffect(() => {
     const cardSelector = [
@@ -844,7 +864,15 @@ function App() {
   return (
     <div className={`portfolio page-${routeKey} route-${subRouteKey}`}>
       <div className="page-motion-bg" aria-hidden="true">
-        <div className="page-art" style={{ backgroundImage: `url("${pageArt}")` }} />
+        <div
+          className="page-art"
+          style={{
+            backgroundImage: `url("${pageArt}")`,
+            ...(artLight.src === pageArt && artLight.brightness != null
+              ? { "--art-brightness": artLight.brightness }
+              : {})
+          }}
+        />
         <div className="page-art-light" />
         <div className="page-art-wash" />
         <AnimatedBackgroundCanvas routeKey={routeKey} />
