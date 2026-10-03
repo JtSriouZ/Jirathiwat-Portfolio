@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { Code2, BriefcaseBusiness, GraduationCap, MapPin, Sparkles, Github, Linkedin, Instagram, Mail } from "lucide-react";
 import * as THREE from "three";
 import { normalizeList, resolveMediaUrl } from "../utils";
+import StillGrid from "../components/StillGrid";
+import { siteLabel } from "../siteCopy";
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
@@ -17,7 +19,7 @@ function AboutRackBackdrop() {
     if (!wrap || !canvas) return undefined;
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x050c18, 0.02);
+    scene.fog = new THREE.FogExp2(0x0c0a0c, 0.02);
 
     const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
     const renderer = new THREE.WebGLRenderer({
@@ -38,26 +40,26 @@ function AboutRackBackdrop() {
     scene.add(rack, neon, dustGroup);
 
     /* --- Materials --- */
-    const metal = new THREE.MeshStandardMaterial({ color: 0x1a2e44, roughness: 0.15, metalness: 0.88, emissive: 0x0a1520, emissiveIntensity: 0.15 });
-    const darkMetal = new THREE.MeshStandardMaterial({ color: 0x0e1a2a, roughness: 0.28, metalness: 0.9, emissive: 0x060e18, emissiveIntensity: 0.1 });
+    const metal = new THREE.MeshStandardMaterial({ color: 0x2a2320, roughness: 0.15, metalness: 0.88, emissive: 0x14100c, emissiveIntensity: 0.15 });
+    const darkMetal = new THREE.MeshStandardMaterial({ color: 0x1a1512, roughness: 0.28, metalness: 0.9, emissive: 0x0c0a08, emissiveIntensity: 0.1 });
     const glass = new THREE.MeshPhysicalMaterial({
       color: 0xffffff, transparent: true, opacity: 0.08,
       roughness: 0.02, metalness: 0.2,
       clearcoat: 1.0, clearcoatRoughness: 0.05,
     });
-    const bladeMat = new THREE.MeshStandardMaterial({ color: 0x182840, roughness: 0.22, metalness: 0.72, emissive: 0x0a1520, emissiveIntensity: 0.12 });
-    const handleMat = new THREE.MeshStandardMaterial({ color: 0x2a4060, roughness: 0.12, metalness: 0.92 });
-    const cyanG = new THREE.MeshBasicMaterial({ color: 0x88f4ff });
-    const amberG = new THREE.MeshBasicMaterial({ color: 0xffcc44 });
-    const greenG = new THREE.MeshBasicMaterial({ color: 0xaaffe0 });
-    const magentaG = new THREE.MeshBasicMaterial({ color: 0xff88e8 });
+    const bladeMat = new THREE.MeshStandardMaterial({ color: 0x241e1a, roughness: 0.22, metalness: 0.72, emissive: 0x14100c, emissiveIntensity: 0.12 });
+    const handleMat = new THREE.MeshStandardMaterial({ color: 0x6a5a3a, roughness: 0.12, metalness: 0.92 });
+    const cyanG = new THREE.MeshBasicMaterial({ color: 0xf1d98a });
+    const amberG = new THREE.MeshBasicMaterial({ color: 0xe9c76b });
+    const greenG = new THREE.MeshBasicMaterial({ color: 0xf3e3b8 });
+    const magentaG = new THREE.MeshBasicMaterial({ color: 0xc57b8b });
     
     // Fiber optic cable materials
     const cableMats = [
-      new THREE.MeshBasicMaterial({ color: 0xff44aa }), // Pink
-      new THREE.MeshBasicMaterial({ color: 0x44ffaa }), // Green
-      new THREE.MeshBasicMaterial({ color: 0x44aaff }), // Blue
-      new THREE.MeshBasicMaterial({ color: 0xffaa44 })  // Orange
+      new THREE.MeshBasicMaterial({ color: 0xa83a5a }), // Pink
+      new THREE.MeshBasicMaterial({ color: 0xf3e3b8 }), // Green
+      new THREE.MeshBasicMaterial({ color: 0x8fa3e8 }), // Blue
+      new THREE.MeshBasicMaterial({ color: 0xc8873c })  // Orange
     ];
 
     const addBox = (name, size, pos, mat, parent = rack) => {
@@ -68,10 +70,10 @@ function AboutRackBackdrop() {
     /* --- Rack frame --- */
     addBox("shell", [2.28, 5.4, 1.08], [0, 0, 0], darkMetal);
     addBox("back-glow", [2.04, 4.92, 0.04], [0, 0.08, -0.56],
-      new THREE.MeshBasicMaterial({ color: 0x1a3a5a, transparent: true, opacity: 0.85 }));
+      new THREE.MeshBasicMaterial({ color: 0x2a2024, transparent: true, opacity: 0.85 }));
 
     // Side glow strips (bright cyan edges)
-    const sideG = new THREE.MeshBasicMaterial({ color: 0x65e8ff, transparent: true, opacity: 0.45 });
+    const sideG = new THREE.MeshBasicMaterial({ color: 0xd4af37, transparent: true, opacity: 0.45 });
     addBox("l-strip", [0.025, 5.2, 0.05], [-1.16, 0, 0.64], sideG);
     addBox("r-strip", [0.025, 5.2, 0.05], [1.16, 0, 0.64], sideG);
 
@@ -92,7 +94,7 @@ function AboutRackBackdrop() {
       const b = addBox(`bl-${i}`, [1.78, 0.24, 0.18], [0, y, 0.48], bladeMat);
       b.rotation.x = 0.01;
       addBox(`hd-${i}`, [0.24, 0.08, 0.04], [-0.72, y, 0.60], handleMat);
-      const lc = i % 3 === 0 ? 0xff88e8 : i % 2 === 0 ? 0xffcc44 : 0x88f4ff;
+      const lc = i % 3 === 0 ? 0xc57b8b : i % 2 === 0 ? 0xe9c76b : 0xf1d98a;
       addBox(`ln-${i}`, [1.2, 0.02, 0.018], [-0.18, y + 0.014, 0.59],
         new THREE.MeshBasicMaterial({ color: lc, transparent: true, opacity: 0.45 }), rack);
       for (let j = 0; j < 5; j++) {
@@ -109,7 +111,7 @@ function AboutRackBackdrop() {
     for (let c = 0; c < 3; c++) {
       for (let r = 0; r < 8; r++) {
         addBox(`v-${c}-${r}`, [0.32, 0.022, 0.02], [-0.82 + c * 0.34, 2.1 - r * 0.14, 0.63],
-          new THREE.MeshBasicMaterial({ color: 0xaaccff, transparent: true, opacity: 0.35 }), rack);
+          new THREE.MeshBasicMaterial({ color: 0xe9dcc0, transparent: true, opacity: 0.35 }), rack);
       }
     }
 
@@ -127,11 +129,11 @@ function AboutRackBackdrop() {
     });
 
     /* --- Neon rings --- */
-    const ringMat = new THREE.MeshBasicMaterial({ color: 0x88f4ff, transparent: true, opacity: 0.4 });
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0xf1d98a, transparent: true, opacity: 0.4 });
     const ring = new THREE.Mesh(new THREE.TorusGeometry(1.72, 0.008, 8, 96), ringMat);
     ring.rotation.x = Math.PI * 0.5; ring.position.set(0, 0, 0.72); neon.add(ring);
 
-    const ring2Mat = new THREE.MeshBasicMaterial({ color: 0xff88e8, transparent: true, opacity: 0.3 });
+    const ring2Mat = new THREE.MeshBasicMaterial({ color: 0xc57b8b, transparent: true, opacity: 0.3 });
     const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.1, 0.006, 8, 96), ring2Mat);
     ring2.rotation.x = Math.PI * 0.5; ring2.position.set(0, 0, 0.5); neon.add(ring2);
 
@@ -141,17 +143,17 @@ function AboutRackBackdrop() {
     for (let i = 0; i < dustCount; i++) dArr.push((Math.random()-0.5)*8, (Math.random()-0.5)*8, (Math.random()-0.5)*4+1);
     const dGeo = new THREE.BufferGeometry();
     dGeo.setAttribute("position", new THREE.Float32BufferAttribute(dArr, 3));
-    const dMat = new THREE.PointsMaterial({ color: 0x65e8ff, size: 0.025, transparent: true, opacity: 0.3, sizeAttenuation: true });
+    const dMat = new THREE.PointsMaterial({ color: 0xd4af37, size: 0.025, transparent: true, opacity: 0.3, sizeAttenuation: true });
     dustGroup.add(new THREE.Points(dGeo, dMat));
 
 
     /* --- Lighting (much brighter) --- */
-    scene.add(new THREE.AmbientLight(0xccddff, 1.2));
+    scene.add(new THREE.AmbientLight(0xffe8c0, 1.2));
     const kl = new THREE.DirectionalLight(0xffffff, 3.5); kl.position.set(3, 5, 4); scene.add(kl);
-    const cl = new THREE.PointLight(0x65e8ff, 8.0, 14); cl.position.set(-2, 2, 3); scene.add(cl);
-    const wl = new THREE.PointLight(0xffaa00, 6.0, 12); wl.position.set(2, -1.5, 3); scene.add(wl);
-    const rl = new THREE.DirectionalLight(0xff6fd8, 4.5); rl.position.set(4, 2, -4); scene.add(rl);
-    const bl = new THREE.PointLight(0x65e8ff, 4.0, 10); bl.position.set(0, -3.5, 2); scene.add(bl);
+    const cl = new THREE.PointLight(0xd4af37, 8.0, 14); cl.position.set(-2, 2, 3); scene.add(cl);
+    const wl = new THREE.PointLight(0xe9c76b, 6.0, 12); wl.position.set(2, -1.5, 3); scene.add(wl);
+    const rl = new THREE.DirectionalLight(0xc57b8b, 4.5); rl.position.set(4, 2, -4); scene.add(rl);
+    const bl = new THREE.PointLight(0xd4af37, 4.0, 10); bl.position.set(0, -3.5, 2); scene.add(bl);
     const fl = new THREE.PointLight(0xffffff, 3.0, 15); fl.position.set(0, 0, 6); scene.add(fl);
 
     let frameId = 0;
@@ -262,9 +264,9 @@ export default function About({ content }) {
   const { profile, experiences, education = [] } = content;
   const skills = normalizeList(profile.skills);
   const aboutStats = [
-    { value: experiences.length, label: "Experience" },
-    { value: education.length, label: "Academic" },
-    { value: skills.length, label: "Core skills" },
+    { value: experiences.length, label: siteLabel(profile, "metricExperience") },
+    { value: education.length, label: siteLabel(profile, "metricAcademic") },
+    { value: skills.length, label: siteLabel(profile, "metricSkills") },
   ];
 
   return (
@@ -276,7 +278,7 @@ export default function About({ content }) {
           <div className="about-copy">
             <div className="section-kicker">
               <Code2 size={18} />
-              Profile
+              {siteLabel(profile, "kickerProfile")}
             </div>
             <h2>{profile.aboutTitle || "Software engineer building AI systems, full-stack products, and practical digital solutions."}</h2>
             <p>{profile.bio}</p>
@@ -293,10 +295,13 @@ export default function About({ content }) {
             <div className="about-profile-body">
               <span className="about-status">
                 <Sparkles size={15} />
-                Available for software engineering work
+                {siteLabel(profile, "availability")}
               </span>
               <h3>{profile.name}</h3>
               <p>{profile.role}</p>
+              {profile.handle && (
+                <p className="company">@{String(profile.handle).replace(/^@/, "")}</p>
+              )}
               <div className="about-meta">
                 <span>
                   <MapPin size={15} />
@@ -304,7 +309,7 @@ export default function About({ content }) {
                 </span>
                 <span>
                   <BriefcaseBusiness size={15} />
-                  IT CITY Public Company Limited
+                  {siteLabel(profile, "company")}
                 </span>
               </div>
               <div className="about-card-links">
@@ -349,12 +354,14 @@ export default function About({ content }) {
         </div>
       </section>
 
+      <StillGrid profile={profile} />
+
       <section className="section timeline-section reveal" id="experience">
         <div className="section-heading">
           <div>
             <div className="section-kicker">
               <BriefcaseBusiness size={18} />
-              Experience
+              {siteLabel(profile, "kickerExperience")}
             </div>
             <h2>{profile.headings?.aboutExperienceTitle || "Work history"}</h2>
           </div>
@@ -379,7 +386,7 @@ export default function About({ content }) {
           <div>
             <div className="section-kicker">
               <GraduationCap size={18} />
-              Education
+              {siteLabel(profile, "kickerEducation")}
             </div>
             <h2>{profile.headings?.aboutEducationTitle || "Academic path"}</h2>
           </div>

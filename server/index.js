@@ -289,6 +289,44 @@ app.put("/api/reorder/:section", requireAdmin, async (req, res, next) => {
   }
 });
 
+app.post("/api/uploads", requireAdmin, async (req, res, next) => {
+  try {
+    const match = String(req.body.image || "").match(/^data:(image\/(?:png|jpeg|jpg|webp));base64,(.+)$/);
+    if (!match) {
+      return res.status(400).json({ message: "Upload a PNG, JPG, or WebP image." });
+    }
+
+    const extension = match[1].includes("png") ? "png" : match[1].includes("webp") ? "webp" : "jpg";
+    const buffer = Buffer.from(match[2], "base64");
+    if (buffer.length > 8 * 1024 * 1024) {
+      return res.status(400).json({ message: "Image must be smaller than 8 MB." });
+    }
+
+    const fileName = `still-${Date.now()}.${extension}`;
+    let url = `uploads/${fileName}`;
+
+    if (hasBlobStorage) {
+      const blob = await put(`portfolio/uploads/${fileName}`, buffer, {
+        access: "public",
+        contentType: match[1]
+      });
+      url = blob.url;
+    } else {
+      if (isVercelRuntime) {
+        throw new Error("Image uploads on Vercel require Vercel Blob. Add BLOB_READ_WRITE_TOKEN in your Vercel environment variables.");
+      }
+
+      const uploadDir = path.join(publicDir, "uploads");
+      await fs.mkdir(uploadDir, { recursive: true });
+      await fs.writeFile(path.join(uploadDir, fileName), buffer);
+    }
+
+    res.status(201).json({ url });
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.post("/api/profile/avatar", requireAdmin, async (req, res, next) => {
   try {
     const match = String(req.body.image || "").match(/^data:(image\/(?:png|jpeg|jpg|webp));base64,(.+)$/);

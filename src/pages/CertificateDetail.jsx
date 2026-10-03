@@ -4,20 +4,21 @@ import CertificateVisual from "../components/CertificateVisual";
 import MediaGallery from "../components/MediaGallery";
 import RichContent from "../components/RichContent";
 import { normalizeList } from "../utils";
+import { siteLabel } from "../siteCopy";
 
 export default function CertificateDetail({ content }) {
   const { id } = useParams();
-  const { certificates = [] } = content;
+  const { certificates = [], profile = {} } = content;
   
   const certificate = certificates.find((c) => c.id === id);
 
   if (!certificate) {
     return (
-      <div className="page-content" style={{ textAlign: "center", paddingTop: "4rem" }}>
-        <h2>Certificate Not Found</h2>
-        <p>The certificate you are looking for does not exist.</p>
+      <div className="page-content detail-missing">
+        <h2>{siteLabel(profile, "certificateMissing")}</h2>
+        <p>{siteLabel(profile, "certificateMissingNote")}</p>
         <br />
-        <Link to="/certificates" className="primary-button">Back to Certificates</Link>
+        <Link to="/certificates" className="primary-button">{siteLabel(profile, "backToCertificates")}</Link>
       </div>
     );
   }
@@ -33,17 +34,17 @@ export default function CertificateDetail({ content }) {
         <div className="project-detail-header">
           <Link to="/certificates" className="ghost-button" style={{ display: "inline-flex", marginBottom: "2rem" }}>
             <ArrowLeft size={16} />
-            Back to Certificates
+            {siteLabel(profile, "backToCertificates")}
           </Link>
           
           <div className="post-meta" style={{ marginBottom: "1rem" }}>
             <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
               <Award size={14} />
-              {certificate.issuer || "Certificate"}
+              {certificate.issuer || siteLabel(profile, "certificateFallback")}
             </span>
             <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
               <Calendar size={14} />
-              {certificate.date || "Recent"}
+              {certificate.date || siteLabel(profile, "recentFallback")}
             </span>
           </div>
           
@@ -53,7 +54,7 @@ export default function CertificateDetail({ content }) {
             {certificate.credentialUrl && (
               <a className="primary-button" href={certificate.credentialUrl} target="_blank" rel="noreferrer">
                 <ExternalLink size={16} />
-                View Credential
+                {siteLabel(profile, "viewCredential")}
               </a>
             )}
           </div>
@@ -61,15 +62,15 @@ export default function CertificateDetail({ content }) {
 
         <CertificateVisual certificate={certificate} variant="detail" />
 
-        <div className="project-detail-content" style={{ maxWidth: "800px", margin: "0 auto" }}>
-          <h2>About the Certificate</h2>
+        <div className="project-detail-content">
+          <h2>{siteLabel(profile, "aboutCertificate")}</h2>
           <RichContent text={descriptionText} mediaUrls={mediaUrls} itemTitle={certificate.title} />
 
           <MediaGallery urls={mediaUrls} itemTitle="Certificate media" />
 
           {skills.length > 0 && (
             <>
-              <h3>Skills Acquired</h3>
+              <h3>{siteLabel(profile, "skillsAcquired")}</h3>
               <div className="mini-skill-cloud">
                 {skills.map((skill) => (
                   <span key={skill}>{skill}</span>

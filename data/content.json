@@ -4,11 +4,141 @@
     "role": "Software Engineer, AI & Full-Stack Developer",
     "location": "Bangkok City, Thailand",
     "aboutTitle": "Software engineer & AI engineer",
-    "headline": "Innovative Software Engineer building high-performance real-time AI systems, intelligent recommendation engines, and production-ready full-stack applications. Passionate about bridging the gap between complex data science and seamless user experiences.",
-    "bio": "Hi to see you there! I am Jirathiwat Suntipreedatham, a software engineer, Faculty of Information and Communication Technology, Mahidol University student, and part-time Sales Consultant at IT CITY Public Company Limited in Bangkok. My background includes international computer competition experience, international seminar experience, leadership in an International Relations Program, project work, sales work, and marketing department experience.",
+    "headline": "Software engineer, night stills, and a Mahidol ICT record. I build real-time AI, recommendation systems, and full-stack products, then photograph the same life in a single spotlight — @jtsriouz_o.",
+    "bio": "Hi to see you there. I am Jirathiwat Suntipreedatham, on Instagram as jtsriouz_o. I am an ICT student at Mahidol University (ICT22, MU 135), CEO of Snail.aes, and president of MU Shooting. By day I also work as a part-time Sales Consultant at IT CITY in Bangkok. The same archive holds COFAS in India, seminar work, International Relations leadership, and project, sales, and marketing experience. The feed is dark, still, and measured. The work is the same habit: one subject, one frame, no spare light.",
+    "handle": "jtsriouz_o",
+    "persona": [
+      "CEO — Snail.aes",
+      "President — MU Shooting",
+      "MUICT · ICT22",
+      "MU 135",
+      "TPR 28 · MNR 64",
+      "COFAS · India",
+      "Night stills",
+      "Bangkok City, Thailand",
+      "Vol. MMXXVI"
+    ],
+    "favorites": [
+      {
+        "id": "snail-aes",
+        "title": "Snail.aes",
+        "note": "The house mark on the Instagram bio. I run Snail.aes as CEO — a small studio name for the work, the stills, and the people around it."
+      },
+      {
+        "id": "mu-shooting",
+        "title": "MU Shooting",
+        "note": "President of MU Shooting. Range work is stillness, measure, and a clean sight picture — the same discipline I want in a camera frame and in code."
+      },
+      {
+        "id": "night-stills",
+        "title": "Night stills",
+        "note": "The Instagram vibe is one light, black ground, and a single subject. Portraits and rooms stay quiet. Hover the plate on this site and the print develops."
+      },
+      {
+        "id": "cinema-scale",
+        "title": "Cinema scale",
+        "note": "CineMatch searches films by mood. IMAX and LED rooms are the hardware side of that taste: picture size, brightness, and a night out you cannot copy on a phone."
+      },
+      {
+        "id": "home-lab",
+        "title": "Home lab rack",
+        "note": "A real 10-inch rack, yellow patch cables, Proxmox, and a Shapr3D mount. Hardware in the room, not only a diagram."
+      },
+      {
+        "id": "cofas-india",
+        "title": "India · COFAS",
+        "note": "A highlight on the feed and a board on this site: representing Thailand at COFAS in Lucknow, with Footage and Teenovation on the same trip."
+      }
+    ],
+    "stills": [
+      {
+        "id": "kodak-ultramax",
+        "image": "instagram/01.jpg",
+        "title": "Kodak Ultramax 400",
+        "date": "16 Feb 2026",
+        "href": "https://www.instagram.com/jtsriouz_o/p/DU0440zk5v3/"
+      },
+      {
+        "id": "night-shops",
+        "image": "instagram/02.jpg",
+        "title": "Night shops",
+        "date": "13 Sep 2025",
+        "href": "https://www.instagram.com/jtsriouz_o/p/DOjMNs-k9B5/"
+      },
+      {
+        "id": "fuji-400",
+        "image": "instagram/03.jpg",
+        "title": "Fuji 400",
+        "date": "09 Sep 2025",
+        "href": "https://www.instagram.com/jtsriouz_o/p/DOYXXWCE7Kh/"
+      },
+      {
+        "id": "city-night",
+        "image": "instagram/04.jpg",
+        "title": "City night",
+        "date": "31 Dec 2024",
+        "href": "https://www.instagram.com/jtsriouz_o/p/DEP7ZO0SSJe/"
+      },
+      {
+        "id": "chill-guy",
+        "image": "instagram/05.jpg",
+        "title": "Chill guy",
+        "date": "28 Dec 2024",
+        "href": "https://www.instagram.com/jtsriouz_o/p/DEHzhMKShmQ/"
+      },
+      {
+        "id": "lit-tree",
+        "image": "instagram/06.jpg",
+        "title": "Lit tree",
+        "date": "27 Dec 2024",
+        "href": "https://www.instagram.com/jtsriouz_o/p/DEFt2_qyYNs/"
+      },
+      {
+        "id": "night-market",
+        "image": "instagram/07.jpg",
+        "title": "Night market",
+        "date": "19 Nov 2024",
+        "href": "https://www.instagram.com/jtsriouz_o/p/DCjQ9JGypt1/"
+      },
+      {
+        "id": "dusk-road",
+        "image": "instagram/08.jpg",
+        "title": "Pinklao",
+        "date": "21 Mar 2025",
+        "href": "https://www.instagram.com/jtsriouz_o/p/DHdR5yNpDl8/"
+      },
+      {
+        "id": "urgi-mk16",
+        "image": "instagram/09.jpg",
+        "title": "URGI MK16 9.5 inch",
+        "date": "21 Dec 2024",
+        "href": "https://www.instagram.com/jtsriouz_o/p/DD16UJ7yjps/"
+      },
+      {
+        "id": "atrium",
+        "image": "instagram/10.jpg",
+        "title": "Atrium",
+        "date": "09 Mar 2025",
+        "href": "https://www.instagram.com/jtsriouz_o/p/DG-o74sJ0ou/"
+      },
+      {
+        "id": "ten-meters",
+        "image": "instagram/11.jpg",
+        "title": "10 meters",
+        "date": "13 Nov 2024",
+        "href": "https://www.instagram.com/jtsriouz_o/p/DCVmni5y1oo/"
+      },
+      {
+        "id": "night-court",
+        "image": "instagram/12.jpg",
+        "title": "Night court",
+        "date": "03 Nov 2024",
+        "href": "https://www.instagram.com/jtsriouz_o/p/DB5684bJW0M/"
+      }
+    ],
     "email": "jirathiwat.j@gmail.com",
     "github": "https://github.com/JirathiwatSun",
-    "instagram": "https://www.instagram.com/Jtsriouz_o",
+    "instagram": "https://www.instagram.com/jtsriouz_o/",
     "linkedin": "https://www.linkedin.com/in/jirathiwat-suntipreedatham-38a8a1193/?locale=th",
     "avatar": "profile-photo.png",
     "skills": [
@@ -33,6 +163,10 @@
       "homeProjectsDesc": "A showcase of my recent work in software engineering, AI, and full-stack development.",
       "homeUpdatesTitle": "Recent Updates",
       "homeUpdatesDesc": "The latest news and insights.",
+      "personaTitle": "Field notes",
+      "personaDesc": "The Instagram archive in plain type: Snail.aes, MU Shooting, night stills, cinema, the home rack, and COFAS.",
+      "stillsTitle": "From the feed",
+      "stillsDesc": "One still at a time from @jtsriouz_o. The frame picks through the feed on its own.",
       "projectsTitle": "Projects",
       "projectsDesc": "A collection of side projects, experiments, and open source contributions.",
       "certificatesTitle": "Licenses & Certifications",
@@ -46,9 +180,93 @@
     },
     "roles": [
       "Real-time AI systems builder",
+      "CEO, Snail.aes",
+      "President, MU Shooting",
+      "Night stills · jtsriouz_o",
       "Full-stack web application developer",
       "Computer vision and data science creator"
-    ]
+    ],
+    "labels": {
+      "brand": "Jirathiwat",
+      "navHome": "Home",
+      "navProjects": "Projects",
+      "navCertificates": "Certificates",
+      "navSkills": "Skills",
+      "navAbout": "About",
+      "navBlog": "Blog",
+      "heroGreeting": "@jtsriouz_o · Bangkok · Still",
+      "heroGreetingTh": "สวัสดี ผม Jirathiwat",
+      "heroGreetingZh": "你好，我是 Jirathiwat",
+      "heroContact": "Contact",
+      "heroWork": "View the work",
+      "portraitIndex": "Fig. I",
+      "portraitCaption": "Portrait · hover or tap to develop",
+      "statProjects": "Projects",
+      "statExperience": "Experience",
+      "statCertificates": "Certificates",
+      "kickerWorks": "Curated Works",
+      "viewPiece": "View the piece",
+      "nextPrefix": "Next:",
+      "kickerJournal": "The Journal",
+      "readPost": "Read post",
+      "kickerGallery": "The Gallery",
+      "linkProjects": "Projects",
+      "linkCertificates": "Certificates",
+      "linkAcademic": "Academic Path",
+      "linkExperience": "Experience",
+      "linkBlog": "Blog",
+      "instagramButton": "Instagram",
+      "kickerProfile": "Profile",
+      "availability": "Available for software engineering work",
+      "company": "IT CITY Public Company Limited",
+      "metricExperience": "Experience",
+      "metricAcademic": "Academic",
+      "metricSkills": "Core skills",
+      "kickerExperience": "Experience",
+      "kickerEducation": "Education",
+      "kickerProjects": "GitHub",
+      "githubButton": "GitHub",
+      "viewDetails": "View Details",
+      "repoButton": "Repo",
+      "repositoryButton": "Repository",
+      "liveButton": "Live",
+      "liveDemo": "Live Demo",
+      "aboutProject": "About the Project",
+      "keyFeatures": "Key Features & Highlights",
+      "technologiesUsed": "Technologies Used",
+      "backToProjects": "Back to Projects",
+      "projectMissing": "Project Not Found",
+      "projectMissingNote": "The project you are looking for does not exist.",
+      "recentFallback": "Recent",
+      "projectFallback": "Project",
+      "kickerCertificates": "Archive",
+      "credentialButton": "Credential",
+      "viewCredential": "View Credential",
+      "aboutCertificate": "About the Certificate",
+      "skillsAcquired": "Skills Acquired",
+      "backToCertificates": "Back to Certificates",
+      "certificateMissing": "Certificate Not Found",
+      "certificateMissingNote": "The certificate you are looking for does not exist.",
+      "certificateFallback": "Certificate",
+      "kickerBlog": "News",
+      "readMore": "Read More",
+      "readArticle": "Read Full Article",
+      "backToBlog": "Back to Blog",
+      "postMissing": "Post Not Found",
+      "postMissingNote": "The blog post you are looking for does not exist.",
+      "postFallback": "Post",
+      "kickerSkills": "Expertise",
+      "kickerStills": "Stills",
+      "footerBlurb": "Software Engineer, AI & Full-Stack Developer in Bangkok City, Thailand.",
+      "footerStatus": "Atelier open · MMXXVI",
+      "footerExplore": "Explore",
+      "footerConnect": "Connect",
+      "footerShare": "Share",
+      "copyLink": "Copy Link",
+      "translateTitle": "Translate website",
+      "translateNote": "Pick a language to automatically translate this page.",
+      "translateCredit": "Powered by Google Translate"
+    }
   },
   "expertise": [
     {

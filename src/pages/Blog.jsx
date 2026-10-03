@@ -1,6 +1,7 @@
 import { Newspaper, CalendarDays, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { resolveMediaUrl, getYoutubeEmbedUrl } from "../utils";
+import { siteLabel } from "../siteCopy";
 
 export default function Blog({ content }) {
   const { posts = [], profile = {} } = content;
@@ -13,7 +14,7 @@ export default function Blog({ content }) {
           <div>
             <div className="section-kicker">
               <Newspaper size={18} />
-              News
+              {siteLabel(profile, "kickerBlog")}
             </div>
             <h2>{profile.headings?.blogTitle || "Latest posts"}</h2>
             <p className="section-note">{profile.headings?.blogDesc || "Thoughts, news, and technical articles."}</p>
@@ -61,7 +62,7 @@ export default function Blog({ content }) {
               )}
               <div className="project-actions" style={{ marginTop: "1.5rem" }}>
                 <Link className="primary-button" to={`/blog/${post.id}`}>
-                  Read More
+                  {siteLabel(profile, "readMore")}
                   <ArrowRight size={16} style={{ marginLeft: 4 }} />
                 </Link>
               </div>

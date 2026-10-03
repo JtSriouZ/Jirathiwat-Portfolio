@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Terminal, Code, Cpu, Database, Layout, Box, Network, Code2, Globe, Braces, Cloud, BarChart, Sparkles, MonitorPlay, Cuboid } from "lucide-react";
 import { getSkillIconUrls, normalizeList } from "../utils";
+import { siteLabel } from "../siteCopy";
 
 function getCategoryIcon(categoryId) {
   if (categoryId.includes("ai")) return <Cpu size={24} />;
@@ -46,15 +47,15 @@ function SkillCard({ skill }) {
         <img 
           src={currentUrl} 
           alt={skill} 
-          style={{ width: "48px", height: "48px", objectFit: "contain" }}
+          className="skill-card-icon"
           onError={() => setUrlIndex(i => i + 1)}
         />
       ) : (
-        <div style={{ width: "48px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", transition: "all 0.2s ease" }} className="fallback-icon">
+        <div className="fallback-icon skill-card-icon">
           {getFallbackIcon(skill)}
         </div>
       )}
-      <span style={{ fontSize: "0.95rem", fontWeight: "500" }}>{skill}</span>
+      <span>{skill}</span>
     </div>
   );
 }
@@ -64,40 +65,31 @@ export default function Skills({ content }) {
 
   return (
     <div className="page-content">
-      <section className="section skills-section reveal is-visible" id="skills">
-        <div className="section-heading" style={{ marginBottom: "3rem", textAlign: "center", justifyContent: "center" }}>
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <div className="section-kicker" style={{ justifyContent: "center", fontSize: "0.95rem" }}>
-              <Code size={20} />
-              Expertise
+      <section className="section skills-section reveal" id="skills">
+        <div className="section-heading">
+          <div>
+            <div className="section-kicker">
+              <Code size={18} />
+              {siteLabel(profile, "kickerSkills")}
             </div>
-            <h2 style={{ fontSize: "clamp(2rem, 8vw, 4.5rem)", fontWeight: "800", letterSpacing: "-0.02em", marginTop: "0.5rem" }}>
-              {profile.headings?.skillsTitle || "Skills & Technologies"}
-            </h2>
-            <p style={{ maxWidth: "700px", margin: "1.5rem auto 0", color: "var(--text-muted)", fontSize: "1.25rem", lineHeight: "1.6" }}>
+            <h2>{profile.headings?.skillsTitle || "Skills & Technologies"}</h2>
+            <p className="section-note">
               {profile.headings?.skillsDesc || "A comprehensive overview of my technical stack, frameworks, and core competencies."}
             </p>
           </div>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "4rem" }}>
+        <div className="skill-groups">
           {expertise.map((category) => (
-            <div key={category.id} style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                <div style={{ 
-                  width: "48px", height: "48px", borderRadius: "12px", 
-                  background: "rgba(0, 240, 255, 0.1)", display: "flex", 
-                  alignItems: "center", justifyContent: "center", color: "var(--cyan)" 
-                }}>
-                  {getCategoryIcon(category.id)}
-                </div>
+            <div className="skill-group" key={category.id}>
+              <div className="skill-group-head">
+                <span className="skill-group-mark">{getCategoryIcon(category.id)}</span>
                 <div>
-                  <h3 style={{ fontSize: "1.8rem", margin: 0 }}>{category.category}</h3>
-                  <p style={{ margin: "0.25rem 0 0", color: "var(--text-muted)" }}>{category.description}</p>
+                  <h3>{category.category}</h3>
+                  <p>{category.description}</p>
                 </div>
               </div>
-              
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: "1rem", alignItems: "start" }}>
+              <div className="skill-grid">
                 {normalizeList(category.skills).map((skill) => (
                   <SkillCard key={skill} skill={skill} />
                 ))}

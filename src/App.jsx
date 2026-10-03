@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Routes, Route, Link, NavLink, useNavigate, useLocation } from "react-router-dom";
-import { Zap, Share2, Search, Globe, Edit3, X, Menu, Linkedin, Github, Instagram, Mail } from "lucide-react";
+import { Landmark, Share2, Search, Globe, Edit3, X, Menu, Linkedin, Github, Instagram, Mail } from "lucide-react";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Skills from "./pages/Skills";
@@ -12,6 +12,8 @@ import Blog from "./pages/Blog";
 import PostDetail from "./pages/PostDetail";
 import Admin from "./pages/Admin";
 import { triggerGoogleTranslate } from "./utils";
+import { siteLabel } from "./siteCopy";
+import AtelierSound from "./components/AtelierSound";
 import staticContent from "../data/content.json";
 
 const languageOptions = [
@@ -24,12 +26,12 @@ const languageOptions = [
 ];
 
 const isStaticSite = import.meta.env.VITE_STATIC_SITE === "true";
-const scrambleCharacters = "01ABCDEF#$_/\\|<>[]{}:";
-const hashCharacters = "0123456789abcdef";
+// Classical glyphs: Greek capitals and Roman numerals settle into the final text.
+const scrambleCharacters = "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ";
+const hashCharacters = "IVXLCDM";
 
 function getRandomCharacter(index) {
-  if (index % 5 === 0) return "#";
-  if (index % 7 === 0) return "$";
+  if (index % 6 === 0) return "·";
   return scrambleCharacters[Math.floor(Math.random() * scrambleCharacters.length)];
 }
 
@@ -39,6 +41,7 @@ function getHashCharacter() {
 
 function scrambleTextElement(element) {
   if (!element || element.dataset.scrambling === "true" || element.dataset.scrambled === "true") return;
+  if (element.classList?.contains("hero-title") || element.closest(".hero-editorial, .ultra-band")) return;
   if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
 
   const finalText = element.dataset.scrambleText || element.textContent || "";
@@ -87,12 +90,19 @@ function scrambleTextElement(element) {
   element._scrambleFrame = window.requestAnimationFrame(draw);
 }
 
+function isEditorialTitle(element) {
+  return Boolean(
+    element.classList?.contains("hero-title") ||
+    element.closest(".hero-editorial, .ultra-band")
+  );
+}
+
 function runScramble(root) {
   const targets = root.matches?.("h1, h2, .project-count")
     ? [root]
     : Array.from(root.querySelectorAll("h1, h2, .project-count"));
 
-  targets.forEach((target) => scrambleTextElement(target));
+  targets.filter((target) => !isEditorialTitle(target)).forEach((target) => scrambleTextElement(target));
 }
 
 function resetScramble(root) {
@@ -100,7 +110,7 @@ function resetScramble(root) {
     ? [root]
     : Array.from(root.querySelectorAll("h1, h2, .project-count"));
 
-  targets.forEach((target) => {
+  targets.filter((target) => !isEditorialTitle(target)).forEach((target) => {
     if (target._scrambleFrame) {
       window.cancelAnimationFrame(target._scrambleFrame);
       target._scrambleFrame = null;
@@ -130,7 +140,9 @@ function AnimatedBackgroundCanvas({ routeKey }) {
     let width = 0;
     let height = 0;
     let dpr = 1;
-    let particles = [];
+    let dust = [];
+    let sparks = [];
+    let lastSparkAt = 0;
     const pointer = {
       x: window.innerWidth * 0.5,
       y: window.innerHeight * 0.34,
@@ -140,12 +152,14 @@ function AnimatedBackgroundCanvas({ routeKey }) {
     };
 
     const getPalette = () => {
-      const source = document.querySelector(".portfolio") || document.documentElement;
-      const styles = window.getComputedStyle(source);
       return {
-        accent: styles.getPropertyValue("--page-accent").trim() || "#65e8ff",
-        accentTwo: styles.getPropertyValue("--page-accent-2").trim() || "#91ffcf",
-        accentThree: styles.getPropertyValue("--page-accent-3").trim() || "#ff6fd8",
+        accent: "#2416f2",
+        accentTwo: "#b7c0ff",
+        accentThree: "#2416f2",
+        gilt: "#2416f2",
+        giltLight: "#b7c0ff",
+        champagne: "#b7c0ff",
+        ultra: "#2416f2",
       };
     };
 
@@ -176,17 +190,130 @@ function AnimatedBackgroundCanvas({ routeKey }) {
       canvas.style.height = `${height}px`;
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      const count = Math.min(110, Math.max(46, Math.floor((width * height) / 18000)));
-      particles = Array.from({ length: count }, (_, index) => ({
+      const count = Math.min(150, Math.max(70, Math.floor((width * height) / 14000)));
+      dust = Array.from({ length: count }, (_, index) => ({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.45,
-        vy: (Math.random() - 0.5) * 0.45,
-        size: 1.0 + Math.random() * 2.5,
-        pulse: Math.random() * Math.PI * 2,
-        colorIndex: index % 3,
+        vx: (Math.random() - 0.5) * 0.18,
+        vy: -0.08 - Math.random() * 0.22,
+        size: 0.6 + Math.random() * 1.9,
+        sway: Math.random() * Math.PI * 2,
+        twinkle: Math.random() * Math.PI * 2,
+        tone: index % 4,
       }));
+    };
 
+    const drawLightRays = (palette, seconds) => {
+      const originX = width * 0.5 + Math.sin(seconds * 0.07) * width * 0.08;
+      const originY = -height * 0.35;
+      const rayCount = 7;
+
+      context.save();
+      context.globalCompositeOperation = "lighter";
+      for (let index = 0; index < rayCount; index += 1) {
+        const spread = (index / (rayCount - 1) - 0.5) * 1.15;
+        const angle = Math.PI / 2 + spread + Math.sin(seconds * 0.11 + index * 1.7) * 0.05;
+        const length = Math.max(width, height) * 1.6;
+        const halfWidth = 0.028 + Math.abs(Math.sin(seconds * 0.09 + index)) * 0.03;
+        const alpha = 0.035 + Math.abs(Math.sin(seconds * 0.13 + index * 0.9)) * 0.03;
+
+        const gradient = context.createLinearGradient(originX, originY, originX, originY + length);
+        gradient.addColorStop(0, alphaColor(palette.giltLight, alpha * 0.7));
+        gradient.addColorStop(0.45, alphaColor(palette.giltLight, alpha * 0.22));
+        gradient.addColorStop(1, alphaColor(palette.giltLight, 0));
+
+        context.fillStyle = gradient;
+        context.beginPath();
+        context.moveTo(originX, originY);
+        context.lineTo(originX + Math.cos(angle - halfWidth) * length, originY + Math.sin(angle - halfWidth) * length);
+        context.lineTo(originX + Math.cos(angle + halfWidth) * length, originY + Math.sin(angle + halfWidth) * length);
+        context.closePath();
+        context.fill();
+      }
+      context.restore();
+    };
+
+    const drawAstrolabe = (x, y, radius, rotation, color, alpha, ticks) => {
+      context.save();
+      context.translate(x, y);
+      context.rotate(rotation);
+      context.globalAlpha = alpha;
+      context.strokeStyle = color;
+      context.lineWidth = 1;
+
+      context.beginPath();
+      context.arc(0, 0, radius, 0, Math.PI * 2);
+      context.stroke();
+
+      context.globalAlpha = alpha * 0.6;
+      context.beginPath();
+      context.arc(0, 0, radius * 0.86, 0, Math.PI * 2);
+      context.stroke();
+
+      context.globalAlpha = alpha;
+      for (let index = 0; index < ticks; index += 1) {
+        const angle = (index / ticks) * Math.PI * 2;
+        const major = index % (ticks / 4) === 0;
+        const inner = radius * (major ? 0.78 : 0.86);
+        context.beginPath();
+        context.moveTo(Math.cos(angle) * inner, Math.sin(angle) * inner);
+        context.lineTo(Math.cos(angle) * radius, Math.sin(angle) * radius);
+        context.stroke();
+      }
+
+      for (let index = 0; index < 4; index += 1) {
+        const angle = (index / 4) * Math.PI * 2;
+        const px = Math.cos(angle) * radius;
+        const py = Math.sin(angle) * radius;
+        context.save();
+        context.translate(px, py);
+        context.fillStyle = color;
+        context.globalAlpha = alpha * 2.2;
+        context.fillRect(-3, -3, 6, 6);
+        context.restore();
+      }
+
+      context.restore();
+    };
+
+    const drawMeander = (palette, seconds) => {
+      const unit = 14;
+      const y = height - 30;
+      const offset = (seconds * 10) % (unit * 4);
+      context.save();
+      context.globalAlpha = 0.14;
+      context.strokeStyle = palette.gilt;
+      context.lineWidth = 1;
+      context.beginPath();
+      for (let x = -unit * 4 - offset; x < width + unit * 4; x += unit * 4) {
+        context.moveTo(x, y);
+        context.lineTo(x + unit * 3, y);
+        context.lineTo(x + unit * 3, y - unit * 2);
+        context.lineTo(x + unit, y - unit * 2);
+        context.lineTo(x + unit, y - unit);
+        context.lineTo(x + unit * 2, y - unit);
+        context.lineTo(x + unit * 2, y - unit * 1.5);
+      }
+      context.stroke();
+      context.restore();
+    };
+
+    const spawnSparks = (count) => {
+      for (let index = 0; index < count; index += 1) {
+        if (sparks.length > 90) break;
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 0.4 + Math.random() * 1.6;
+        sparks.push({
+          x: pointer.x + (Math.random() - 0.5) * 8,
+          y: pointer.y + (Math.random() - 0.5) * 8,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 0.4,
+          life: 1,
+          decay: 0.012 + Math.random() * 0.02,
+          size: 0.8 + Math.random() * 1.8,
+          spin: Math.random() * Math.PI,
+        });
+      }
     };
 
     const draw = (time = 0) => {
@@ -199,158 +326,126 @@ function AnimatedBackgroundCanvas({ routeKey }) {
       context.globalAlpha = 1;
       context.globalCompositeOperation = "source-over";
 
-      const backgroundSweep = context.createLinearGradient(0, 0, width, height);
-      backgroundSweep.addColorStop(0, alphaColor(palette.accentThree, 0.1));
-      backgroundSweep.addColorStop(0.48, "rgba(5, 8, 18, 0.02)");
-      backgroundSweep.addColorStop(1, alphaColor(palette.accent, 0.1));
-      context.fillStyle = backgroundSweep;
+      if (!reduceMotion) {
+        pointer.x += (pointer.targetX - pointer.x) * 0.1;
+        pointer.y += (pointer.targetY - pointer.y) * 0.1;
+      }
+
+      // Warm ambient wash tied to the page palette
+      const wash = context.createLinearGradient(0, 0, width, height);
+      wash.addColorStop(0, alphaColor(palette.giltLight, 0.035));
+      wash.addColorStop(0.5, "rgba(12, 11, 10, 0)");
+      wash.addColorStop(1, alphaColor(palette.giltLight, 0.02));
+      context.fillStyle = wash;
       context.fillRect(0, 0, width, height);
 
-      const drawNebula = (x, y, radius, color, alpha) => {
-        const gradient = context.createRadialGradient(x, y, 0, x, y, radius);
-        gradient.addColorStop(0, alphaColor(color, alpha));
-        gradient.addColorStop(0.4, alphaColor(color, alpha * 0.32));
-        gradient.addColorStop(1, alphaColor(color, 0));
-        context.fillStyle = gradient;
-        context.fillRect(0, 0, width, height);
-      };
+      drawLightRays(palette, seconds);
 
       context.globalCompositeOperation = "lighter";
 
-      if (!reduceMotion) {
-        pointer.x += (pointer.targetX - pointer.x) * 0.12;
-        pointer.y += (pointer.targetY - pointer.y) * 0.12;
-      }
-
-      drawNebula(
-        width * (0.18 + Math.sin(seconds * 0.35) * 0.08),
-        height * (0.18 + Math.cos(seconds * 0.28) * 0.08),
-        Math.max(width, height) * 0.52,
-        palette.accentThree,
-        0.22
-      );
-      drawNebula(
-        width * (0.82 + Math.cos(seconds * 0.3) * 0.07),
-        height * (0.3 + Math.sin(seconds * 0.38) * 0.07),
-        Math.max(width, height) * 0.48,
-        palette.accent,
-        0.20
-      );
-      drawNebula(
-        width * 0.52 + Math.cos(seconds * 0.22) * width * 0.1,
-        height * (0.85 + Math.sin(seconds * 0.26) * 0.08),
-        Math.max(width, height) * 0.44,
-        palette.accentTwo,
-        0.16
-      );
-
-      const cursorGlow = context.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, Math.max(width, height) * 0.22);
-      cursorGlow.addColorStop(0, alphaColor(palette.accent, pointer.active ? 0.22 : 0.11));
-      cursorGlow.addColorStop(0.34, alphaColor(palette.accentTwo, pointer.active ? 0.08 : 0.04));
-      cursorGlow.addColorStop(1, alphaColor(palette.accentThree, 0));
+      // Candle-light glow that follows the pointer
+      const glowRadius = Math.max(width, height) * 0.24;
+      const cursorGlow = context.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, glowRadius);
+      cursorGlow.addColorStop(0, alphaColor(palette.giltLight, pointer.active ? 0.1 : 0.05));
+      cursorGlow.addColorStop(0.4, alphaColor(palette.giltLight, pointer.active ? 0.035 : 0.018));
+      cursorGlow.addColorStop(1, alphaColor(palette.giltLight, 0));
       context.fillStyle = cursorGlow;
       context.fillRect(0, 0, width, height);
 
-      const laneColors = [palette.accent, palette.accentTwo, palette.accentThree];
-      const drawPerspectiveGrid = () => {
-        const horizon = height * 0.25;
-        const vanishingX = width * 0.52 + Math.sin(seconds * 0.4) * width * 0.08;
-        const floorBottom = height + 80;
-        const floorTop = horizon;
-        const columns = 18;
-        const rows = 16;
+      // Gilded astrolabe rings drifting at the margins
+      drawAstrolabe(
+        width * 0.86 + Math.sin(seconds * 0.12) * 18,
+        height * 0.22 + Math.cos(seconds * 0.1) * 14,
+        Math.min(width, height) * 0.26,
+        seconds * 0.05,
+        palette.gilt,
+        0.16,
+        48
+      );
+      drawAstrolabe(
+        width * 0.12 + Math.cos(seconds * 0.09) * 16,
+        height * 0.82 + Math.sin(seconds * 0.11) * 14,
+        Math.min(width, height) * 0.2,
+        -seconds * 0.07,
+        palette.accentThree,
+        0.14,
+        36
+      );
+      drawAstrolabe(
+        width * 0.5 + Math.sin(seconds * 0.06) * 30,
+        height * 0.5,
+        Math.min(width, height) * 0.46,
+        seconds * 0.025,
+        palette.giltLight,
+        0.05,
+        96
+      );
 
-        context.save();
-        context.globalCompositeOperation = "lighter";
-        context.shadowBlur = 10;
-        context.shadowColor = palette.accentTwo;
+      drawMeander(palette, seconds);
 
-        for (let index = -columns; index <= columns; index += 1) {
-          const bottomX = width * 0.5 + index * (width / columns) * 1.6;
-          context.globalAlpha = 0.09;
-          context.strokeStyle = alphaColor(index % 2 === 0 ? palette.accentTwo : palette.accent, 0.95);
-          context.lineWidth = index === 0 ? 1.35 : 0.75;
-          context.beginPath();
-          context.moveTo(vanishingX, floorTop);
-          context.lineTo(bottomX, floorBottom);
-          context.stroke();
-        }
-
-        for (let row = 3; row <= rows; row += 1) {
-          const progress = row / rows;
-          const eased = progress * progress;
-          const y = floorTop + eased * (floorBottom - floorTop);
-          const halfWidth = (width * 0.04) + eased * width * 1.6;
-          const wave = Math.sin(seconds * 1.4 + row * 0.55) * 3;
-          context.globalAlpha = 0.02 + Math.pow(progress, 1.45) * 0.2;
-          context.strokeStyle = alphaColor(row % 2 === 0 ? palette.accent : palette.accentTwo, 0.95);
-          context.lineWidth = row % 4 === 0 ? 1.2 : 0.7;
-          context.beginPath();
-          context.moveTo(vanishingX - halfWidth, y + wave);
-          context.lineTo(vanishingX + halfWidth, y - wave);
-          context.stroke();
-        }
-
-        context.shadowBlur = 0;
-        context.restore();
-      };
-
-      drawPerspectiveGrid();
-
-      for (let ring = 0; ring < 6; ring += 1) {
-        const x = width * (0.15 + ring * 0.14) + Math.sin(seconds * 0.45 + ring) * 45;
-        const y = height * (0.15 + (ring % 2) * 0.5) + Math.cos(seconds * 0.38 + ring) * 35;
-        const radius = 50 + ring * 22 + Math.sin(seconds * 1.2 + ring) * 15;
-        context.globalAlpha = 0.22;
-        context.strokeStyle = laneColors[(ring + 1) % laneColors.length];
-        context.lineWidth = 1.5;
-        context.beginPath();
-        context.arc(x, y, radius, seconds * 0.4, seconds * 0.4 + Math.PI * 1.5);
-        context.stroke();
-      }
-
-      particles.forEach((particle) => {
+      // Gold dust
+      dust.forEach((mote) => {
         if (!reduceMotion) {
-          particle.x += particle.vx;
-          particle.y += particle.vy;
-          if (particle.x < -20) particle.x = width + 20;
-          if (particle.x > width + 20) particle.x = -20;
-          if (particle.y < -20) particle.y = height + 20;
-          if (particle.y > height + 20) particle.y = -20;
-        }
-      });
-
-      for (let a = 0; a < particles.length; a += 1) {
-        for (let b = a + 1; b < particles.length; b += 1) {
-          const first = particles[a];
-          const second = particles[b];
-          const dx = first.x - second.x;
-          const dy = first.y - second.y;
+          const dx = pointer.x - mote.x;
+          const dy = pointer.y - mote.y;
           const distance = Math.hypot(dx, dy);
-          if (distance > 170) continue;
-
-          context.globalAlpha = (1 - distance / 170) * 0.38;
-          context.strokeStyle = a % 2 === 0 ? palette.accent : palette.accentTwo;
-          context.lineWidth = 0.85;
-          context.beginPath();
-          context.moveTo(first.x, first.y);
-          context.lineTo(second.x, second.y);
-          context.stroke();
+          if (distance < 200 && distance > 0.001) {
+            const pull = ((200 - distance) / 200) * 0.012;
+            mote.vx += (dx / distance) * pull;
+            mote.vy += (dy / distance) * pull;
+          }
+          mote.vx *= 0.985;
+          mote.vy = mote.vy * 0.985 - 0.002;
+          mote.x += mote.vx + Math.sin(seconds * 0.6 + mote.sway) * 0.12;
+          mote.y += mote.vy;
+          if (mote.x < -20) mote.x = width + 20;
+          if (mote.x > width + 20) mote.x = -20;
+          if (mote.y < -20) {
+            mote.y = height + 20;
+            mote.x = Math.random() * width;
+          }
+          if (mote.y > height + 20) mote.y = -20;
         }
-      }
 
-      particles.forEach((particle) => {
-        const color = particle.colorIndex === 0 ? palette.accent : particle.colorIndex === 1 ? palette.accentTwo : palette.accentThree;
-        const pulse = reduceMotion ? 0.8 : 0.62 + Math.sin(seconds * 1.8 + particle.pulse) * 0.3;
-        context.globalAlpha = Math.max(0.24, pulse);
-        context.fillStyle = color;
-        context.shadowBlur = 10;
-        context.shadowColor = color;
-        context.beginPath();
-        context.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        context.fill();
+        // Pixel "dither" motes: crisp squares in ivory / periwinkle / ultramarine
+        const tone = mote.tone === 0 ? palette.giltLight : mote.tone === 1 ? palette.gilt : mote.tone === 2 ? palette.ultra : palette.accent;
+        const twinkle = reduceMotion ? 0.7 : 0.4 + Math.sin(seconds * 2.2 + mote.twinkle) * 0.35;
+        const px = Math.round(mote.size + 0.5);
+        context.globalAlpha = Math.max(0.1, twinkle);
+        context.fillStyle = tone;
+        context.shadowBlur = 0;
+        context.fillRect(Math.round(mote.x), Math.round(mote.y), px, px);
       });
+
+      // Pointer sparks
+      sparks = sparks.filter((spark) => spark.life > 0);
+      sparks.forEach((spark) => {
+        spark.x += spark.vx;
+        spark.y += spark.vy;
+        spark.vy += 0.015;
+        spark.vx *= 0.97;
+        spark.life -= spark.decay;
+        spark.spin += 0.1;
+
+        // Crisp pixel sparks (squares and plus-signs), no glow
+        context.save();
+        context.translate(Math.round(spark.x), Math.round(spark.y));
+        context.globalAlpha = Math.max(0, spark.life) * 0.95;
+        const phase = spark.spin % Math.PI;
+        context.fillStyle = phase > Math.PI * 0.5 ? palette.giltLight : palette.ultra;
+        context.shadowBlur = 0;
+        const size = Math.max(1, Math.round(spark.size * (0.6 + spark.life * 0.9)));
+        if (phase > Math.PI * 0.75) {
+          context.fillRect(-size * 2, -0.5, size * 4, 1);
+          context.fillRect(-0.5, -size * 2, 1, size * 4);
+        } else {
+          context.fillRect(-size, -size, size * 2, size * 2);
+        }
+        context.restore();
+      });
+
       context.shadowBlur = 0;
+      context.globalAlpha = 1;
       context.globalCompositeOperation = "source-over";
 
       if (!reduceMotion) {
@@ -368,15 +463,26 @@ function AnimatedBackgroundCanvas({ routeKey }) {
       pointer.targetX = point.clientX;
       pointer.targetY = point.clientY;
       pointer.active = true;
+
+      const now = performance.now();
+      if (!reduceMotion && now - lastSparkAt > 28) {
+        lastSparkAt = now;
+        spawnSparks(2);
+      }
     };
 
     const deactivatePointer = () => {
       pointer.active = false;
     };
 
+    const burst = () => {
+      if (!reduceMotion) spawnSparks(18);
+    };
+
     window.addEventListener("resize", resize);
     window.addEventListener("pointermove", updatePointer, { passive: true });
     window.addEventListener("touchmove", updatePointer, { passive: true });
+    window.addEventListener("pointerdown", burst, { passive: true });
     window.addEventListener("pointerleave", deactivatePointer, { passive: true });
 
     return () => {
@@ -384,11 +490,85 @@ function AnimatedBackgroundCanvas({ routeKey }) {
       window.removeEventListener("resize", resize);
       window.removeEventListener("pointermove", updatePointer);
       window.removeEventListener("touchmove", updatePointer);
+      window.removeEventListener("pointerdown", burst);
       window.removeEventListener("pointerleave", deactivatePointer);
     };
   }, [routeKey]);
 
   return <canvas className="motion-canvas" ref={canvasRef} />;
+}
+
+function GildedCursor() {
+  const rootRef = useRef(null);
+  const ringRef = useRef(null);
+  const dotRef = useRef(null);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    const ring = ringRef.current;
+    const dot = dotRef.current;
+    if (!root || !ring || !dot) return undefined;
+    if (window.matchMedia?.("(hover: none), (pointer: coarse)").matches) return undefined;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return undefined;
+
+    let frame = 0;
+    let visible = false;
+    const target = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    const ringPosition = { x: target.x, y: target.y };
+    const dotPosition = { x: target.x, y: target.y };
+    const interactiveSelector = "a, button, [role='button'], input, textarea, select, label, summary";
+
+    const render = () => {
+      ringPosition.x += (target.x - ringPosition.x) * 0.16;
+      ringPosition.y += (target.y - ringPosition.y) * 0.16;
+      dotPosition.x += (target.x - dotPosition.x) * 0.55;
+      dotPosition.y += (target.y - dotPosition.y) * 0.55;
+      ring.style.transform = `translate(${ringPosition.x}px, ${ringPosition.y}px) translate(-50%, -50%)`;
+      dot.style.transform = `translate(${dotPosition.x}px, ${dotPosition.y}px) translate(-50%, -50%)`;
+      frame = requestAnimationFrame(render);
+    };
+
+    const move = (event) => {
+      target.x = event.clientX;
+      target.y = event.clientY;
+      if (!visible) {
+        visible = true;
+        root.classList.remove("is-hidden");
+      }
+      const interactive = event.target?.closest?.(interactiveSelector);
+      root.classList.toggle("is-hovering", Boolean(interactive));
+    };
+
+    const hide = () => {
+      visible = false;
+      root.classList.add("is-hidden");
+    };
+
+    const press = () => root.classList.add("is-pressed");
+    const release = () => root.classList.remove("is-pressed");
+
+    root.classList.add("is-hidden");
+    frame = requestAnimationFrame(render);
+    window.addEventListener("pointermove", move, { passive: true });
+    window.addEventListener("pointerdown", press, { passive: true });
+    window.addEventListener("pointerup", release, { passive: true });
+    document.documentElement.addEventListener("mouseleave", hide);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerdown", press);
+      window.removeEventListener("pointerup", release);
+      document.documentElement.removeEventListener("mouseleave", hide);
+    };
+  }, []);
+
+  return (
+    <div className="lux-cursor is-hidden" ref={rootRef} aria-hidden="true">
+      <span className="lux-cursor-ring" ref={ringRef} />
+      <span className="lux-cursor-dot" ref={dotRef} />
+    </div>
+  );
 }
 
 function App() {
@@ -414,22 +594,61 @@ function App() {
       ".timeline-item",
       ".education-card",
       ".skill-card",
+      ".feature-card",
+      ".persona-card",
       ".editor-panel",
       ".about-profile-card",
       ".about-metric",
+      ".project-preview-stage",
     ].join(",");
 
+    const root = document.documentElement;
+    let tiltedCard = null;
+
+    const resetTilt = (card) => {
+      if (!card) return;
+      card.style.setProperty("--tilt-x", "0deg");
+      card.style.setProperty("--tilt-y", "0deg");
+    };
+
     const updateCardGlow = (event) => {
+      // Pointer position as 0..1 drives parallax on the hero columns and ornaments.
+      root.style.setProperty("--px", (event.clientX / Math.max(1, window.innerWidth)).toFixed(3));
+      root.style.setProperty("--py", (event.clientY / Math.max(1, window.innerHeight)).toFixed(3));
+
       const card = event.target.closest?.(cardSelector);
+      if (card !== tiltedCard) {
+        resetTilt(tiltedCard);
+        tiltedCard = card;
+      }
       if (!card) return;
 
       const rect = card.getBoundingClientRect();
-      card.style.setProperty("--card-x", `${event.clientX - rect.left}px`);
-      card.style.setProperty("--card-y", `${event.clientY - rect.top}px`);
+      const localX = event.clientX - rect.left;
+      const localY = event.clientY - rect.top;
+      card.style.setProperty("--card-x", `${localX}px`);
+      card.style.setProperty("--card-y", `${localY}px`);
+
+      const ratioX = localX / Math.max(1, rect.width) - 0.5;
+      const ratioY = localY / Math.max(1, rect.height) - 0.5;
+      const maxTilt = rect.width > 520 ? 3.5 : 6;
+      card.style.setProperty("--tilt-x", `${(-ratioY * maxTilt).toFixed(2)}deg`);
+      card.style.setProperty("--tilt-y", `${(ratioX * maxTilt).toFixed(2)}deg`);
+    };
+
+    const clearTilt = () => {
+      resetTilt(tiltedCard);
+      tiltedCard = null;
     };
 
     window.addEventListener("pointermove", updateCardGlow, { passive: true });
-    return () => window.removeEventListener("pointermove", updateCardGlow);
+    window.addEventListener("pointerleave", clearTilt, { passive: true });
+    document.addEventListener("scroll", clearTilt, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", updateCardGlow);
+      window.removeEventListener("pointerleave", clearTilt);
+      document.removeEventListener("scroll", clearTilt);
+    };
   }, []);
 
   useEffect(() => {
@@ -484,6 +703,10 @@ function App() {
         ".timeline-item",
         ".education-card",
         ".skill-card",
+        ".feature-card",
+        ".persona-card",
+        ".still-plate",
+        ".skill-group",
         ".project-stepper",
       ].join(",");
       const revealCards = document.querySelectorAll(revealCardSelector);
@@ -636,7 +859,7 @@ function App() {
   if (error) {
     return (
       <div className="loading-screen">
-        <Zap size={32} color="var(--pink)" />
+        <div className="lux-monogram" aria-hidden="true">J</div>
         <p style={{ textAlign: "center", maxWidth: 480 }}>{error}</p>
         <button className="primary-button" onClick={fetchContent}>
           Retry
@@ -648,8 +871,8 @@ function App() {
   if (!content) {
     return (
       <div className="loading-screen">
-        <Zap size={32} className="pulse-icon" color="var(--cyan)" />
-        <p>Initializing...</p>
+        <div className="lux-monogram" aria-hidden="true">J</div>
+        <p>Unveiling the collection</p>
       </div>
     );
   }
@@ -664,23 +887,24 @@ function App() {
       <div className="page-motion-bg" aria-hidden="true">
         <AnimatedBackgroundCanvas routeKey={routeKey} />
       </div>
+      <GildedCursor />
 
       <header className="topbar">
         <nav className="topbar-nav">
           {/* Logo / Brand */}
-          <Link className="brand" to="/" aria-label="Jirathiwat home" onClick={handleNavClick}>
-            <Zap size={24} className="brand-icon" />
-            <strong>Jirathiwat</strong>
+          <Link className="brand" to="/" aria-label={`${siteLabel(profile, "brand")} home`} onClick={handleNavClick}>
+            <Landmark size={22} className="brand-icon" />
+            <strong>{siteLabel(profile, "brand")}</strong>
           </Link>
 
           {/* Desktop + mobile-dropdown links */}
           <div className={`nav-links${mobileNavOpen ? " is-open" : ""}`}>
-            <NavLink to="/" end className={({ isActive }) => isActive ? "active" : ""} onClick={handleNavClick}>Home</NavLink>
-            <NavLink to="/projects" className={({ isActive }) => isActive ? "active" : ""} onClick={handleNavClick}>Projects</NavLink>
-            <NavLink to="/certificates" className={({ isActive }) => isActive ? "active" : ""} onClick={handleNavClick}>Certificates</NavLink>
-            <NavLink to="/skills" className={({ isActive }) => isActive ? "active" : ""} onClick={handleNavClick}>Skills</NavLink>
-            <NavLink to="/about" className={({ isActive }) => isActive ? "active" : ""} onClick={handleNavClick}>About</NavLink>
-            <NavLink to="/blog" className={({ isActive }) => isActive ? "active" : ""} onClick={handleNavClick}>Blog</NavLink>
+            <NavLink to="/" end className={({ isActive }) => isActive ? "active" : ""} onClick={handleNavClick}>{siteLabel(profile, "navHome")}</NavLink>
+            <NavLink to="/projects" className={({ isActive }) => isActive ? "active" : ""} onClick={handleNavClick}>{siteLabel(profile, "navProjects")}</NavLink>
+            <NavLink to="/certificates" className={({ isActive }) => isActive ? "active" : ""} onClick={handleNavClick}>{siteLabel(profile, "navCertificates")}</NavLink>
+            <NavLink to="/skills" className={({ isActive }) => isActive ? "active" : ""} onClick={handleNavClick}>{siteLabel(profile, "navSkills")}</NavLink>
+            <NavLink to="/about" className={({ isActive }) => isActive ? "active" : ""} onClick={handleNavClick}>{siteLabel(profile, "navAbout")}</NavLink>
+            <NavLink to="/blog" className={({ isActive }) => isActive ? "active" : ""} onClick={handleNavClick}>{siteLabel(profile, "navBlog")}</NavLink>
           </div>
 
           {/* Right-side actions */}
@@ -745,29 +969,29 @@ function App() {
           <span className="footer-orbit footer-orbit-two" aria-hidden="true" />
           <span className="footer-scanline" aria-hidden="true" />
           <div className="footer-brand">
-            <Link className="brand" to="/" aria-label="Jirathiwat home">
-              <Zap size={28} color="var(--cyan)" />
-              <strong>Jirathiwat</strong>
+            <Link className="brand" to="/" aria-label={`${siteLabel(profile, "brand")} home`}>
+              <Landmark size={26} className="brand-icon" />
+              <strong>{siteLabel(profile, "brand")}</strong>
             </Link>
-            <p>Software Engineer, AI &amp; Full-Stack Developer in Bangkok City, Thailand.</p>
-            <div className="footer-signal" aria-label="Portfolio system online">
+            <p>{siteLabel(profile, "footerBlurb")}</p>
+            <div className="footer-signal" aria-label={siteLabel(profile, "footerStatus")}>
               <span />
-              Portfolio system online
+              {siteLabel(profile, "footerStatus")}
             </div>
           </div>
           <div className="footer-section">
-            <h2>Explore</h2>
+            <h2>{siteLabel(profile, "footerExplore")}</h2>
             <div className="footer-links">
-              <Link to="/projects">Projects</Link>
-              <Link to="/certificates">Certificates</Link>
-              <Link to="/skills">Skills</Link>
-              <Link to="/about">About</Link>
-              <Link to="/blog">Blog</Link>
+              <Link to="/projects">{siteLabel(profile, "navProjects")}</Link>
+              <Link to="/certificates">{siteLabel(profile, "navCertificates")}</Link>
+              <Link to="/skills">{siteLabel(profile, "navSkills")}</Link>
+              <Link to="/about">{siteLabel(profile, "navAbout")}</Link>
+              <Link to="/blog">{siteLabel(profile, "navBlog")}</Link>
             </div>
           </div>
           <div className="footer-actions">
             <div className="footer-section">
-              <h2>Connect</h2>
+              <h2>{siteLabel(profile, "footerConnect")}</h2>
               <div className="footer-socials">
                 <a href={profile.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn"><Linkedin size={18} /></a>
                 <a href={profile.github} target="_blank" rel="noreferrer" aria-label="GitHub"><Github size={18} /></a>
@@ -776,13 +1000,13 @@ function App() {
               </div>
             </div>
             <div className="footer-section footer-action">
-              <h2>Share</h2>
+              <h2>{siteLabel(profile, "footerShare")}</h2>
               <button
                 className="ghost-button"
                 onClick={() => navigator.clipboard?.writeText(window.location.href)}
               >
                 <Share2 size={16} />
-                Copy Link
+                {siteLabel(profile, "copyLink")}
               </button>
             </div>
           </div>
@@ -802,7 +1026,7 @@ function App() {
       >
         <div className="language-modal">
           <div className="panel-title">
-            <h2>Translate website</h2>
+            <h2>{siteLabel(profile, "translateTitle")}</h2>
             <button
               className="icon-button"
               onClick={() => setLanguageOpen(false)}
@@ -811,7 +1035,7 @@ function App() {
               <X size={18} />
             </button>
           </div>
-          <p>Pick a language to automatically translate this page.</p>
+          <p>{siteLabel(profile, "translateNote")}</p>
           <div className="language-options">
             {languageOptions.map(({ code, label }) => (
               <button
@@ -825,7 +1049,7 @@ function App() {
           </div>
           <div className="translator-status">
             <Globe size={14} />
-            <p>Powered by Google Translate</p>
+            <p>{siteLabel(profile, "translateCredit")}</p>
           </div>
         </div>
       </div>
@@ -833,6 +1057,7 @@ function App() {
       <div className="google-translate-host" aria-hidden="true">
         <div id="google_translate_element" />
       </div>
+      <AtelierSound profile={profile} />
     </div>
 
   );

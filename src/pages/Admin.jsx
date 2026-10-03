@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Bold, Code2, Edit3, Heading2, Image as ImageIcon, Italic, Link as LinkIcon, List, Quote, Save, Trash2, Plus, GripVertical, Upload, Video, Youtube } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { getUrlLabel, getYoutubeEmbedUrl, isImageUrl, resolveMediaUrl, normalizeList } from "../utils";
+import { siteCopy, siteCopyGroups } from "../siteCopy";
 
 const blankPost = { title: "", category: "News", date: new Date().toISOString().slice(0, 10), summary: "", fullDescription: "", imageUrl: "", mediaUrls: "", youtubeUrl: "", externalUrl: "" };
 const blankExperience = { role: "", company: "", period: "", description: "" };
@@ -48,15 +49,20 @@ export async function api(path, options = {}) {
   return response.json();
 }
 
-export default function AdminPanel({ content, canEdit, canPublish, onRefresh, onNavigate }) {
-  const safeSkills = Array.isArray(content.profile.skills)
-    ? content.profile.skills
-    : String(content.profile.skills || "").split(",").map((s) => s.trim()).filter(Boolean);
+function editableProfile(source) {
+  const safeSkills = Array.isArray(source.skills)
+    ? source.skills
+    : String(source.skills || "").split(",").map((item) => item.trim()).filter(Boolean);
+  return {
+    ...source,
+    skills: safeSkills.join(", "),
+    labels: { ...siteCopy, ...(source.labels || {}) },
+    stills: Array.isArray(source.stills) ? source.stills : [],
+  };
+}
 
-  const [profile, setProfile] = useState({
-    ...content.profile,
-    skills: safeSkills.join(", ")
-  });
+export default function AdminPanel({ content, canEdit, canPublish, onRefresh, onNavigate }) {
+  const [profile, setProfile] = useState(() => editableProfile(content.profile));
   const [adminToken, setAdminToken] = useState(sessionStorage.getItem("portfolioAdminToken") || "");
   const [password, setPassword] = useState("");
   
@@ -82,11 +88,72 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
     });
   };
 
+  const updateLabel = (key, value) => {
+    setProfile({
+      ...profile,
+      labels: {
+        ...(profile.labels || {}),
+        [key]: value
+      }
+    });
+  };
+
+  const updateStill = (id, patch) => {
+    setProfile({
+      ...profile,
+      stills: (profile.stills || []).map((still) => (still.id === id ? { ...still, ...patch } : still))
+    });
+  };
+
+  const addStill = () => {
+    setProfile({
+      ...profile,
+      stills: [
+        { id: `temp-${Date.now()}`, image: "", title: "", date: "", href: profile.instagram || "" },
+        ...(profile.stills || [])
+      ]
+    });
+  };
+
+  const removeStill = (id) => {
+    setProfile({
+      ...profile,
+      stills: (profile.stills || []).filter((still) => still.id !== id)
+    });
+  };
+
+  const moveStill = (index, direction) => {
+    const next = [...(profile.stills || [])];
+    const target = index + direction;
+    if (target < 0 || target >= next.length) return;
+    const [item] = next.splice(index, 1);
+    next.splice(target, 0, item);
+    setProfile({ ...profile, stills: next });
+  };
+
+  const uploadStill = async (id, file) => {
+    if (!file || !canSave) return;
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        setSaving(`still-${id}`);
+        const result = await api("/api/uploads", { method: "POST", body: JSON.stringify({ image: reader.result }) });
+        setProfile((current) => ({
+          ...current,
+          stills: (current.stills || []).map((still) => (still.id === id ? { ...still, image: result.url } : still))
+        }));
+        setMessage("Image uploaded. Save the stills to publish it.");
+      } catch (err) {
+        setMessage(err.message);
+      } finally {
+        setSaving("");
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
   useEffect(() => {
-    const safeSkills = Array.isArray(content.profile.skills)
-      ? content.profile.skills
-      : String(content.profile.skills || "").split(",").map((s) => s.trim()).filter(Boolean);
-    setProfile({ ...content.profile, skills: safeSkills.join(", ") });
+    setProfile(editableProfile(content.profile));
     setAvatarPreview(resolveMediaUrl(content.profile.avatar || ""));
     setPosts(content.posts || []);
     setExperiences(content.experiences || []);
@@ -290,6 +357,8 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
             <TextInput label="GitHub" value={profile.github} onChange={(github) => setProfile({ ...profile, github })} />
             <TextInput label="LinkedIn" value={profile.linkedin} onChange={(linkedin) => setProfile({ ...profile, linkedin })} />
             <TextInput label="Instagram" value={profile.instagram} onChange={(instagram) => setProfile({ ...profile, instagram })} />
+            <TextInput label="Handle" value={profile.handle || ""} onChange={(handle) => setProfile({ ...profile, handle })} />
+            <TextInput label="Persona ticker (comma separated)" value={(profile.persona || []).join(", ")} onChange={(persona) => setProfile({ ...profile, persona: persona.split(",").map((item) => item.trim()).filter(Boolean) })} />
             <div className="avatar-editor">
               <img src={avatarPreview || resolveMediaUrl(profile.avatar || "")} alt="" />
               <div>
@@ -326,6 +395,8 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
             <TextInput label="Blog Page Description" value={profile.headings?.blogDesc || ""} onChange={(v) => updateHeading("blogDesc", v)} />
             <TextInput label="About - Work History Title" value={profile.headings?.aboutExperienceTitle || ""} onChange={(v) => updateHeading("aboutExperienceTitle", v)} />
             <TextInput label="About - Education Title" value={profile.headings?.aboutEducationTitle || ""} onChange={(v) => updateHeading("aboutEducationTitle", v)} />
+            <TextInput label="Instagram stills title" value={profile.headings?.stillsTitle || ""} onChange={(v) => updateHeading("stillsTitle", v)} />
+            <TextInput label="Instagram stills description" value={profile.headings?.stillsDesc || ""} onChange={(v) => updateHeading("stillsDesc", v)} />
           </div>
         </section>
 
@@ -342,6 +413,67 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
             <TextArea label="Skill chips (comma separated)" value={profile.skills} onChange={(skills) => setProfile({ ...profile, skills })} />
           </div>
         </section>
+
+        <section className="editor-panel wide-panel">
+          <div className="panel-title">
+            <h2>Instagram stills</h2>
+            <div className="admin-actions">
+              <button className="secondary-button" onClick={addStill} disabled={!canSave}>
+                <Plus size={18} /> Add still
+              </button>
+              <button className="primary-button" onClick={saveProfile} disabled={!canSave || saving === "profile"}>
+                <Save size={18} /> Save
+              </button>
+            </div>
+          </div>
+          <div className="record-list">
+            {(profile.stills || []).map((still, index) => (
+              <article className="record-card" key={still.id || index}>
+                <div className="record-fields">
+                  {still.image && (
+                    <img src={resolveMediaUrl(still.image)} alt="" style={{ width: "100%", maxHeight: 220, objectFit: "cover" }} />
+                  )}
+                  <TextInput label="Title" value={still.title || ""} onChange={(title) => updateStill(still.id, { title })} />
+                  <TextInput label="Date" value={still.date || ""} onChange={(date) => updateStill(still.id, { date })} />
+                  <TextInput label="Instagram post URL" value={still.href || ""} onChange={(href) => updateStill(still.id, { href })} />
+                  <TextInput label="Image path or URL" value={still.image || ""} onChange={(image) => updateStill(still.id, { image })} />
+                  <label className="file-field">
+                    <span>{saving === `still-${still.id}` ? "Uploading..." : "Upload image"}</span>
+                    <input type="file" accept="image/png,image/jpeg,image/webp" disabled={!canSave} onChange={(event) => uploadStill(still.id, event.target.files?.[0])} />
+                  </label>
+                  <div className="project-actions">
+                    <button className="secondary-button" type="button" onClick={() => moveStill(index, -1)} disabled={!canSave || index === 0}>Up</button>
+                    <button className="secondary-button" type="button" onClick={() => moveStill(index, 1)} disabled={!canSave || index === profile.stills.length - 1}>Down</button>
+                    <button className="secondary-button" type="button" onClick={() => removeStill(still.id)} disabled={!canSave}>
+                      <Trash2 size={16} /> Remove
+                    </button>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {siteCopyGroups.map((group) => (
+          <section className="editor-panel wide-panel" key={group.title}>
+            <div className="panel-title">
+              <h2>{group.title}</h2>
+              <button className="primary-button" onClick={saveProfile} disabled={!canSave || saving === "profile"}>
+                <Save size={18} /> Save
+              </button>
+            </div>
+            <div className="form-grid">
+              {group.fields.map(([key, label]) => (
+                <TextInput
+                  key={key}
+                  label={label}
+                  value={profile.labels?.[key] ?? ""}
+                  onChange={(value) => updateLabel(key, value)}
+                />
+              ))}
+            </div>
+          </section>
+        ))}
 
         <section className="editor-panel wide-panel">
           <div className="panel-title">

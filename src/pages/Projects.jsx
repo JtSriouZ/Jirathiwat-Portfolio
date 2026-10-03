@@ -1,6 +1,7 @@
 import { Github, ExternalLink, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { normalizeList, resolveMediaUrl } from "../utils";
+import { siteLabel } from "../siteCopy";
 
 export default function Projects({ content }) {
   const { profile, projects = [] } = content;
@@ -12,14 +13,14 @@ export default function Projects({ content }) {
           <div>
             <div className="section-kicker">
               <Github size={18} />
-              GitHub
+              {siteLabel(profile, "kickerProjects")}
             </div>
             <h2>{profile.headings?.projectsTitle || "Projects"}</h2>
             <p className="section-note">{profile.headings?.projectsDesc || "A collection of side projects, experiments, and open source contributions."}</p>
           </div>
           <a className="ghost-button" href={profile.github} target="_blank" rel="noreferrer">
             <ExternalLink size={16} />
-            GitHub
+            {siteLabel(profile, "githubButton")}
           </a>
         </div>
         <div className="project-grid card-masonry">
@@ -33,8 +34,8 @@ export default function Projects({ content }) {
               )}
               <div className="project-body">
                 <div className="post-meta">
-                  <span>{project.language || "Project"}</span>
-                  <span>{project.period || project.updated || "Recent"}</span>
+                  <span>{project.language || siteLabel(profile, "projectFallback")}</span>
+                  <span>{project.period || project.updated || siteLabel(profile, "recentFallback")}</span>
                 </div>
                 <h3>
                   <Link to={`/projects/${project.id}`} style={{ color: "inherit", textDecoration: "none" }}>
@@ -61,19 +62,19 @@ export default function Projects({ content }) {
                 )}
                 <div className="project-actions">
                   <Link className="primary-button" to={`/projects/${project.id}`}>
-                    View Details
+                    {siteLabel(profile, "viewDetails")}
                     <ArrowRight size={16} style={{ marginLeft: 4 }} />
                   </Link>
                   {project.repoUrl && (
                     <a className="secondary-button" href={project.repoUrl} target="_blank" rel="noreferrer">
                       <Github size={16} />
-                      Repo
+                      {siteLabel(profile, "repoButton")}
                     </a>
                   )}
                   {project.liveUrl && (
                     <a className="secondary-button" href={project.liveUrl} target="_blank" rel="noreferrer">
                       <ExternalLink size={16} />
-                      Live
+                      {siteLabel(profile, "liveButton")}
                     </a>
                   )}
                 </div>

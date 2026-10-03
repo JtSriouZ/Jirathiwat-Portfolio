@@ -1,22 +1,23 @@
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, Calendar, FileText, ExternalLink } from "lucide-react";
 import { resolveMediaUrl, getYoutubeEmbedUrl, normalizeList } from "../utils";
+import { siteLabel } from "../siteCopy";
 import MediaGallery from "../components/MediaGallery";
 import RichContent from "../components/RichContent";
 
 export default function PostDetail({ content }) {
   const { id } = useParams();
-  const { posts = [] } = content;
+  const { posts = [], profile = {} } = content;
   
   const post = posts.find((p) => p.id === id);
 
   if (!post) {
     return (
-      <div className="page-content" style={{ textAlign: "center", paddingTop: "4rem" }}>
-        <h2>Post Not Found</h2>
-        <p>The blog post you are looking for does not exist.</p>
+      <div className="page-content detail-missing">
+        <h2>{siteLabel(profile, "postMissing")}</h2>
+        <p>{siteLabel(profile, "postMissingNote")}</p>
         <br />
-        <Link to="/blog" className="primary-button">Back to Blog</Link>
+        <Link to="/blog" className="primary-button">{siteLabel(profile, "backToBlog")}</Link>
       </div>
     );
   }
@@ -34,17 +35,17 @@ export default function PostDetail({ content }) {
         <div className="project-detail-header">
           <Link to="/blog" className="ghost-button" style={{ display: "inline-flex", marginBottom: "2rem" }}>
             <ArrowLeft size={16} />
-            Back to Blog
+            {siteLabel(profile, "backToBlog")}
           </Link>
           
           <div className="post-meta" style={{ marginBottom: "1rem" }}>
             <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
               <FileText size={14} />
-              {post.category || "Post"}
+              {post.category || siteLabel(profile, "postFallback")}
             </span>
             <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
               <Calendar size={14} />
-              {post.date || "Recent"}
+              {post.date || siteLabel(profile, "recentFallback")}
             </span>
           </div>
           
@@ -54,23 +55,23 @@ export default function PostDetail({ content }) {
             <div className="project-actions" style={{ marginBottom: "2rem" }}>
               <a className="primary-button" href={post.externalUrl} target="_blank" rel="noreferrer">
                 <ExternalLink size={16} />
-                Read Full Article
+                {siteLabel(profile, "readArticle")}
               </a>
             </div>
           )}
         </div>
 
         {mainYoutubeEmbed ? (
-          <div className="project-detail-image" style={{ marginBottom: "3rem", borderRadius: "12px", overflow: "hidden", aspectRatio: "16/9", border: "1px solid var(--line)" }}>
+          <div className="project-detail-image">
             <iframe src={mainYoutubeEmbed} style={{ width: "100%", height: "100%", border: "none", display: "block" }} allowFullScreen title="Post Video" />
           </div>
         ) : post.imageUrl ? (
-          <div className="project-detail-image" style={{ marginBottom: "3rem", borderRadius: "12px", overflow: "hidden", border: "1px solid var(--line)" }}>
+          <div className="project-detail-image is-natural">
             <img src={resolveMediaUrl(post.imageUrl)} alt={post.title} style={{ width: "100%", height: "auto", display: "block" }} />
           </div>
         ) : null}
 
-        <div className="project-detail-content" style={{ maxWidth: "800px", margin: "0 auto" }}>
+        <div className="project-detail-content">
           <RichContent text={descriptionText} mediaUrls={mediaUrls} itemTitle={post.title} />
 
           <MediaGallery urls={mediaUrls} itemTitle="Post media" />

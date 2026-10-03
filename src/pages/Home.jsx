@@ -17,8 +17,9 @@ import {
   Rocket,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import heroImage from "../assets/hero-futuristic.png";
 import { resolveMediaUrl } from "../utils";
+import StillGrid from "../components/StillGrid";
+import { siteLabel } from "../siteCopy";
 
 function actualRecords(value) {
   return Array.isArray(value) ? value.filter((item) => item && item.id) : [];
@@ -160,57 +161,114 @@ function HeroCinematicBackdrop({ className = "hero-cinematic" }) {
       ctx.clearRect(0, 0, width, height);
 
       const bg = ctx.createLinearGradient(0, 0, width, height);
-      bg.addColorStop(0, "#03050c");
-      bg.addColorStop(0.42, "#07182b");
-      bg.addColorStop(1, "#17071f");
+      bg.addColorStop(0, "#07060f");
+      bg.addColorStop(0.45, "#07060f");
+      bg.addColorStop(1, "#05040f");
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, width, height);
 
-      const glow = ctx.createRadialGradient(width * (0.68 - p * 0.12), height * (0.48 + p * 0.12), 10, width * 0.66, height * 0.52, width * 0.58);
-      glow.addColorStop(0, "rgba(101, 232, 255, 0.34)");
-      glow.addColorStop(0.38, "rgba(255, 111, 216, 0.12)");
+      // Chandelier glow drifting with scroll
+      const glow = ctx.createRadialGradient(width * (0.68 - p * 0.12), height * (0.4 + p * 0.12), 10, width * 0.66, height * 0.5, width * 0.6);
+      glow.addColorStop(0, "rgba(36, 22, 242, 0.45)");
+      glow.addColorStop(0.34, "rgba(36, 22, 242, 0.16)");
+      glow.addColorStop(0.7, "rgba(36, 22, 242, 0.04)");
       glow.addColorStop(1, "rgba(0, 0, 0, 0)");
       ctx.fillStyle = glow;
       ctx.fillRect(0, 0, width, height);
 
-      const horizon = height * (0.55 - p * 0.1);
-      const vanishingX = width * (0.63 + Math.sin(t * 0.15) * 0.05);
+      // Palatial checkerboard marble floor in perspective
+      const horizon = height * (0.56 - p * 0.1);
+      const vanishingX = width * (0.6 + Math.sin(t * 0.12) * 0.04);
+      const columns = 14;
+      const rows = 16;
+      const floorBottom = height + 40;
+      const spread = width * 1.7;
+      const rowY = (index) => horizon + Math.pow(index / rows, 2.1) * (floorBottom - horizon);
+      const colX = (index, y) => {
+        const depth = (y - horizon) / (floorBottom - horizon);
+        return vanishingX + (index / columns) * spread * depth;
+      };
+      const drift = (t * 0.35) % 1;
+
+      for (let r = 0; r < rows; r += 1) {
+        const yTop = rowY(r + drift);
+        const yBottom = rowY(r + 1 + drift);
+        if (yTop > height) break;
+        const depthAlpha = Math.pow((r + drift) / rows, 1.3);
+        for (let c = -columns; c < columns; c += 1) {
+          const dark = (c + r) % 2 === 0;
+          ctx.beginPath();
+          ctx.moveTo(colX(c, yTop), yTop);
+          ctx.lineTo(colX(c + 1, yTop), yTop);
+          ctx.lineTo(colX(c + 1, yBottom), yBottom);
+          ctx.lineTo(colX(c, yBottom), yBottom);
+          ctx.closePath();
+          ctx.fillStyle = dark
+            ? `rgba(7, 6, 15, ${0.55 * depthAlpha})`
+            : `rgba(183, 192, 255, ${0.045 * depthAlpha})`;
+          ctx.fill();
+        }
+      }
+
       ctx.lineWidth = 1;
-      for (let i = -18; i <= 18; i++) {
-        const x = width * 0.5 + i * width * 0.055;
+      for (let r = 0; r <= rows; r += 1) {
+        const y = rowY(r + drift);
+        if (y > height + 2) break;
+        const alpha = 0.04 + Math.pow(r / rows, 1.4) * 0.22;
         ctx.beginPath();
-        ctx.moveTo(vanishingX, horizon);
-        ctx.lineTo(x, height);
-        ctx.strokeStyle = i % 3 === 0 ? "rgba(101, 232, 255, 0.18)" : "rgba(101, 232, 255, 0.08)";
+        ctx.moveTo(colX(-columns, y), y);
+        ctx.lineTo(colX(columns, y), y);
+        ctx.strokeStyle = `rgba(183, 192, 255, ${alpha * 0.45})`;
         ctx.stroke();
       }
-      for (let i = 0; i < 18; i++) {
-        const y = horizon + Math.pow(i / 17, 1.9) * (height - horizon);
+      for (let c = -columns; c <= columns; c += 1) {
         ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(width, y);
-        ctx.strokeStyle = i % 4 === 0 ? "rgba(255, 159, 67, 0.12)" : "rgba(145, 255, 207, 0.06)";
+        ctx.moveTo(vanishingX, horizon);
+        ctx.lineTo(colX(c, floorBottom), floorBottom);
+        ctx.strokeStyle = c % 2 === 0 ? "rgba(183, 192, 255, 0.08)" : "rgba(183, 192, 255, 0.035)";
         ctx.stroke();
       }
 
-      const orbitX = width * (0.66 - p * 0.05);
-      const orbitY = height * (0.45 + p * 0.08);
-      for (let i = 0; i < 3; i++) {
+      // Horizon haze so the floor dissolves into the hall
+      const haze = ctx.createLinearGradient(0, horizon - 60, 0, horizon + height * 0.22);
+      haze.addColorStop(0, "rgba(8, 8, 18, 0.95)");
+      haze.addColorStop(1, "rgba(8, 8, 18, 0)");
+      ctx.fillStyle = haze;
+      ctx.fillRect(0, horizon - 60, width, height * 0.22 + 60);
+
+      // Concentric ivory arc grid (Nous-style) with a slow sweeping hand
+      const arcX = width * (0.7 - p * 0.05);
+      const arcY = height * (0.44 + p * 0.08);
+      const ringCount = 9;
+      for (let i = 0; i < ringCount; i += 1) {
+        const radius = 60 + i * 58 + p * 40;
         ctx.beginPath();
-        ctx.ellipse(orbitX, orbitY, 160 + i * 48 + p * 60, 54 + i * 18, Math.sin(t * 0.16 + i) * 0.25, 0, Math.PI * 2);
-        ctx.strokeStyle = i === 1 ? "rgba(255, 159, 67, 0.25)" : "rgba(101, 232, 255, 0.18)";
+        ctx.arc(arcX, arcY, radius, 0, Math.PI * 2);
+        ctx.strokeStyle = i % 3 === 1 ? "rgba(36, 22, 242, 0.85)" : "rgba(36, 22, 242, 0.4)";
         ctx.lineWidth = 1;
         ctx.stroke();
       }
+      const sweep = t * 0.22;
+      ctx.beginPath();
+      ctx.moveTo(arcX, arcY);
+      ctx.lineTo(arcX + Math.cos(sweep) * (60 + ringCount * 58), arcY + Math.sin(sweep) * (60 + ringCount * 58));
+      ctx.strokeStyle = "rgba(183, 192, 255, 0.9)";
+      ctx.stroke();
+      for (let i = 0; i < 12; i += 1) {
+        const angle = (i / 12) * Math.PI * 2;
+        const r = 60 + 2 * 58 + p * 40;
+        ctx.fillStyle = "rgba(183, 192, 255, 0.5)";
+        ctx.fillRect(Math.round(arcX + Math.cos(angle) * r) - 2, Math.round(arcY + Math.sin(angle) * r) - 2, 4, 4);
+      }
 
-      for (let i = 0; i < 24; i++) {
-        const x = width * (0.44 + ((i * 97) % 420) / 1000) + Math.sin(t * 0.34 + i) * 24;
-        const y = height * (0.16 + ((i * 53) % 620) / 1000) + Math.cos(t * 0.28 + i) * 18 + p * 80;
-        const radius = 1.4 + ((i * 11) % 4);
-        ctx.beginPath();
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
-        ctx.fillStyle = i % 3 === 0 ? "rgba(255, 159, 67, 0.52)" : "rgba(101, 232, 255, 0.36)";
-        ctx.fill();
+      // Rising pixel motes
+      for (let i = 0; i < 36; i += 1) {
+        const x = width * (0.4 + ((i * 97) % 520) / 1000) + Math.sin(t * 0.3 + i) * 26;
+        const y = height * (0.12 + ((i * 53 + t * 9) % 720) / 1000) + Math.cos(t * 0.26 + i) * 16 + p * 80;
+        const size = 1 + ((i * 11) % 3);
+        const twinkle = 0.3 + Math.abs(Math.sin(t * 1.6 + i)) * 0.5;
+        ctx.fillStyle = `rgba(183, 192, 255, ${twinkle * 0.55})`;
+        ctx.fillRect(Math.round(x), Math.round(y), size, size);
       }
 
       if (!media.matches) {
@@ -237,6 +295,231 @@ function HeroCinematicBackdrop({ className = "hero-cinematic" }) {
   }, []);
 
   return <canvas className={className} ref={canvasRef} aria-hidden="true" />;
+}
+
+function HeroSignalField() {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const section = canvas?.closest(".hero-editorial");
+    if (!canvas || !section) return undefined;
+
+    const ctx = canvas.getContext("2d", { alpha: false });
+    if (!ctx) return undefined;
+
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let frameId = 0;
+    let running = true;
+    let width = 0;
+    let height = 0;
+    const pointer = { x: 0.74, y: 0.48, tx: 0.74, ty: 0.48, active: false };
+    const started = performance.now();
+
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 3);
+      const nextWidth = Math.max(1, rect.width);
+      const nextHeight = Math.max(1, rect.height);
+      const nextBitmapWidth = Math.max(1, Math.round(nextWidth * dpr));
+      const nextBitmapHeight = Math.max(1, Math.round(nextHeight * dpr));
+      width = nextWidth;
+      height = nextHeight;
+      if (canvas.width !== nextBitmapWidth || canvas.height !== nextBitmapHeight) {
+        canvas.width = nextBitmapWidth;
+        canvas.height = nextBitmapHeight;
+      }
+      ctx.setTransform(nextBitmapWidth / nextWidth, 0, 0, nextBitmapHeight / nextHeight, 0, 0);
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+    };
+
+    const onPointer = (event) => {
+      const rect = section.getBoundingClientRect();
+      pointer.tx = (event.clientX - rect.left) / Math.max(1, rect.width);
+      pointer.ty = (event.clientY - rect.top) / Math.max(1, rect.height);
+      pointer.active = true;
+    };
+
+    const onLeave = () => {
+      pointer.active = false;
+    };
+
+    const draw = (now) => {
+      const t = motion.matches ? 1.2 : (now - started) / 1000;
+      const compact = width < 840;
+      const restX = compact ? 0.5 : 0.73;
+      const restY = compact ? 0.3 : 0.48;
+      const aimX = pointer.active ? Math.min(0.9, Math.max(compact ? 0.2 : 0.46, pointer.tx)) : restX;
+      const aimY = pointer.active ? Math.min(0.84, Math.max(0.14, pointer.ty)) : restY;
+      pointer.x += (aimX - pointer.x) * 0.05;
+      pointer.y += (aimY - pointer.y) * 0.05;
+
+      const ox = width * pointer.x;
+      const oy = height * pointer.y;
+      const reach = Math.hypot(width, height) * 0.78;
+
+      ctx.fillStyle = "#07060f";
+      ctx.fillRect(0, 0, width, height);
+
+      const wash = ctx.createRadialGradient(ox, oy, 10, ox, oy, reach);
+      wash.addColorStop(0, "rgba(183, 192, 255, 0.07)");
+      wash.addColorStop(0.4, "rgba(183, 192, 255, 0.02)");
+      wash.addColorStop(1, "rgba(12, 11, 10, 0)");
+      ctx.fillStyle = wash;
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.save();
+      ctx.translate(ox, oy);
+      ctx.lineWidth = 1;
+      ctx.lineCap = "round";
+      ctx.setLineDash([]);
+      const rings = compact ? 8 : 12;
+      for (let i = 1; i <= rings; i += 1) {
+        const radius = 36 + i * (reach / (rings + 2));
+        ctx.beginPath();
+        ctx.arc(0, 0, radius, 0, Math.PI * 2);
+        ctx.strokeStyle = i % 3 === 0 ? "rgba(36, 22, 242, 0.95)" : "rgba(36, 22, 242, 0.5)";
+        ctx.stroke();
+      }
+
+      const tickRadius = 36 + 4 * (reach / (rings + 2));
+      ctx.strokeStyle = "rgba(36, 22, 242, 0.9)";
+      for (let i = 0; i < 56; i += 1) {
+        const angle = (i / 56) * Math.PI * 2 + t * 0.18;
+        const inner = tickRadius - (i % 4 === 0 ? 14 : 6);
+        ctx.beginPath();
+        ctx.moveTo(Math.cos(angle) * inner, Math.sin(angle) * inner);
+        ctx.lineTo(Math.cos(angle) * tickRadius, Math.sin(angle) * tickRadius);
+        ctx.stroke();
+      }
+
+      ctx.save();
+      ctx.rotate(t * 0.08);
+      ctx.strokeStyle = "rgba(183, 192, 255, 0.2)";
+      ctx.beginPath();
+      ctx.moveTo(-reach, 0);
+      ctx.lineTo(reach, 0);
+      ctx.moveTo(0, -reach);
+      ctx.lineTo(0, reach);
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.save();
+      ctx.rotate(t * 0.45);
+      const fan = Math.min(reach, Math.max(width, height) * 0.42);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.arc(0, 0, fan, -0.55, 0);
+      ctx.closePath();
+      const wedge = ctx.createRadialGradient(0, 0, 0, 0, 0, fan);
+      wedge.addColorStop(0, "rgba(183, 192, 255, 0.16)");
+      wedge.addColorStop(1, "rgba(183, 192, 255, 0)");
+      ctx.fillStyle = wedge;
+      ctx.fill();
+      ctx.strokeStyle = "rgba(183, 192, 255, 0.95)";
+      ctx.lineWidth = 1.25;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(fan, 0);
+      ctx.stroke();
+      ctx.restore();
+
+      const cometRadius = 36 + 7 * (reach / (rings + 2));
+      const cometAngle = t * 0.85;
+      for (let i = 0; i < 12; i += 1) {
+        const angle = cometAngle - i * 0.07;
+        const size = Math.max(1.25, 3.2 - i * 0.16);
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(36, 22, 242, ${1 - i / 12})`;
+        ctx.arc(Math.cos(angle) * cometRadius, Math.sin(angle) * cometRadius, size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      const beads = compact ? 6 : 9;
+      for (let i = 0; i < beads; i += 1) {
+        const ring = 2 + (i % 5);
+        const radius = 36 + ring * (reach / (rings + 2));
+        const angle = t * (0.28 + (i % 3) * 0.07) * (i % 2 === 0 ? 1 : -1) + i * 0.9;
+        ctx.beginPath();
+        ctx.fillStyle = "rgba(183, 192, 255, 1)";
+        ctx.arc(Math.cos(angle) * radius, Math.sin(angle) * radius, 2.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+
+      ctx.lineWidth = 1;
+      ctx.setLineDash([]);
+      for (let i = 0; i < 3; i += 1) {
+        const cycle = (t * 0.15 + i / 3) % 1;
+        ctx.beginPath();
+        ctx.arc(ox, oy, 18 + cycle * reach, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(183, 192, 255, ${(1 - cycle) * 0.32})`;
+        ctx.stroke();
+      }
+
+      const motes = compact ? 16 : 32;
+      for (let i = 0; i < motes; i += 1) {
+        const seed = i * 97.13;
+        const x = (seed * 17) % width + Math.sin(t * 0.32 + i) * 16;
+        const y = (seed * 9) % height + Math.cos(t * 0.24 + i * 0.6) * 12;
+        const twinkle = 0.2 + Math.abs(Math.sin(t * 1.5 + i)) * 0.8;
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(183, 192, 255, ${twinkle * 0.55})`;
+        ctx.arc(x, y, i % 4 === 0 ? 1.6 : 0.9, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      const scanY = ((t * 36) % (height + 80)) - 40;
+      const scan = ctx.createLinearGradient(0, scanY - 36, 0, scanY + 36);
+      scan.addColorStop(0, "rgba(183, 192, 255, 0)");
+      scan.addColorStop(0.5, "rgba(183, 192, 255, 0.07)");
+      scan.addColorStop(1, "rgba(183, 192, 255, 0)");
+      ctx.fillStyle = scan;
+      ctx.fillRect(0, scanY - 36, width, 72);
+
+      const veil = ctx.createLinearGradient(0, 0, width * (compact ? 0.2 : 0.62), 0);
+      veil.addColorStop(0, "rgba(7, 6, 15, 0.42)");
+      veil.addColorStop(0.55, "rgba(7, 6, 15, 0.12)");
+      veil.addColorStop(1, "rgba(7, 6, 15, 0)");
+      ctx.fillStyle = veil;
+      ctx.fillRect(0, 0, width, height);
+
+      if (running && !motion.matches) frameId = requestAnimationFrame(draw);
+    };
+
+    const observer = new IntersectionObserver(([entry]) => {
+      const visible = Boolean(entry?.isIntersecting);
+      if (visible === running) return;
+      running = visible;
+      if (running && !motion.matches) {
+        cancelAnimationFrame(frameId);
+        frameId = requestAnimationFrame(draw);
+      }
+    }, { threshold: 0.08 });
+
+    const onScreenResize = () => resize();
+    const boxObserver = new ResizeObserver(onScreenResize);
+    resize();
+    observer.observe(section);
+    boxObserver.observe(section);
+    draw(performance.now());
+    window.addEventListener("resize", onScreenResize);
+    section.addEventListener("pointermove", onPointer);
+    section.addEventListener("pointerleave", onLeave);
+
+    return () => {
+      running = false;
+      cancelAnimationFrame(frameId);
+      observer.disconnect();
+      boxObserver.disconnect();
+      window.removeEventListener("resize", onScreenResize);
+      section.removeEventListener("pointermove", onPointer);
+      section.removeEventListener("pointerleave", onLeave);
+    };
+  }, []);
+
+  return <canvas className="hero-field" ref={canvasRef} aria-hidden="true" />;
 }
 
 function HomeServerRoomModel() {
@@ -470,9 +753,9 @@ export default function Home({ content, language }) {
   };
 
   const stats = [
-    { label: "Projects", value: String(safeProjects.length).padStart(2, "0") },
-    { label: "Experience", value: String(safeExperiences.length).padStart(2, "0") },
-    { label: "Certificates", value: String(safeCerts.length).padStart(2, "0") }
+    { label: siteLabel(profile, "statProjects"), value: String(safeProjects.length).padStart(2, "0") },
+    { label: siteLabel(profile, "statExperience"), value: String(safeExperiences.length).padStart(2, "0") },
+    { label: siteLabel(profile, "statCertificates"), value: String(safeCerts.length).padStart(2, "0") }
   ];
 
   const latestPosts = useMemo(
@@ -484,68 +767,103 @@ export default function Home({ content, language }) {
   );
 
   const internalLinks = [
-    { label: "Projects", to: "/projects", icon: <Github size={18} /> },
-    { label: "Certificates", to: "/certificates", icon: <Award size={18} /> },
-    { label: "Academic Path", to: "/about", icon: <GraduationCap size={18} /> },
-    { label: "Experience", to: "/about", icon: <BriefcaseBusiness size={18} /> },
-    { label: "Blog", to: "/blog", icon: <Mail size={18} /> }
+    { label: siteLabel(profile, "linkProjects"), to: "/projects", icon: <Github size={18} /> },
+    { label: siteLabel(profile, "linkCertificates"), to: "/certificates", icon: <Award size={18} /> },
+    { label: siteLabel(profile, "linkAcademic"), to: "/about", icon: <GraduationCap size={18} /> },
+    { label: siteLabel(profile, "linkExperience"), to: "/about", icon: <BriefcaseBusiness size={18} /> },
+    { label: siteLabel(profile, "linkBlog"), to: "/blog", icon: <Mail size={18} /> }
   ];
 
   const externalLinks = [
-    { label: "GitHub", href: profile.github, icon: <ExternalLink size={18} /> }
-  ];
+    { label: siteLabel(profile, "githubButton"), href: profile.github, icon: <ExternalLink size={18} /> },
+    profile.instagram
+      ? { label: siteLabel(profile, "instagramButton"), href: profile.instagram, icon: <ExternalLink size={18} /> }
+      : null,
+  ].filter(Boolean);
+
+  const nameParts = (profile.name || "Jirathiwat Suntipreedatham").split(" ");
+  const givenName = nameParts.slice(0, -1).join(" ") || nameParts[0];
+  const familyName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : "";
+
+  const personaMarks = Array.isArray(profile.persona) && profile.persona.length
+    ? profile.persona
+    : [
+        "CEO — Snail.aes",
+        "President — MU Shooting",
+        "MUICT · ICT22",
+        "MU 135",
+        profile.location || "Bangkok, Thailand",
+        "Vol. MMXXVI"
+      ];
+  const tickerMarks = [...personaMarks, ...personaMarks];
 
   return (
     <div className="home-cinematic-page">
       <HeroCinematicBackdrop className="home-cinematic-background" />
       <HomeServerRoomModel />
-      <section className="hero-section">
-        <img className="hero-image" src={heroImage} alt="Futuristic holographic developer workspace" />
-        <div className="hero-overlay" />
-        <div className="hero-content reveal is-visible">
-          <div className="hero-identity">
-            {profile.avatar && <img className="profile-avatar" src={resolveMediaUrl(profile.avatar)} alt="" />}
-            <div>
-              <div className="eyebrow">
-                <Sparkles size={16} />
-                {profile.location}
+      <section className="hero-section hero-editorial">
+        <HeroSignalField />
+        <div className="hero-split reveal is-visible">
+          <div className="hero-copy-col">
+            <p className="hero-greeting">
+              {language === "th"
+                ? siteLabel(profile, "heroGreetingTh")
+                : language === "zh-CN"
+                ? siteLabel(profile, "heroGreetingZh")
+                : siteLabel(profile, "heroGreeting")}
+            </p>
+            <h1 className="hero-title">
+              <span>{givenName}</span>
+              {familyName ? <span>{familyName}</span> : null}
+            </h1>
+            <p className="hero-copy">{profile.headline}</p>
+            <div className="hero-actions">
+              <Link className="primary-button" to="/about">
+                {siteLabel(profile, "heroContact")}
+                <ArrowRight size={18} />
+              </Link>
+              <Link className="secondary-button" to="/projects">
+                {siteLabel(profile, "heroWork")}
+              </Link>
+            </div>
+            <div className="command-bar" aria-label="Current role">
+              <Sparkles size={14} />
+              <span>{typedText || currentTypingPhrase || profile.role}</span>
+            </div>
+            <div className="signal-panel">
+              {stats.map((stat) => (
+                <div className="stat" key={stat.label}>
+                  <RandomNumber value={stat.value} />
+                  <span>{stat.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          {profile.avatar && (
+            <div className="hero-seal-col">
+              <div className="hero-seal" tabIndex={0} aria-label={`${profile.name} portrait`}>
+                <img src={resolveMediaUrl(profile.avatar)} alt="" />
               </div>
-              <p className="hero-status">Part-time at IT CITY Public Company Limited</p>
+              <p className="hero-seal-caption" aria-hidden="true">
+                <span>{siteLabel(profile, "portraitIndex")}</span>
+                <span>{siteLabel(profile, "portraitCaption")}</span>
+              </p>
             </div>
-          </div>
-          <p className="hero-greeting">
-            {language === "th"
-              ? "สวัสดี ผม Jirathiwat"
-              : language === "zh-CN"
-              ? "你好，我是 Jirathiwat"
-              : "Hello, I am Jirathiwat"}
-          </p>
-          <h1>{profile.name}</h1>
-          <p className={`hero-role typing-line ${typingIndex > 0 ? 'sub-role' : ''}`} aria-label={currentTypingPhrase || profile.role}>
-            <span>{typedText || " "}</span>
-            <i aria-hidden="true" />
-          </p>
-          <p className="hero-copy">{profile.headline}</p>
-          <div className="hero-actions">
-            {/* Use Link to navigate to /about#contact section */}
-            <Link className="primary-button" to="/about">
-              Contact
-              <ArrowRight size={18} />
-            </Link>
-            <Link className="secondary-button" to="/blog">
-              Latest news
-            </Link>
-          </div>
+          )}
         </div>
-        <div className="signal-panel reveal is-visible">
-          {stats.map((stat) => (
-            <div className="stat" key={stat.label}>
-              <RandomNumber value={stat.value} />
-              <span>{stat.label}</span>
-            </div>
-          ))}
+        <div className="hero-ticker" aria-hidden="true">
+          <div className="hero-ticker-track">
+            {tickerMarks.map((mark, index) => (
+              <span key={`${mark}-${index}`}>
+                <i />
+                {mark}
+              </span>
+            ))}
+          </div>
         </div>
       </section>
+
+      <StillGrid profile={profile} />
 
       {activeProjectData && (
         <section
@@ -556,8 +874,8 @@ export default function Home({ content, language }) {
           onBlur={() => setIsPreviewPaused(false)}
         >
           <div className="section-kicker">
-            <Rocket size={18} />
-            Interactive Preview
+            <Rocket size={16} />
+            {siteLabel(profile, "kickerWorks")}
           </div>
           <div className="section-heading">
             <h2>{profile.headings?.homeProjectsTitle || "Featured Projects"}</h2>
@@ -583,7 +901,7 @@ export default function Home({ content, language }) {
                 <div className="project-scanline" />
                 <div className="project-preview-badge">
                   <Code2 size={16} />
-                  {activeProjectData.language || "Project"}
+                  {activeProjectData.language || siteLabel(profile, "projectFallback")}
                 </div>
               </Link>
 
@@ -592,7 +910,7 @@ export default function Home({ content, language }) {
                   <span>
                     {String(activeProject + 1).padStart(2, "0")} / {String(featuredProjects.length).padStart(2, "0")}
                   </span>
-                  <strong>{nextProjectData ? `Next: ${nextProjectData.name}` : activeProjectData.name}</strong>
+                  <strong>{nextProjectData ? `${siteLabel(profile, "nextPrefix")} ${nextProjectData.name}` : activeProjectData.name}</strong>
                 </div>
                 {nextProjectData && (
                   <button className="icon-button" onClick={() => changeProject(1)} aria-label="Move to next project">
@@ -621,7 +939,7 @@ export default function Home({ content, language }) {
                   <ChevronRight size={18} />
                 </button>
                 <Link className="primary-button" to={`/projects/${activeProjectData.id}`}>
-                  View case
+                  {siteLabel(profile, "viewPiece")}
                   <ArrowRight size={18} />
                 </Link>
               </div>
@@ -633,8 +951,8 @@ export default function Home({ content, language }) {
       {latestPosts.length > 0 && (
         <section className="section home-blog-section reveal">
           <div className="section-kicker">
-            <Newspaper size={18} />
-            Latest Blog
+            <Newspaper size={16} />
+            {siteLabel(profile, "kickerJournal")}
           </div>
           <div className="section-heading">
             <h2>{profile.headings?.blogTitle || "Latest posts"}</h2>
@@ -658,16 +976,16 @@ export default function Home({ content, language }) {
                 )}
                 <div className="home-post-copy">
                   <div className="post-meta">
-                    <span>{post.category || "Post"}</span>
+                    <span>{post.category || siteLabel(profile, "postFallback")}</span>
                     <span>
                       <CalendarDays size={14} />
-                      {post.date || "Recent"}
+                      {post.date || siteLabel(profile, "recentFallback")}
                     </span>
                   </div>
                   <h3>{post.title}</h3>
                   <p>{post.summary}</p>
                   <span className="read-more-link">
-                    Read post
+                    {siteLabel(profile, "readPost")}
                     <ArrowRight size={16} />
                   </span>
                 </div>
@@ -679,25 +997,27 @@ export default function Home({ content, language }) {
 
       <section className="section quick-section reveal">
         <div className="section-kicker">
-          <LinkIcon size={18} />
-          Explore
+          <LinkIcon size={16} />
+          {siteLabel(profile, "kickerGallery")}
         </div>
         <div className="section-heading">
           <h2>{profile.headings?.homeUpdatesTitle || "Quick shortcuts"}</h2>
           <p className="section-note">{profile.headings?.homeUpdatesDesc || "Jump directly into the parts of the portfolio people usually want first."}</p>
         </div>
-        <div className="quick-grid">
-          {internalLinks.map((link) => (
-            <Link className="quick-card" key={link.label} to={link.to}>
+        <div className="feature-grid">
+          {internalLinks.map((link, index) => (
+            <Link className="feature-card" key={link.label} to={link.to}>
+              <em>#{String(index + 1).padStart(2, "0")}</em>
               {link.icon}
-              <span>{link.label}</span>
+              <strong>{link.label}</strong>
               <ArrowRight size={16} />
             </Link>
           ))}
-          {externalLinks.map((link) => (
-            <a className="quick-card" key={link.label} href={link.href} target="_blank" rel="noreferrer">
+          {externalLinks.map((link, index) => (
+            <a className="feature-card" key={link.label} href={link.href} target="_blank" rel="noreferrer">
+              <em>#{String(internalLinks.length + index + 1).padStart(2, "0")}</em>
               {link.icon}
-              <span>{link.label}</span>
+              <strong>{link.label}</strong>
               <ArrowRight size={16} />
             </a>
           ))}

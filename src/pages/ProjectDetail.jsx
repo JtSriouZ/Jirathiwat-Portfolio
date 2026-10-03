@@ -1,22 +1,23 @@
 import { useParams, Link } from "react-router-dom";
 import { Github, ExternalLink, ArrowLeft, Calendar, Building2, Code2 } from "lucide-react";
 import { normalizeList, resolveMediaUrl } from "../utils";
+import { siteLabel } from "../siteCopy";
 import MediaGallery from "../components/MediaGallery";
 import RichContent, { getInlineMediaUsage } from "../components/RichContent";
 
 export default function ProjectDetail({ content }) {
   const { id } = useParams();
-  const { projects = [] } = content;
+  const { projects = [], profile = {} } = content;
   
   const project = projects.find((p) => p.id === id);
 
   if (!project) {
     return (
-      <div className="page-content" style={{ textAlign: "center", paddingTop: "4rem" }}>
-        <h2>Project Not Found</h2>
-        <p>The project you are looking for does not exist.</p>
+      <div className="page-content detail-missing">
+        <h2>{siteLabel(profile, "projectMissing")}</h2>
+        <p>{siteLabel(profile, "projectMissingNote")}</p>
         <br />
-        <Link to="/projects" className="primary-button">Back to Projects</Link>
+        <Link to="/projects" className="primary-button">{siteLabel(profile, "backToProjects")}</Link>
       </div>
     );
   }
@@ -35,17 +36,17 @@ export default function ProjectDetail({ content }) {
         <div className="project-detail-header">
           <Link to="/projects" className="ghost-button" style={{ display: "inline-flex", marginBottom: "2rem" }}>
             <ArrowLeft size={16} />
-            Back to Projects
+            {siteLabel(profile, "backToProjects")}
           </Link>
           
           <div className="post-meta" style={{ marginBottom: "1rem" }}>
             <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
               <Code2 size={14} />
-              {project.language || "Project"}
+              {project.language || siteLabel(profile, "projectFallback")}
             </span>
             <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
               <Calendar size={14} />
-              {project.period || project.updated || "Recent"}
+              {project.period || project.updated || siteLabel(profile, "recentFallback")}
             </span>
             {project.associated && (
               <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
@@ -61,13 +62,13 @@ export default function ProjectDetail({ content }) {
             {project.repoUrl && (
               <a className="secondary-button" href={project.repoUrl} target="_blank" rel="noreferrer">
                 <Github size={16} />
-                Repository
+                {siteLabel(profile, "repositoryButton")}
               </a>
             )}
             {project.liveUrl && (
               <a className="primary-button" href={project.liveUrl} target="_blank" rel="noreferrer">
                 <ExternalLink size={16} />
-                Live Demo
+                {siteLabel(profile, "liveDemo")}
               </a>
             )}
           </div>
@@ -81,12 +82,12 @@ export default function ProjectDetail({ content }) {
         )}
 
         <div className="project-detail-content" style={{ maxWidth: "800px", margin: "0 auto" }}>
-          <h2>About the Project</h2>
+          <h2>{siteLabel(profile, "aboutProject")}</h2>
           <RichContent text={descriptionText} mediaUrls={mediaUrls} itemTitle={project.name} />
           
           {highlights.length > 0 && (
             <>
-              <h3>Key Features & Highlights</h3>
+              <h3>{siteLabel(profile, "keyFeatures")}</h3>
               <ul className="project-highlights" style={{ marginBottom: "2rem" }}>
                 {highlights.map((highlight) => (
                   <li key={highlight}>{highlight}</li>
@@ -99,7 +100,7 @@ export default function ProjectDetail({ content }) {
 
           {skills.length > 0 && (
             <>
-              <h3>Technologies Used</h3>
+              <h3>{siteLabel(profile, "technologiesUsed")}</h3>
               <div className="mini-skill-cloud">
                 {skills.map((skill) => (
                   <span key={skill}>{skill}</span>
