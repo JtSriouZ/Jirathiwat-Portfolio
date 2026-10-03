@@ -134,15 +134,32 @@ export default function AtelierSound({ profile }) {
       if (!enabled || (context.state === "running" && source)) return;
       start();
     };
+    let scrollAttempt = 0;
+    const onScroll = () => {
+      if (!enabled || closed || mine !== generation) return;
+      if (context.state === "running" && source) return;
+      if (scrollAttempt) return;
+      scrollAttempt = window.setTimeout(() => {
+        scrollAttempt = 0;
+      }, 800);
+      start();
+    };
     window.addEventListener("pointerdown", onGesture, true);
     window.addEventListener("keydown", onGesture, true);
+    window.addEventListener("wheel", onScroll, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("touchmove", onScroll, { passive: true });
 
     return () => {
       closed = true;
       generation += 1;
       stopSource();
+      window.clearTimeout(scrollAttempt);
       window.removeEventListener("pointerdown", onGesture, true);
       window.removeEventListener("keydown", onGesture, true);
+      window.removeEventListener("wheel", onScroll);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("touchmove", onScroll);
     };
   }, [track.src]);
 
