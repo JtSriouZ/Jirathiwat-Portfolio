@@ -874,7 +874,9 @@ body,
   min-height: 100svh;
   padding: clamp(6.4rem, 12vh, 8rem) max(20px, calc((100% - 1160px) / 2)) clamp(2.5rem, 6vh, 4rem);
   text-align: left;
-  background: transparent;
+  background:
+    linear-gradient(90deg, rgba(7, 6, 15, 0.58), rgba(7, 6, 15, 0.38) 55%, rgba(7, 6, 15, 0.24)),
+    linear-gradient(180deg, rgba(7, 6, 15, 0.12), rgba(7, 6, 15, 0.3));
   border-bottom: 1px solid var(--frame);
   overflow: hidden;
 }
