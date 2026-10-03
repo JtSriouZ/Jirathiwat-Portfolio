@@ -549,7 +549,7 @@ function EditablePost({ post, canEdit, onSave, onDelete, saving, dragHandleProps
         <TextInput label="YouTube URL" value={draft.youtubeUrl || ""} onChange={(youtubeUrl) => setDraft({ ...draft, youtubeUrl })} />
         <TextInput label="External Link (Optional)" value={draft.externalUrl || ""} onChange={(externalUrl) => setDraft({ ...draft, externalUrl })} />
         <TextInput label="Additional Media URLs (Comma separated)" value={draft.mediaUrls || ""} onChange={(mediaUrls) => setDraft({ ...draft, mediaUrls })} />
-        <RichTextArea label="Full Content (Optional)" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft({ ...draft, fullDescription })} mediaUrls={draft.mediaUrls} onMediaUrlsChange={(mediaUrls) => setDraft({ ...draft, mediaUrls })} youtubeUrl={draft.youtubeUrl} />
+        <RichTextArea label="Full Content (Optional)" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft((current) => ({ ...current, fullDescription }))} mediaUrls={draft.mediaUrls} onMediaUrlsChange={(mediaUrls) => setDraft((current) => ({ ...current, mediaUrls }))} youtubeUrl={draft.youtubeUrl} />
       </div>
       <RecordActions onSave={() => onSave(draft)} onDelete={() => onDelete(draft.id)} disabled={!canEdit || saving === `post-${draft.id}` || saving === `post-delete-${draft.id}`} />
     </article>
@@ -597,7 +597,7 @@ function EditableCertificate({ certificate, canEdit, onSave, onDelete, saving, d
         <TextInput label="Skills" value={draft.skills || ""} onChange={(skills) => setDraft({ ...draft, skills })} />
         <TextArea label="Description" value={draft.description || ""} onChange={(description) => setDraft({ ...draft, description })} />
         <TextInput label="Additional Media URLs (Comma separated)" value={draft.mediaUrls || ""} onChange={(mediaUrls) => setDraft({ ...draft, mediaUrls })} />
-        <RichTextArea label="Full Description (Optional)" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft({ ...draft, fullDescription })} mediaUrls={draft.mediaUrls} onMediaUrlsChange={(mediaUrls) => setDraft({ ...draft, mediaUrls })} />
+        <RichTextArea label="Full Description (Optional)" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft((current) => ({ ...current, fullDescription }))} mediaUrls={draft.mediaUrls} onMediaUrlsChange={(mediaUrls) => setDraft((current) => ({ ...current, mediaUrls }))} />
       </div>
       <RecordActions onSave={() => onSave(draft)} onDelete={() => onDelete(draft.id)} disabled={!canEdit || saving === `certificate-${draft.id}` || saving === `certificate-delete-${draft.id}`} />
     </article>
@@ -628,7 +628,7 @@ function EditableProject({ project, canEdit, onSave, onDelete, saving, dragHandl
         <TextArea label="Description" value={draft.description || ""} onChange={(description) => setDraft({ ...draft, description })} />
         <TextArea label="Highlights" value={draft.highlights || ""} onChange={(highlights) => setDraft({ ...draft, highlights })} />
         <TextInput label="Additional Media URLs (Comma separated)" value={draft.mediaUrls || ""} onChange={(mediaUrls) => setDraft({ ...draft, mediaUrls })} />
-        <RichTextArea label="Full Description (Optional)" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft({ ...draft, fullDescription })} mediaUrls={draft.mediaUrls} onMediaUrlsChange={(mediaUrls) => setDraft({ ...draft, mediaUrls })} />
+        <RichTextArea label="Full Description (Optional)" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft((current) => ({ ...current, fullDescription }))} mediaUrls={draft.mediaUrls} onMediaUrlsChange={(mediaUrls) => setDraft((current) => ({ ...current, mediaUrls }))} />
       </div>
       <RecordActions onSave={() => onSave(draft)} onDelete={() => onDelete(draft.id)} disabled={!canEdit || saving === `project-${draft.id}` || saving === `project-delete-${draft.id}`} />
     </article>

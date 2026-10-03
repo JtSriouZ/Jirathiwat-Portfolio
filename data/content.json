@@ -476,7 +476,7 @@
         "https://i.postimg.cc/kDrHCtCW/S-36593677-0.jpg"
       ],
       "updated": "2026-08-24",
-      "featuredRank": "",
+      "featuredRank": 1,
       "period": "22 Aug 2026",
       "associated": "Cursor, Thailand",
       "skills": [],
@@ -497,7 +497,7 @@
       "liveUrl": "",
       "imageUrl": "projects/iron-dome-banner.jpg",
       "updated": "2026-04-25",
-      "featuredRank": 1,
+      "featuredRank": 2,
       "period": "Mar 2026 - Present",
       "associated": "Faculty of Information and Communication Technology, Mahidol University",
       "skills": [
@@ -534,7 +534,7 @@
       "liveUrl": "",
       "imageUrl": "projects/cinematch-banner.jpg",
       "updated": "2026-04-16",
-      "featuredRank": 2,
+      "featuredRank": "",
       "period": "2026",
       "associated": "Faculty of Information and Communication Technology, Mahidol University",
       "skills": [
@@ -622,13 +622,13 @@
       "id": "project-homelab",
       "name": "Personal Home Lab Server",
       "description": "A real compact home lab server rack running a Proxmox VE 9.2.3 cluster with LXC containers and virtual machines for networking, self-hosting, storage, automation, media, AI experiments, and infrastructure monitoring.",
-      "fullDescription": "Building a Personal Home Lab Server is an ongoing journey of creating a private, self-hosted cloud environment from real hardware. The setup is built around a compact 10-inch rack with managed switching, structured patch cabling, mini PC hardware, and HP server hardware, giving the lab a practical footprint while still supporting multiple always-on services.\n\n[media: 4]\n\nThe core of the infrastructure is powered by Proxmox VE 9.2.3. The cluster currently uses pve1 and pve2 nodes, with lightweight LXC containers and virtual machines for services such as AdGuard, InfluxDB, Grafana, Immich, Jellyfin, Ollama, Seerr, Radarr, Prowlarr, Open WebUI, Hermes Agent, Home Assistant, Ubuntu, and other automation or media workloads.\n\n[media: 6]\n\nNetworking and security are handled with a self-hosted network stack and Tailscale-enabled remote access. This keeps services reachable through an encrypted private network while reducing the need to expose home infrastructure directly to the public internet.\n\n[media: 7]\n\nThe lab serves as a learning and production-style environment for system administration, virtualization, Docker-based services, monitoring, media hosting, local AI experimentation, storage, and infrastructure operations. It connects physical hardware design with practical DevOps workflows and real service maintenance.\n\n\n[media: 8]",
+      "fullDescription": "[media: 7]\n\nBuilding a Personal Home Lab Server is an ongoing journey of creating a private, self-hosted cloud environment from real hardware. The setup is built around a compact 10-inch rack with managed switching, structured patch cabling, mini PC hardware, and HP server hardware, giving the lab a practical footprint while still supporting multiple always-on services.\n\n[media: 8]\n\nThe core of the infrastructure is powered by Proxmox VE 9.2.3. The cluster currently uses pve1 and pve2 nodes, with lightweight LXC containers and virtual machines for services such as AdGuard, InfluxDB, Grafana, Immich, Jellyfin, Ollama, Seerr, Radarr, Prowlarr, Open WebUI, Hermes Agent, Home Assistant, Ubuntu, and other automation or media workloads.\n\n[media: 6]\n\nNetworking and security are handled with a self-hosted network stack and Tailscale-enabled remote access. This keeps services reachable through an encrypted private network while reducing the need to expose home infrastructure directly to the public internet.\n\n[media: 5]\n\nThe lab serves as a learning and production-style environment for system administration, virtualization, Docker-based services, monitoring, media hosting, local AI experimentation, storage, and infrastructure operations. It connects physical hardware design with practical DevOps workflows and real service maintenance.\n\n",
       "language": "Infrastructure",
       "repoUrl": "",
       "liveUrl": "",
       "imageUrl": "projects/homelab-real-banner.jpg",
       "updated": "2026-06-25",
-      "featuredRank": 4,
+      "featuredRank": 6,
       "period": "2026 - Present",
       "associated": "Personal Project",
       "skills": [
@@ -667,14 +667,12 @@
       "mediaUrls": [
         "projects/homelab-real-banner.jpg",
         "projects/homelab-real-02.jpg",
-        "projects/homelab-real-01.jpg",
         "projects/homelab-real-05.jpg",
-        "projects/homelab-real-06.jpg",
         "projects/homelab-real-03.jpg",
         "projects/homelab-real-04.jpg",
         "projects/homelab-proxmox-live-cluster.jpg",
-        "projects/homelab-proxmox-cluster.jpg",
-        "https://www.youtube.com/watch?v=v-FKrwwSFXo"
+        "https://www.youtube.com/watch?v=v-FKrwwSFXo",
+        "https://i.postimg.cc/4y3Q975H/S-40009731.jpg"
       ]
     },
     {
