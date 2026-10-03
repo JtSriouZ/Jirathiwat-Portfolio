@@ -3,6 +3,7 @@ import { Code2, BriefcaseBusiness, GraduationCap, MapPin, Sparkles, Github, Link
 import * as THREE from "three";
 import { normalizeList, resolveMediaUrl } from "../utils";
 import StillGrid from "../components/StillGrid";
+import ArtFrame from "../components/ArtFrame";
 import { siteLabel } from "../siteCopy";
 
 function clamp(value, min, max) {
@@ -25,11 +26,11 @@ function AboutRackBackdrop() {
     const renderer = new THREE.WebGLRenderer({
       canvas,
       alpha: true,
-      antialias: true,
+      antialias: false,
       powerPreference: "high-performance",
     });
     renderer.setClearColor(0x000000, 0);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(1);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.35;
@@ -42,10 +43,9 @@ function AboutRackBackdrop() {
     /* --- Materials --- */
     const metal = new THREE.MeshStandardMaterial({ color: 0x12102a, roughness: 0.22, metalness: 0.86, emissive: 0x100c72, emissiveIntensity: 0.18 });
     const darkMetal = new THREE.MeshStandardMaterial({ color: 0x07060f, roughness: 0.34, metalness: 0.9, emissive: 0x0a0830, emissiveIntensity: 0.12 });
-    const glass = new THREE.MeshPhysicalMaterial({
+    const glass = new THREE.MeshStandardMaterial({
       color: 0xb7c0ff, transparent: true, opacity: 0.1,
-      roughness: 0.04, metalness: 0.16,
-      clearcoat: 1.0, clearcoatRoughness: 0.08,
+      roughness: 0.08, metalness: 0.16,
     });
     const bladeMat = new THREE.MeshStandardMaterial({ color: 0x0e0c22, roughness: 0.28, metalness: 0.74, emissive: 0x100c72, emissiveIntensity: 0.16 });
     const handleMat = new THREE.MeshStandardMaterial({ color: 0x2a3168, roughness: 0.16, metalness: 0.88, emissive: 0x2416f2, emissiveIntensity: 0.08 });
@@ -97,7 +97,7 @@ function AboutRackBackdrop() {
         new THREE.MeshBasicMaterial({ color: lc, transparent: true, opacity: 0.45 }), rack);
       for (let j = 0; j < 5; j++) {
         const gm = [signalG, ivoryG, brightG, deepG][(i + j) % 4];
-        const dot = new THREE.Mesh(new THREE.SphereGeometry(0.038, 12, 12), gm);
+        const dot = new THREE.Mesh(new THREE.SphereGeometry(0.038, 6, 6), gm);
         // Positioned safely inside the right side of the blade (x=0.2 to x=0.68)
         dot.position.set(0.2 + j * 0.12, y + 0.015, 0.64);
         dot.userData = { pulse: i * 0.42 + j * 0.7 };
@@ -123,7 +123,7 @@ function AboutRackBackdrop() {
     curves.forEach((pts, i) => {
       const cv = new THREE.CatmullRomCurve3(pts.map(([x,y,z]) => new THREE.Vector3(x,y,z)));
       // Thinner tube, bright neon material
-      rack.add(new THREE.Mesh(new THREE.TubeGeometry(cv, 64, 0.008 + (i % 2) * 0.003, 8, false), cableMats[i % cableMats.length]));
+      rack.add(new THREE.Mesh(new THREE.TubeGeometry(cv, 24, 0.008 + (i % 2) * 0.003, 5, false), cableMats[i % cableMats.length]));
     });
 
     /* --- Neon rings --- */
@@ -168,15 +168,14 @@ function AboutRackBackdrop() {
     };
 
     const animate = (time = 0) => {
+      frameId = requestAnimationFrame(animate);
+      if (document.hidden || time - lastRender < 32) return;
+      lastRender = time;
       const sec = time * 0.001;
       const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
       const progress = clamp(window.scrollY / maxScroll, 0, 1);
       const sway = Math.sin(progress * Math.PI * 2.35);
       const lift = Math.cos(progress * Math.PI * 2.05);
-
-      wrap.style.setProperty("--about-rack-progress", progress.toFixed(3));
-      wrap.style.setProperty("--about-rack-sway", sway.toFixed(3));
-      wrap.style.setProperty("--about-rack-lift", lift.toFixed(3));
 
       rack.rotation.y = -0.32 + sway * 0.24 + progress * 0.18 + Math.sin(sec * 0.32) * 0.035;
       rack.rotation.x = 0.04 + lift * 0.035;
@@ -194,24 +193,17 @@ function AboutRackBackdrop() {
         }
       });
 
-      // Dust drift
-      const dp = dGeo.attributes.position;
-      for (let i = 0; i < dustCount; i++) dp.setY(i, dp.getY(i) + Math.sin(sec * 0.5 + i) * 0.001);
-      dp.needsUpdate = true;
-      dMat.opacity = 0.22 + Math.sin(sec * 0.8) * 0.08;
-
-      // Camera offset to the LEFT so the rack appears on the RIGHT side
       camera.position.set(-4.5 + sway * 0.2, 0.2 + lift * 0.15, 16.0 - progress * 0.6);
       camera.lookAt(-1.5, -0.1, 0);
 
-      // Gradually appear as user scrolls down
       const fadeIn = clamp(progress * 2.5, 0, 1);
-      canvas.style.opacity = fadeIn.toFixed(3);
+      canvas.style.opacity = fadeIn.toFixed(2);
 
       renderer.render(scene, camera);
       wrap.classList.add("is-ready");
-      frameId = requestAnimationFrame(animate);
     };
+
+    let lastRender = 0;
 
     resize();
     frameId = requestAnimationFrame(animate);
@@ -298,8 +290,11 @@ export default function About({ content }) {
           <aside className="about-profile-card" aria-label="Jirathiwat profile summary">
             <div className="about-portrait-wrap">
               {profile.avatar && (
-                <img className="about-portrait" src={resolveMediaUrl(profile.avatar)} alt={profile.name} />
+                <div className="about-portrait-plate">
+                  <img className="about-portrait" src={resolveMediaUrl(profile.avatar)} alt={profile.name} />
+                </div>
               )}
+              <ArtFrame />
               <span className="about-orbit about-orbit-one" />
               <span className="about-orbit about-orbit-two" />
             </div>

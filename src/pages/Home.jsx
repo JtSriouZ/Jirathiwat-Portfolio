@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ArrowRight,
   BriefcaseBusiness,
@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { resolveMediaUrl } from "../utils";
+import ArtFrame from "../components/ArtFrame";
 import StillGrid from "../components/StillGrid";
 import { siteLabel } from "../siteCopy";
 
@@ -46,126 +47,6 @@ const RandomNumber = ({ value }) => {
 
   return <strong>{displayValue}</strong>;
 };
-
-function HeroSignalField() {
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const section = canvas?.closest(".hero-editorial");
-    if (!canvas || !section) return undefined;
-
-    const ctx = canvas.getContext("2d", { alpha: true });
-    if (!ctx) return undefined;
-
-    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let frameId = 0;
-    let running = true;
-    let width = 0;
-    let height = 0;
-    const pointer = { x: 0.74, y: 0.48, tx: 0.74, ty: 0.48, active: false };
-    const started = performance.now();
-
-    const resize = () => {
-      const rect = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 3);
-      const nextWidth = Math.max(1, rect.width);
-      const nextHeight = Math.max(1, rect.height);
-      const nextBitmapWidth = Math.max(1, Math.round(nextWidth * dpr));
-      const nextBitmapHeight = Math.max(1, Math.round(nextHeight * dpr));
-      width = nextWidth;
-      height = nextHeight;
-      if (canvas.width !== nextBitmapWidth || canvas.height !== nextBitmapHeight) {
-        canvas.width = nextBitmapWidth;
-        canvas.height = nextBitmapHeight;
-      }
-      ctx.setTransform(nextBitmapWidth / nextWidth, 0, 0, nextBitmapHeight / nextHeight, 0, 0);
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = "high";
-    };
-
-    const onPointer = (event) => {
-      const rect = section.getBoundingClientRect();
-      pointer.tx = (event.clientX - rect.left) / Math.max(1, rect.width);
-      pointer.ty = (event.clientY - rect.top) / Math.max(1, rect.height);
-      pointer.active = true;
-    };
-
-    const onLeave = () => {
-      pointer.active = false;
-    };
-
-    const draw = (now) => {
-      const t = motion.matches ? 1.2 : (now - started) / 1000;
-      const compact = width < 840;
-      const restX = compact ? 0.5 : 0.73;
-      const restY = compact ? 0.3 : 0.48;
-      const aimX = pointer.active ? Math.min(0.9, Math.max(compact ? 0.2 : 0.46, pointer.tx)) : restX;
-      const aimY = pointer.active ? Math.min(0.84, Math.max(0.14, pointer.ty)) : restY;
-      pointer.x += (aimX - pointer.x) * 0.05;
-      pointer.y += (aimY - pointer.y) * 0.05;
-
-      const ox = width * pointer.x;
-      const oy = height * pointer.y;
-      const reach = Math.hypot(width, height) * 0.78;
-
-      ctx.clearRect(0, 0, width, height);
-
-      const wash = ctx.createRadialGradient(ox, oy, 8, ox, oy, reach * 0.55);
-      wash.addColorStop(0, "rgba(183, 192, 255, 0.08)");
-      wash.addColorStop(0.45, "rgba(36, 22, 242, 0.05)");
-      wash.addColorStop(1, "rgba(12, 11, 10, 0)");
-      ctx.fillStyle = wash;
-      ctx.fillRect(0, 0, width, height);
-
-      const motes = compact ? 18 : 36;
-      for (let i = 0; i < motes; i += 1) {
-        const seed = i * 97.13;
-        const x = (seed * 17) % width + Math.sin(t * 0.28 + i) * 12;
-        const y = (seed * 9) % height + Math.cos(t * 0.2 + i * 0.6) * 10;
-        const twinkle = 0.18 + Math.abs(Math.sin(t * 1.4 + i)) * 0.55;
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(183, 192, 255, ${twinkle * 0.5})`;
-        ctx.arc(x, y, i % 5 === 0 ? 1.7 : 0.85, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      if (running && !motion.matches) frameId = requestAnimationFrame(draw);
-    };
-
-    const observer = new IntersectionObserver(([entry]) => {
-      const visible = Boolean(entry?.isIntersecting);
-      if (visible === running) return;
-      running = visible;
-      if (running && !motion.matches) {
-        cancelAnimationFrame(frameId);
-        frameId = requestAnimationFrame(draw);
-      }
-    }, { threshold: 0.08 });
-
-    const onScreenResize = () => resize();
-    const boxObserver = new ResizeObserver(onScreenResize);
-    resize();
-    observer.observe(section);
-    boxObserver.observe(section);
-    draw(performance.now());
-    window.addEventListener("resize", onScreenResize);
-    section.addEventListener("pointermove", onPointer);
-    section.addEventListener("pointerleave", onLeave);
-
-    return () => {
-      running = false;
-      cancelAnimationFrame(frameId);
-      observer.disconnect();
-      boxObserver.disconnect();
-      window.removeEventListener("resize", onScreenResize);
-      section.removeEventListener("pointermove", onPointer);
-      section.removeEventListener("pointerleave", onLeave);
-    };
-  }, []);
-
-  return <canvas className="hero-field" ref={canvasRef} aria-hidden="true" />;
-}
 
 export default function Home({ content, language }) {
   const { profile, experiences, certificates, projects, posts } = content;
@@ -300,7 +181,6 @@ export default function Home({ content, language }) {
   return (
     <div className="home-cinematic-page">
       <section className="hero-section hero-editorial">
-        <HeroSignalField />
         <div className="hero-split reveal is-visible">
           <div className="hero-copy-col">
             <p className="hero-greeting">
@@ -340,7 +220,10 @@ export default function Home({ content, language }) {
           {profile.avatar && (
             <div className="hero-seal-col">
               <div className="hero-seal" tabIndex={0} aria-label={`${profile.name} portrait`}>
-                <img src={resolveMediaUrl(profile.avatar)} alt="" />
+                <div className="hero-seal-plate">
+                  <img src={resolveMediaUrl(profile.avatar)} alt="" />
+                </div>
+                <ArtFrame />
               </div>
               <p className="hero-seal-caption" aria-hidden="true">
                 <span>{siteLabel(profile, "portraitIndex")}</span>

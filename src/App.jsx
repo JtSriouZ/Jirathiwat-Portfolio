@@ -140,7 +140,6 @@ function AnimatedBackgroundCanvas({ routeKey }) {
     let frame = 0;
     let width = 0;
     let height = 0;
-    let dpr = 1;
     let dust = [];
     let sparks = [];
     let lastSparkAt = 0;
@@ -164,34 +163,16 @@ function AnimatedBackgroundCanvas({ routeKey }) {
       };
     };
 
-    const alphaColor = (color, alpha) => {
-      const hex = color.trim().replace("#", "");
-      if (/^[0-9a-f]{3}$/i.test(hex)) {
-        const r = parseInt(hex[0] + hex[0], 16);
-        const g = parseInt(hex[1] + hex[1], 16);
-        const b = parseInt(hex[2] + hex[2], 16);
-        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-      }
-      if (/^[0-9a-f]{6}$/i.test(hex)) {
-        const r = parseInt(hex.slice(0, 2), 16);
-        const g = parseInt(hex.slice(2, 4), 16);
-        const b = parseInt(hex.slice(4, 6), 16);
-        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-      }
-      return color;
-    };
-
     const resize = () => {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
       width = window.innerWidth;
       height = window.innerHeight;
-      canvas.width = Math.floor(width * dpr);
-      canvas.height = Math.floor(height * dpr);
+      canvas.width = width;
+      canvas.height = height;
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
-      context.setTransform(dpr, 0, 0, dpr, 0, 0);
+      context.setTransform(1, 0, 0, 1, 0, 0);
 
-      const count = Math.min(90, Math.max(40, Math.floor((width * height) / 22000)));
+      const count = Math.min(28, Math.max(12, Math.floor((width * height) / 70000)));
       dust = Array.from({ length: count }, (_, index) => ({
         x: Math.random() * width,
         y: Math.random() * height,
@@ -237,22 +218,7 @@ function AnimatedBackgroundCanvas({ routeKey }) {
         pointer.y += (pointer.targetY - pointer.y) * 0.1;
       }
 
-      const wash = context.createLinearGradient(0, 0, width, height);
-      wash.addColorStop(0, alphaColor(palette.giltLight, 0.03));
-      wash.addColorStop(0.55, "rgba(7, 6, 15, 0)");
-      wash.addColorStop(1, alphaColor(palette.accent, 0.025));
-      context.fillStyle = wash;
-      context.fillRect(0, 0, width, height);
-
       context.globalCompositeOperation = "lighter";
-
-      const glowRadius = Math.max(width, height) * 0.2;
-      const cursorGlow = context.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, glowRadius);
-      cursorGlow.addColorStop(0, alphaColor(palette.giltLight, pointer.active ? 0.08 : 0.04));
-      cursorGlow.addColorStop(0.45, alphaColor(palette.accent, pointer.active ? 0.03 : 0.014));
-      cursorGlow.addColorStop(1, alphaColor(palette.giltLight, 0));
-      context.fillStyle = cursorGlow;
-      context.fillRect(0, 0, width, height);
 
       dust.forEach((mote) => {
         if (!reduceMotion) {
@@ -499,6 +465,8 @@ function App() {
     const root = document.documentElement;
     let tiltedCard = null;
     let magnet = null;
+    let pointerFrame = 0;
+    let pointer = null;
     const magnetSelector = [
       ".primary-button",
       ".secondary-button",
@@ -526,42 +494,54 @@ function App() {
     };
 
     const updateCardGlow = (event) => {
-      // Pointer position as 0..1 drives parallax on the hero columns and ornaments.
-      root.style.setProperty("--px", (event.clientX / Math.max(1, window.innerWidth)).toFixed(3));
-      root.style.setProperty("--py", (event.clientY / Math.max(1, window.innerHeight)).toFixed(3));
+      pointer = {
+        x: event.clientX,
+        y: event.clientY,
+        target: event.target,
+        pointerType: event.pointerType,
+      };
+      if (pointerFrame) return;
+      pointerFrame = window.requestAnimationFrame(() => {
+        pointerFrame = 0;
+        const point = pointer;
+        if (!point) return;
 
-      const nextMagnet = event.target.closest?.(magnetSelector);
-      if (nextMagnet !== magnet) {
-        clearMagnet(magnet);
-        magnet = nextMagnet;
-      }
-      if (magnet && event.pointerType !== "touch") {
-        const magnetRect = magnet.getBoundingClientRect();
-        const dx = event.clientX - (magnetRect.left + magnetRect.width / 2);
-        const dy = event.clientY - (magnetRect.top + magnetRect.height / 2);
-        const pull = (delta) => Math.max(-7, Math.min(7, delta * 0.18));
-        magnet.style.setProperty("--mag-x", `${pull(dx).toFixed(1)}px`);
-        magnet.style.setProperty("--mag-y", `${pull(dy).toFixed(1)}px`);
-      }
+        root.style.setProperty("--px", (point.x / Math.max(1, window.innerWidth)).toFixed(3));
+        root.style.setProperty("--py", (point.y / Math.max(1, window.innerHeight)).toFixed(3));
 
-      const card = event.target.closest?.(cardSelector);
-      if (card !== tiltedCard) {
-        resetTilt(tiltedCard);
-        tiltedCard = card;
-      }
-      if (!card) return;
+        const nextMagnet = point.target?.closest?.(magnetSelector);
+        if (nextMagnet !== magnet) {
+          clearMagnet(magnet);
+          magnet = nextMagnet;
+        }
+        if (magnet && point.pointerType !== "touch") {
+          const magnetRect = magnet.getBoundingClientRect();
+          const dx = point.x - (magnetRect.left + magnetRect.width / 2);
+          const dy = point.y - (magnetRect.top + magnetRect.height / 2);
+          const pull = (delta) => Math.max(-7, Math.min(7, delta * 0.18));
+          magnet.style.setProperty("--mag-x", `${pull(dx).toFixed(1)}px`);
+          magnet.style.setProperty("--mag-y", `${pull(dy).toFixed(1)}px`);
+        }
 
-      const rect = card.getBoundingClientRect();
-      const localX = event.clientX - rect.left;
-      const localY = event.clientY - rect.top;
-      card.style.setProperty("--card-x", `${localX}px`);
-      card.style.setProperty("--card-y", `${localY}px`);
+        const card = point.target?.closest?.(cardSelector);
+        if (card !== tiltedCard) {
+          resetTilt(tiltedCard);
+          tiltedCard = card;
+        }
+        if (!card) return;
 
-      const ratioX = localX / Math.max(1, rect.width) - 0.5;
-      const ratioY = localY / Math.max(1, rect.height) - 0.5;
-      const maxTilt = rect.width > 520 ? 3.5 : 6;
-      card.style.setProperty("--tilt-x", `${(-ratioY * maxTilt).toFixed(2)}deg`);
-      card.style.setProperty("--tilt-y", `${(ratioX * maxTilt).toFixed(2)}deg`);
+        const rect = card.getBoundingClientRect();
+        const localX = point.x - rect.left;
+        const localY = point.y - rect.top;
+        card.style.setProperty("--card-x", `${localX}px`);
+        card.style.setProperty("--card-y", `${localY}px`);
+
+        const ratioX = localX / Math.max(1, rect.width) - 0.5;
+        const ratioY = localY / Math.max(1, rect.height) - 0.5;
+        const maxTilt = rect.width > 520 ? 3.5 : 6;
+        card.style.setProperty("--tilt-x", `${(-ratioY * maxTilt).toFixed(2)}deg`);
+        card.style.setProperty("--tilt-y", `${(ratioX * maxTilt).toFixed(2)}deg`);
+      });
     };
 
     const clearTilt = () => {
@@ -575,6 +555,7 @@ function App() {
     window.addEventListener("pointerleave", clearTilt, { passive: true });
     document.addEventListener("scroll", clearTilt, { passive: true });
     return () => {
+      window.cancelAnimationFrame(pointerFrame);
       window.removeEventListener("pointermove", updateCardGlow);
       window.removeEventListener("pointerleave", clearTilt);
       document.removeEventListener("scroll", clearTilt);
