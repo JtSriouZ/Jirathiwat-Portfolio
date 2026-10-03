@@ -42,10 +42,6 @@ const WIKIDATA_QUERY = `SELECT ?item ?title ?image ?creator ?year ?museumName WH
   OPTIONAL { ?museum rdfs:label ?museumName FILTER(LANG(?museumName) = "en") }
 }`;
 
-const CLEVELAND_URL = "https://openaccess-api.clevelandart.org/api/artworks/?type=Painting"
-  + "&department=European%20Painting%20and%20Sculpture&has_image=1&cc0=1&limit=1000"
-  + "&fields=id,title,creators,creation_date,images,url";
-
 const pools = new Map();
 
 async function fetchJson(url, options = {}) {
@@ -84,29 +80,8 @@ async function loadWikidata() {
   return [...byItem.values()];
 }
 
-async function loadCleveland() {
-  const data = await fetchJson(CLEVELAND_URL);
-  return (data?.data || [])
-    .filter((item) => {
-      const web = item.images?.web;
-      const width = Number(web?.width);
-      const height = Number(web?.height);
-      return web?.url && width >= 900 && width > height * 1.15;
-    })
-    .map((item) => ({
-      src: item.images.web.url,
-      title: item.title || "Untitled",
-      artist: String(item.creators?.[0]?.description || "").replace(/\s*\(.*$/, ""),
-      date: item.creation_date || "",
-      museum: "The Cleveland Museum of Art",
-      link: item.url || "",
-      source: "Cleveland Museum of Art Open Access"
-    }));
-}
-
 const SOURCES = {
-  wikidata: loadWikidata,
-  cleveland: loadCleveland
+  wikidata: loadWikidata
 };
 
 async function getPool(name) {

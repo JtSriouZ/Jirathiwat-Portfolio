@@ -666,7 +666,8 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
               />
               <span>
                 Pull random European paintings from museum collections on every visit
-                (Louvre, Rijksmuseum, National Gallery, Prado, Uffizi, Orsay, Cleveland and more).
+                (Louvre, Rijksmuseum, National Gallery, Prado, Uffizi, Orsay and more).
+                Pale or white-bordered scans are skipped.
                 The list below fills any page the museums can't.
               </span>
             </label>

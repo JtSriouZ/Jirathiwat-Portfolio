@@ -77,28 +77,45 @@ export function createVisitArtMap(seed = `${Date.now()}-${Math.random()}`, paint
 
 export const ART_ROUTE_COUNT = ART_ROUTES.length;
 
-export async function fetchMuseumArt(count = ART_ROUTES.length + 6) {
+export async function fetchMuseumArt(count = 24) {
   const response = await fetch(`/api/art/random?count=${count}`, { cache: "no-store" });
   if (!response.ok) throw new Error(`Museum art request failed (${response.status})`);
   const data = await response.json();
   return Array.isArray(data?.art) ? data.art.filter((item) => item?.src) : [];
 }
 
-const artLuma = new Map();
+const artTone = new Map();
+const TONE_SIZE = 32;
+const MAX_MUSEUM_LUMA = 0.38;
+const MAX_WHITE_SHARE = 0.1;
+const MAX_WHITE_EDGE = 0.3;
 
-function readLuma(image) {
+function readTone(image) {
   try {
     const canvas = document.createElement("canvas");
-    canvas.width = 24;
-    canvas.height = 24;
+    canvas.width = TONE_SIZE;
+    canvas.height = TONE_SIZE;
     const context = canvas.getContext("2d", { willReadFrequently: true });
-    context.drawImage(image, 0, 0, 24, 24);
-    const { data } = context.getImageData(0, 0, 24, 24);
+    context.drawImage(image, 0, 0, TONE_SIZE, TONE_SIZE);
+    const { data } = context.getImageData(0, 0, TONE_SIZE, TONE_SIZE);
     let total = 0;
-    for (let index = 0; index < data.length; index += 4) {
-      total += 0.2126 * data[index] + 0.7152 * data[index + 1] + 0.0722 * data[index + 2];
+    let white = 0;
+    let edge = 0;
+    let edgeWhite = 0;
+    for (let pixel = 0; pixel < TONE_SIZE * TONE_SIZE; pixel += 1) {
+      const index = pixel * 4;
+      const luma = (0.2126 * data[index] + 0.7152 * data[index + 1] + 0.0722 * data[index + 2]) / 255;
+      const x = pixel % TONE_SIZE;
+      const y = Math.floor(pixel / TONE_SIZE);
+      total += luma;
+      if (luma > 0.82) white += 1;
+      if (x < 2 || y < 2 || x >= TONE_SIZE - 2 || y >= TONE_SIZE - 2) {
+        edge += 1;
+        if (luma > 0.8) edgeWhite += 1;
+      }
     }
-    return total / (data.length / 4) / 255;
+    const pixels = TONE_SIZE * TONE_SIZE;
+    return { luma: total / pixels, white: white / pixels, edgeWhite: edgeWhite / edge };
   } catch {
     return null;
   }
@@ -109,14 +126,14 @@ function loadArtImage(src, onLoad, onError) {
   image.decoding = "async";
   image.crossOrigin = "anonymous";
   image.onload = () => {
-    if (!artLuma.has(src)) artLuma.set(src, readLuma(image));
+    if (!artTone.has(src)) artTone.set(src, readTone(image));
     onLoad(image);
   };
   image.onerror = () => {
     const plain = new Image();
     plain.decoding = "async";
     plain.onload = () => {
-      if (!artLuma.has(src)) artLuma.set(src, null);
+      if (!artTone.has(src)) artTone.set(src, null);
       onLoad(plain);
     };
     plain.onerror = onError;
@@ -125,11 +142,18 @@ function loadArtImage(src, onLoad, onError) {
   image.src = src;
 }
 
+function isDarkEnough(tone) {
+  return Boolean(tone)
+    && tone.luma <= MAX_MUSEUM_LUMA
+    && tone.white <= MAX_WHITE_SHARE
+    && tone.edgeWhite <= MAX_WHITE_EDGE;
+}
+
 export function measureArtLuma(src) {
   if (!src) return Promise.resolve(null);
-  if (artLuma.has(src)) return Promise.resolve(artLuma.get(src));
+  if (artTone.has(src)) return Promise.resolve(artTone.get(src)?.luma ?? null);
   return new Promise((resolve) => {
-    loadArtImage(src, () => resolve(artLuma.get(src) ?? null), () => resolve(null));
+    loadArtImage(src, () => resolve(artTone.get(src)?.luma ?? null), () => resolve(null));
   });
 }
 
@@ -159,7 +183,8 @@ export function keepLandscapeArt(items, needed = ART_ROUTES.length, timeout = 90
       loadArtImage(
         item.src,
         (image) => {
-          if (image.naturalWidth >= 900 && image.naturalWidth > image.naturalHeight * 1.1) kept.push(item);
+          const landscape = image.naturalWidth >= 900 && image.naturalWidth > image.naturalHeight * 1.1;
+          if (landscape && isDarkEnough(artTone.get(item.src))) kept.push(item);
           settled += 1;
           if (kept.length >= needed || settled === items.length) finish();
         },
