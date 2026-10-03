@@ -282,6 +282,19 @@ export default function About({ content }) {
             </div>
             <h2>{profile.aboutTitle || "Software engineer building AI systems, full-stack products, and practical digital solutions."}</h2>
             <p>{profile.bio}</p>
+            <div className="about-metrics">
+              {aboutStats.map((stat) => (
+                <div className="about-metric" key={stat.label}>
+                  <strong><AnimatedNumber value={stat.value} /></strong>
+                  <span>{stat.label}</span>
+                </div>
+              ))}
+            </div>
+            <div className="skill-cloud">
+              {skills.map((skill) => (
+                <span key={skill}>{skill}</span>
+              ))}
+            </div>
           </div>
 
           <aside className="about-profile-card" aria-label="Jirathiwat profile summary">
@@ -338,20 +351,6 @@ export default function About({ content }) {
           </aside>
         </div>
 
-        <div className="about-metrics">
-          {aboutStats.map((stat) => (
-            <div className="about-metric" key={stat.label}>
-              <strong><AnimatedNumber value={stat.value} /></strong>
-              <span>{stat.label}</span>
-            </div>
-          ))}
-        </div>
-
-        <div className="skill-cloud">
-          {skills.map((skill) => (
-            <span key={skill}>{skill}</span>
-          ))}
-        </div>
       </section>
 
       <StillGrid profile={profile} />

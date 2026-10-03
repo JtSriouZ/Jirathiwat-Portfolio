@@ -14,7 +14,7 @@ export const siteCopyGroups = [
   {
     title: "Home hero",
     fields: [
-      ["heroGreeting", "Greeting", "@jtsriouz_o · Bangkok · Still"],
+      ["heroGreeting", "Greeting", "@jtsriouz_o · Bangkok · Night"],
       ["heroGreetingTh", "Greeting · Thai", "สวัสดี ผม Jirathiwat"],
       ["heroGreetingZh", "Greeting · Chinese", "你好，我是 Jirathiwat"],
       ["heroContact", "Primary button", "Contact"],
@@ -123,6 +123,10 @@ export const siteCopyGroups = [
       ["translateCredit", "Language modal credit", "Powered by Google Translate"],
       ["soundOn", "Sound control, playing", "Sound on"],
       ["soundOff", "Sound control, quiet", "Sound"],
+      ["soundSkip", "Sound control, next track", "Skip"],
+      ["soundMute", "Sound control, mute", "Mute"],
+      ["soundUnmute", "Sound control, unmute", "Hear"],
+      ["soundVolume", "Sound control, volume", "Volume"],
     ],
   },
 ];

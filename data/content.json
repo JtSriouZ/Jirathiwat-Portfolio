@@ -3,9 +3,9 @@
     "name": "Jirathiwat Suntipreedatham",
     "role": "Software Engineer, AI & Full-Stack Developer",
     "location": "Bangkok City, Thailand",
-    "aboutTitle": "Software engineer & AI engineer",
-    "headline": "Software engineer, night stills, and a Mahidol ICT record. I build real-time AI, recommendation systems, and full-stack products, then photograph the same life in a single spotlight — @jtsriouz_o.",
-    "bio": "Hi to see you there. I am Jirathiwat Suntipreedatham, on Instagram as jtsriouz_o. I am an ICT student at Mahidol University (ICT22, MU 135), CEO of Snail.aes, and president of MU Shooting. By day I also work as a part-time Sales Consultant at IT CITY in Bangkok. The same archive holds COFAS in India, seminar work, International Relations leadership, and project, sales, and marketing experience. The feed is dark, still, and measured. The work is the same habit: one subject, one frame, no spare light.",
+    "aboutTitle": "Engineer, DJ & night stills",
+    "headline": "Software engineer, DJ, and night stills. I build real-time AI and full-stack products, then keep the same night for luxury deep house and a single spotlight — @jtsriouz_o.",
+    "bio": "Hi to see you there. I am Jirathiwat Suntipreedatham, on Instagram as jtsriouz_o. I am an ICT student at Mahidol University (ICT22, MU 135), CEO of Snail.aes, and president of MU Shooting. I also DJ. The room I want is luxury deep house: dark, physical, and exact. By day I work as a part-time Sales Consultant at IT CITY in Bangkok. The same archive holds COFAS in India, seminar work, International Relations leadership, and project, sales, and marketing experience. The feed is dark and still. The floor is the other half of that night.",
     "handle": "jtsriouz_o",
     "persona": [
       "CEO — Snail.aes",
@@ -15,6 +15,7 @@
       "TPR 28 · MNR 64",
       "COFAS · India",
       "Night stills",
+      "DJ · deep house",
       "Bangkok City, Thailand",
       "Vol. MMXXVI"
     ],
@@ -183,6 +184,7 @@
       "CEO, Snail.aes",
       "President, MU Shooting",
       "Night stills · jtsriouz_o",
+      "DJ · luxury deep house",
       "Full-stack web application developer",
       "Computer vision and data science creator"
     ],
@@ -194,7 +196,7 @@
       "navSkills": "Skills",
       "navAbout": "About",
       "navBlog": "Blog",
-      "heroGreeting": "@jtsriouz_o · Bangkok · Still",
+      "heroGreeting": "@jtsriouz_o · Bangkok · Night",
       "heroGreetingTh": "สวัสดี ผม Jirathiwat",
       "heroGreetingZh": "你好，我是 Jirathiwat",
       "heroContact": "Contact",

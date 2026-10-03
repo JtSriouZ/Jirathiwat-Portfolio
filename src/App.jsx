@@ -533,6 +533,10 @@ function GildedCursor() {
       target.y = event.clientY;
       if (!visible) {
         visible = true;
+        ringPosition.x = target.x;
+        ringPosition.y = target.y;
+        dotPosition.x = target.x;
+        dotPosition.y = target.y;
         root.classList.remove("is-hidden");
       }
       const interactive = event.target?.closest?.(interactiveSelector);
@@ -604,6 +608,26 @@ function App() {
 
     const root = document.documentElement;
     let tiltedCard = null;
+    let magnet = null;
+    const magnetSelector = [
+      ".primary-button",
+      ".secondary-button",
+      ".ghost-button",
+      ".nav-links a",
+      ".icon-link",
+      ".icon-button",
+      ".skill-cloud span",
+      ".about-metric",
+      ".footer-links a",
+      ".still-controls button",
+      ".still-controls a",
+    ].join(",");
+
+    const clearMagnet = (element) => {
+      if (!element) return;
+      element.style.setProperty("--mag-x", "0px");
+      element.style.setProperty("--mag-y", "0px");
+    };
 
     const resetTilt = (card) => {
       if (!card) return;
@@ -615,6 +639,20 @@ function App() {
       // Pointer position as 0..1 drives parallax on the hero columns and ornaments.
       root.style.setProperty("--px", (event.clientX / Math.max(1, window.innerWidth)).toFixed(3));
       root.style.setProperty("--py", (event.clientY / Math.max(1, window.innerHeight)).toFixed(3));
+
+      const nextMagnet = event.target.closest?.(magnetSelector);
+      if (nextMagnet !== magnet) {
+        clearMagnet(magnet);
+        magnet = nextMagnet;
+      }
+      if (magnet && event.pointerType !== "touch") {
+        const magnetRect = magnet.getBoundingClientRect();
+        const dx = event.clientX - (magnetRect.left + magnetRect.width / 2);
+        const dy = event.clientY - (magnetRect.top + magnetRect.height / 2);
+        const pull = (delta) => Math.max(-7, Math.min(7, delta * 0.18));
+        magnet.style.setProperty("--mag-x", `${pull(dx).toFixed(1)}px`);
+        magnet.style.setProperty("--mag-y", `${pull(dy).toFixed(1)}px`);
+      }
 
       const card = event.target.closest?.(cardSelector);
       if (card !== tiltedCard) {
@@ -639,6 +677,8 @@ function App() {
     const clearTilt = () => {
       resetTilt(tiltedCard);
       tiltedCard = null;
+      clearMagnet(magnet);
+      magnet = null;
     };
 
     window.addEventListener("pointermove", updateCardGlow, { passive: true });
