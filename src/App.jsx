@@ -519,10 +519,10 @@ function GildedCursor() {
     const interactiveSelector = "a, button, [role='button'], input, textarea, select, label, summary";
 
     const render = () => {
-      ringPosition.x += (target.x - ringPosition.x) * 0.16;
-      ringPosition.y += (target.y - ringPosition.y) * 0.16;
-      dotPosition.x += (target.x - dotPosition.x) * 0.55;
-      dotPosition.y += (target.y - dotPosition.y) * 0.55;
+      ringPosition.x = target.x;
+      ringPosition.y = target.y;
+      dotPosition.x = target.x;
+      dotPosition.y = target.y;
       ring.style.transform = `translate(${ringPosition.x}px, ${ringPosition.y}px) translate(-50%, -50%)`;
       dot.style.transform = `translate(${dotPosition.x}px, ${dotPosition.y}px) translate(-50%, -50%)`;
       frame = requestAnimationFrame(render);

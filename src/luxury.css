@@ -2182,6 +2182,13 @@ body,
 
 /* ---------- Cursor ---------- */
 
+@media (hover: hover) and (pointer: fine) {
+  .portfolio,
+  .portfolio * {
+    cursor: none;
+  }
+}
+
 .lux-cursor {
   position: fixed;
   top: 0;
