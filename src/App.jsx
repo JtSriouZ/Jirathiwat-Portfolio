@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import {
+  ART_ROUTE_COUNT,
   artBrightness,
   createVisitArtMap,
   fetchMuseumArt,
@@ -472,6 +473,13 @@ function App() {
     let cancelled = false;
     fetchMuseumArt()
       .then((items) => keepLandscapeArt(items))
+      .then((kept) => {
+        if (cancelled || kept.length >= ART_ROUTE_COUNT) return kept;
+        return fetchMuseumArt()
+          .then((items) => keepLandscapeArt(items, ART_ROUTE_COUNT - kept.length))
+          .then((more) => [...kept, ...more.filter((item) => !kept.some((known) => known.src === item.src))])
+          .catch(() => kept);
+      })
       .then((kept) => {
         if (!cancelled && kept.length) setMuseumArt(kept);
       })
