@@ -96,7 +96,7 @@ export default function StillGrid({ profile }) {
 
         <div className="still-copy">
           <p className="still-kicker">{profile.headings?.stillsTitle || "From the feed"}</p>
-          <h2>{still.title}</h2>
+          <h2 key={still.id || still.image}>{still.title}</h2>
           <em>{still.date}</em>
           <p className="section-note">
             {profile.headings?.stillsDesc || `One still at a time from @${handle}.`}

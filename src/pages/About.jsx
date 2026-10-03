@@ -350,9 +350,11 @@ export default function About({ content }) {
         </div>
 
       </section>
+      </div>
 
       <StillGrid profile={profile} />
 
+      <div className="page-content about-content-rest">
       <section className="section timeline-section reveal" id="experience">
         <div className="section-heading">
           <div>

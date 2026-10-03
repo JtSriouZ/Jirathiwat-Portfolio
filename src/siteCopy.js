@@ -20,7 +20,7 @@ export const siteCopyGroups = [
       ["heroContact", "Primary button", "Contact"],
       ["heroWork", "Secondary button", "View the work"],
       ["portraitIndex", "Portrait index", "Fig. I"],
-      ["portraitCaption", "Portrait caption", "Portrait · hover or tap to develop"],
+      ["portraitCaption", "Portrait caption", "Portrait · Bangkok"],
       ["statProjects", "Count label · Projects", "Projects"],
       ["statExperience", "Count label · Experience", "Experience"],
       ["statCertificates", "Count label · Certificates", "Certificates"],

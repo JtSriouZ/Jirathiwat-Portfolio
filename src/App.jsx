@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { createVisitArtMap, getArtRouteKey, preloadEuropeanArt } from "./europeanArt";
 import { Routes, Route, Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { Landmark, Share2, Search, Globe, Edit3, X, Menu, Linkedin, Github, Instagram, Mail } from "lucide-react";
 import Home from "./pages/Home";
@@ -93,7 +94,7 @@ function scrambleTextElement(element) {
 function isEditorialTitle(element) {
   return Boolean(
     element.classList?.contains("hero-title") ||
-    element.closest(".hero-editorial, .ultra-band")
+    element.closest(".hero-editorial, .ultra-band, .still-copy")
   );
 }
 
@@ -190,112 +191,17 @@ function AnimatedBackgroundCanvas({ routeKey }) {
       canvas.style.height = `${height}px`;
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      const count = Math.min(150, Math.max(70, Math.floor((width * height) / 14000)));
+      const count = Math.min(90, Math.max(40, Math.floor((width * height) / 22000)));
       dust = Array.from({ length: count }, (_, index) => ({
         x: Math.random() * width,
         y: Math.random() * height,
         vx: (Math.random() - 0.5) * 0.18,
-        vy: -0.08 - Math.random() * 0.22,
+        vy: -0.16 - Math.random() * 0.34,
         size: 0.6 + Math.random() * 1.9,
         sway: Math.random() * Math.PI * 2,
         twinkle: Math.random() * Math.PI * 2,
         tone: index % 4,
       }));
-    };
-
-    const drawLightRays = (palette, seconds) => {
-      const originX = width * 0.5 + Math.sin(seconds * 0.07) * width * 0.08;
-      const originY = -height * 0.35;
-      const rayCount = 7;
-
-      context.save();
-      context.globalCompositeOperation = "lighter";
-      for (let index = 0; index < rayCount; index += 1) {
-        const spread = (index / (rayCount - 1) - 0.5) * 1.15;
-        const angle = Math.PI / 2 + spread + Math.sin(seconds * 0.11 + index * 1.7) * 0.05;
-        const length = Math.max(width, height) * 1.6;
-        const halfWidth = 0.028 + Math.abs(Math.sin(seconds * 0.09 + index)) * 0.03;
-        const alpha = 0.035 + Math.abs(Math.sin(seconds * 0.13 + index * 0.9)) * 0.03;
-
-        const gradient = context.createLinearGradient(originX, originY, originX, originY + length);
-        gradient.addColorStop(0, alphaColor(palette.giltLight, alpha * 0.7));
-        gradient.addColorStop(0.45, alphaColor(palette.giltLight, alpha * 0.22));
-        gradient.addColorStop(1, alphaColor(palette.giltLight, 0));
-
-        context.fillStyle = gradient;
-        context.beginPath();
-        context.moveTo(originX, originY);
-        context.lineTo(originX + Math.cos(angle - halfWidth) * length, originY + Math.sin(angle - halfWidth) * length);
-        context.lineTo(originX + Math.cos(angle + halfWidth) * length, originY + Math.sin(angle + halfWidth) * length);
-        context.closePath();
-        context.fill();
-      }
-      context.restore();
-    };
-
-    const drawAstrolabe = (x, y, radius, rotation, color, alpha, ticks) => {
-      context.save();
-      context.translate(x, y);
-      context.rotate(rotation);
-      context.globalAlpha = alpha;
-      context.strokeStyle = color;
-      context.lineWidth = 1;
-
-      context.beginPath();
-      context.arc(0, 0, radius, 0, Math.PI * 2);
-      context.stroke();
-
-      context.globalAlpha = alpha * 0.6;
-      context.beginPath();
-      context.arc(0, 0, radius * 0.86, 0, Math.PI * 2);
-      context.stroke();
-
-      context.globalAlpha = alpha;
-      for (let index = 0; index < ticks; index += 1) {
-        const angle = (index / ticks) * Math.PI * 2;
-        const major = index % (ticks / 4) === 0;
-        const inner = radius * (major ? 0.78 : 0.86);
-        context.beginPath();
-        context.moveTo(Math.cos(angle) * inner, Math.sin(angle) * inner);
-        context.lineTo(Math.cos(angle) * radius, Math.sin(angle) * radius);
-        context.stroke();
-      }
-
-      for (let index = 0; index < 4; index += 1) {
-        const angle = (index / 4) * Math.PI * 2;
-        const px = Math.cos(angle) * radius;
-        const py = Math.sin(angle) * radius;
-        context.save();
-        context.translate(px, py);
-        context.fillStyle = color;
-        context.globalAlpha = alpha * 2.2;
-        context.fillRect(-3, -3, 6, 6);
-        context.restore();
-      }
-
-      context.restore();
-    };
-
-    const drawMeander = (palette, seconds) => {
-      const unit = 14;
-      const y = height - 30;
-      const offset = (seconds * 10) % (unit * 4);
-      context.save();
-      context.globalAlpha = 0.14;
-      context.strokeStyle = palette.gilt;
-      context.lineWidth = 1;
-      context.beginPath();
-      for (let x = -unit * 4 - offset; x < width + unit * 4; x += unit * 4) {
-        context.moveTo(x, y);
-        context.lineTo(x + unit * 3, y);
-        context.lineTo(x + unit * 3, y - unit * 2);
-        context.lineTo(x + unit, y - unit * 2);
-        context.lineTo(x + unit, y - unit);
-        context.lineTo(x + unit * 2, y - unit);
-        context.lineTo(x + unit * 2, y - unit * 1.5);
-      }
-      context.stroke();
-      context.restore();
     };
 
     const spawnSparks = (count) => {
@@ -331,59 +237,23 @@ function AnimatedBackgroundCanvas({ routeKey }) {
         pointer.y += (pointer.targetY - pointer.y) * 0.1;
       }
 
-      // Warm ambient wash tied to the page palette
       const wash = context.createLinearGradient(0, 0, width, height);
-      wash.addColorStop(0, alphaColor(palette.giltLight, 0.035));
-      wash.addColorStop(0.5, "rgba(12, 11, 10, 0)");
-      wash.addColorStop(1, alphaColor(palette.giltLight, 0.02));
+      wash.addColorStop(0, alphaColor(palette.giltLight, 0.03));
+      wash.addColorStop(0.55, "rgba(7, 6, 15, 0)");
+      wash.addColorStop(1, alphaColor(palette.accent, 0.025));
       context.fillStyle = wash;
       context.fillRect(0, 0, width, height);
 
-      drawLightRays(palette, seconds);
-
       context.globalCompositeOperation = "lighter";
 
-      // Candle-light glow that follows the pointer
-      const glowRadius = Math.max(width, height) * 0.24;
+      const glowRadius = Math.max(width, height) * 0.2;
       const cursorGlow = context.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, glowRadius);
-      cursorGlow.addColorStop(0, alphaColor(palette.giltLight, pointer.active ? 0.1 : 0.05));
-      cursorGlow.addColorStop(0.4, alphaColor(palette.giltLight, pointer.active ? 0.035 : 0.018));
+      cursorGlow.addColorStop(0, alphaColor(palette.giltLight, pointer.active ? 0.08 : 0.04));
+      cursorGlow.addColorStop(0.45, alphaColor(palette.accent, pointer.active ? 0.03 : 0.014));
       cursorGlow.addColorStop(1, alphaColor(palette.giltLight, 0));
       context.fillStyle = cursorGlow;
       context.fillRect(0, 0, width, height);
 
-      // Gilded astrolabe rings drifting at the margins
-      drawAstrolabe(
-        width * 0.86 + Math.sin(seconds * 0.12) * 18,
-        height * 0.22 + Math.cos(seconds * 0.1) * 14,
-        Math.min(width, height) * 0.26,
-        seconds * 0.05,
-        palette.gilt,
-        0.16,
-        48
-      );
-      drawAstrolabe(
-        width * 0.12 + Math.cos(seconds * 0.09) * 16,
-        height * 0.82 + Math.sin(seconds * 0.11) * 14,
-        Math.min(width, height) * 0.2,
-        -seconds * 0.07,
-        palette.accentThree,
-        0.14,
-        36
-      );
-      drawAstrolabe(
-        width * 0.5 + Math.sin(seconds * 0.06) * 30,
-        height * 0.5,
-        Math.min(width, height) * 0.46,
-        seconds * 0.025,
-        palette.giltLight,
-        0.05,
-        96
-      );
-
-      drawMeander(palette, seconds);
-
-      // Gold dust
       dust.forEach((mote) => {
         if (!reduceMotion) {
           const dx = pointer.x - mote.x;
@@ -407,14 +277,13 @@ function AnimatedBackgroundCanvas({ routeKey }) {
           if (mote.y > height + 20) mote.y = -20;
         }
 
-        // Pixel "dither" motes: crisp squares in ivory / periwinkle / ultramarine
-        const tone = mote.tone === 0 ? palette.giltLight : mote.tone === 1 ? palette.gilt : mote.tone === 2 ? palette.ultra : palette.accent;
-        const twinkle = reduceMotion ? 0.7 : 0.4 + Math.sin(seconds * 2.2 + mote.twinkle) * 0.35;
-        const px = Math.round(mote.size + 0.5);
-        context.globalAlpha = Math.max(0.1, twinkle);
+        const tone = mote.tone % 2 === 0 ? palette.giltLight : palette.accent;
+        const twinkle = reduceMotion ? 0.45 : 0.42 + Math.sin(seconds * 1.6 + mote.twinkle) * 0.38;
+        context.globalAlpha = Math.max(0.08, twinkle);
         context.fillStyle = tone;
-        context.shadowBlur = 0;
-        context.fillRect(Math.round(mote.x), Math.round(mote.y), px, px);
+        context.beginPath();
+        context.arc(mote.x, mote.y, mote.size * 0.55, 0, Math.PI * 2);
+        context.fill();
       });
 
       // Pointer sparks
@@ -502,12 +371,14 @@ function GildedCursor() {
   const rootRef = useRef(null);
   const ringRef = useRef(null);
   const dotRef = useRef(null);
+  const burstRef = useRef(null);
 
   useEffect(() => {
     const root = rootRef.current;
     const ring = ringRef.current;
     const dot = dotRef.current;
-    if (!root || !ring || !dot) return undefined;
+    const burst = burstRef.current;
+    if (!root || !ring || !dot || !burst) return undefined;
     if (window.matchMedia?.("(hover: none), (pointer: coarse)").matches) return undefined;
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return undefined;
 
@@ -515,16 +386,18 @@ function GildedCursor() {
     let visible = false;
     const target = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
     const ringPosition = { x: target.x, y: target.y };
-    const dotPosition = { x: target.x, y: target.y };
     const interactiveSelector = "a, button, [role='button'], input, textarea, select, label, summary";
 
+    const place = (element, x, y) => {
+      element.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+    };
+
     const render = () => {
-      ringPosition.x = target.x;
-      ringPosition.y = target.y;
-      dotPosition.x = target.x;
-      dotPosition.y = target.y;
-      ring.style.transform = `translate(${ringPosition.x}px, ${ringPosition.y}px) translate(-50%, -50%)`;
-      dot.style.transform = `translate(${dotPosition.x}px, ${dotPosition.y}px) translate(-50%, -50%)`;
+      ringPosition.x += (target.x - ringPosition.x) * 0.22;
+      ringPosition.y += (target.y - ringPosition.y) * 0.22;
+      place(ring, ringPosition.x, ringPosition.y);
+      place(dot, target.x, target.y);
+      place(burst, target.x, target.y);
       frame = requestAnimationFrame(render);
     };
 
@@ -535,8 +408,9 @@ function GildedCursor() {
         visible = true;
         ringPosition.x = target.x;
         ringPosition.y = target.y;
-        dotPosition.x = target.x;
-        dotPosition.y = target.y;
+        place(ring, target.x, target.y);
+        place(dot, target.x, target.y);
+        place(burst, target.x, target.y);
         root.classList.remove("is-hidden");
       }
       const interactive = event.target?.closest?.(interactiveSelector);
@@ -548,7 +422,12 @@ function GildedCursor() {
       root.classList.add("is-hidden");
     };
 
-    const press = () => root.classList.add("is-pressed");
+    const press = () => {
+      root.classList.add("is-pressed");
+      burst.classList.remove("is-burst");
+      void burst.offsetWidth;
+      burst.classList.add("is-burst");
+    };
     const release = () => root.classList.remove("is-pressed");
 
     root.classList.add("is-hidden");
@@ -556,6 +435,7 @@ function GildedCursor() {
     window.addEventListener("pointermove", move, { passive: true });
     window.addEventListener("pointerdown", press, { passive: true });
     window.addEventListener("pointerup", release, { passive: true });
+    window.addEventListener("pointercancel", release, { passive: true });
     document.documentElement.addEventListener("mouseleave", hide);
 
     return () => {
@@ -563,12 +443,14 @@ function GildedCursor() {
       window.removeEventListener("pointermove", move);
       window.removeEventListener("pointerdown", press);
       window.removeEventListener("pointerup", release);
+      window.removeEventListener("pointercancel", release);
       document.documentElement.removeEventListener("mouseleave", hide);
     };
   }, []);
 
   return (
     <div className="lux-cursor is-hidden" ref={rootRef} aria-hidden="true">
+      <span className="lux-cursor-burst" ref={burstRef}><i /></span>
       <span className="lux-cursor-ring" ref={ringRef} />
       <span className="lux-cursor-dot" ref={dotRef} />
     </div>
@@ -587,6 +469,14 @@ function App() {
   const [language, setLanguage] = useState("en");
   const navigate = useNavigate();
   const location = useLocation();
+  const artMapRef = useRef(null);
+  if (!artMapRef.current) {
+    artMapRef.current = createVisitArtMap();
+  }
+
+  useEffect(() => {
+    preloadEuropeanArt();
+  }, []);
 
   useEffect(() => {
     const cardSelector = [
@@ -921,10 +811,14 @@ function App() {
   const pathParts = location.pathname.split("/").filter(Boolean);
   const routeKey = pathParts[0] || "home";
   const subRouteKey = pathParts.join("-") || "home";
+  const pageArt = artMapRef.current[getArtRouteKey(location.pathname)] || artMapRef.current.home;
 
   return (
     <div className={`portfolio page-${routeKey} route-${subRouteKey}`}>
       <div className="page-motion-bg" aria-hidden="true">
+        <div className="page-art" style={{ backgroundImage: `url("${pageArt}")` }} />
+        <div className="page-art-light" />
+        <div className="page-art-wash" />
         <AnimatedBackgroundCanvas routeKey={routeKey} />
       </div>
       <GildedCursor />
