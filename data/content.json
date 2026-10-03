@@ -339,12 +339,257 @@
   ],
   "posts": [
     {
+      "id": "post-imax-sydney-laser",
+      "title": "IMAX Sydney Reopens as a 692-Square-Metre Laser Room",
+      "category": "Movie Tech",
+      "date": "2026-10-03",
+      "summary": "EVT opens IMAX Sydney in Darling Harbour on 11 October with Laser by IMAX, a 1.43 screen, and a first week that mixes Avatar, Oppenheimer, and a concert film. Premium cinema is still a hardware product.",
+      "imageUrl": "blog/imax-screen.jpg",
+      "youtubeUrl": "",
+      "externalUrl": "https://www.filmink.com.au/public-notice/revolutionising-cinematic-experience-imax-sydney-is-opening-with-laser-technology-and-new-seating-options/",
+      "fullDescription": "IMAX Sydney opens on 11 October 2026 in Darling Harbour with Laser by IMAX on a 692-square-metre screen. IMAX and EVT are selling the 1.43 aspect ratio as up to 40 percent more picture than a common widescreen frame, plus laser brightness and a tuned sound system. Opening week is a hardware demo disguised as a schedule: Avatar: The Way of Water, The Creator, Oppenheimer, a nature documentary, and the global launch of Taylor Swift | The Eras Tour.\n\nThat mix is the point. A laser IMAX room is not only for one kind of film. It is a room that can hold a water-heavy sequel, a war biography, and a concert with the same projectors. HOYTS has a separate deal for ten more IMAX with Laser sites in Australia and New Zealand, with at least three due before the end of 2026. The format is still spreading while ordinary multiplexes fight for a reason to leave the house.\n\n## Why this sits next to CineMatch\n\nCineMatch is built for people who search by vibe. A 1.43 IMAX frame is a vibe you cannot fake on a laptop. Space Race on a poster and Avatar in a laser room are related requests: scale, horizon, and a picture that fills more of the eye. When I write a Hidden Gem Radar, I am fighting blockbuster bias in a catalog. When I sit in a flagship IMAX, I am looking at the other end of the same industry. Some films are designed for that glass. Some are not. The recommendation should know the difference.\n\n## The hardware take, from the shop floor\n\nAt IT CITY I spend part of the week talking about brightness, contrast, and whether a customer should pay for a better panel. Laser IMAX is that conversation at cinema scale. Xenon bulbs dim. Dual 4K laser does not fade the same way. The Sydney room is a reminder that display technology is still the product people will travel for. My IMAX review from June still holds: the format wins when the movie was shot for it. A 692-metre screen just makes the miss more obvious when it was not.\n\nSources: FilmInk on IMAX Sydney's 11 October opening, and IMAX's HOYTS Laser expansion in Australia and New Zealand.",
+      "mediaUrls": [
+        "https://www.filmink.com.au/public-notice/revolutionising-cinematic-experience-imax-sydney-is-opening-with-laser-technology-and-new-seating-options/",
+        "https://www.businesswire.com/news/home/20260429224824/en/HOYTS-Cinemas-and-IMAX-Expand-Partnership-with-Ten-New-IMAX-with-Laser-Locations-Across-Australia-and-New-Zealand"
+      ]
+    },
+    {
+      "id": "post-led-cinema-behind-screen-audio",
+      "title": "The New Cinema LED Trick Is Putting the Speakers Back Where They Belong",
+      "category": "Movie Tech",
+      "date": "2026-10-01",
+      "summary": "Schulman Theatres switched on North America's first acoustically transparent LED cinema screen in Texas. The picture is a 2.5 mm LED wall. The sound can come from behind it again.",
+      "imageUrl": "blog/led-venue-wall.jpg",
+      "youtubeUrl": "",
+      "externalUrl": "https://www.boxofficepro.com/schulman-theatres-debuts-north-americas-first-acoustically-transparent-led-cinema-screen/",
+      "fullDescription": "On 1 October 2026 Boxoffice Pro reported that Schulman Theatres turned on North America's first acoustically transparent cinema LED screen at Film Alley Bastrop in Texas. The SPX Direct room has 87 seats and an ultra-fine 2.5 mm Tricorne Premium LED wall, driven by a GDC SR-5520 media server and certified for DCI HDR, high frame rate, and 3D.\n\nThe news is not only that the screen makes its own light. Most cinema LED walls force the left, center, and right speakers above, below, or beside the picture. This panel lets the loudspeakers sit behind the wall, the way a perforated cinema screen always did. Dialogue can come from the mouth on screen again, not from a speaker riding the ceiling.\n\n## Picture and sound are one system\n\nIron Dome taught me to treat a vision pipeline as memory, scheduling, and I/O, not only a model. A theater is the same kind of system. If the LED is brighter but the voice comes from the wrong place, the room feels broken. Acoustically transparent LED is the fix for a hardware conflict that direct-view walls created.\n\nTwo days later, Oaks Center Cinema in Pennsylvania announced a different premium stack: a 38-foot Samsung Onyx LED wall with 41 D-Box motion seats, due in December, the first Onyx theatrical room in the U.S. Northeast. One room is chasing correct dialogue. The other is chasing a seat that moves with the shot. Both are bets that people will leave the house for hardware they cannot copy on a phone.\n\n## How I would watch it\n\nCineMatch can tell you a film is neon, noir, or complicated. It cannot tell you whether the local screen is a laser, a xenon bulb, or an LED wall with the speakers in the right place. As someone who sells displays by day and builds a movie engine by night, that gap is interesting. The catalog is software. The night out is still a rack of light and speakers.\n\nSources: Boxoffice Pro on the Bastrop Tricorne LED screen, and Digital Cinema Report on Oaks Center Cinema's Samsung Onyx and D-Box room.",
+      "mediaUrls": [
+        "https://www.boxofficepro.com/schulman-theatres-debuts-north-americas-first-acoustically-transparent-led-cinema-screen/",
+        "https://www.digitalcinemareport.com/oaks-center-cinema-installing-northeasts-first-samsung-onyx-led-cinema-screen/"
+      ]
+    },
+    {
+      "id": "post-dgx-spark-64gb",
+      "title": "A 64 GB Desktop Superchip Is NVIDIA's Answer to Painful RAM Prices",
+      "category": "Hardware",
+      "date": "2026-10-02",
+      "summary": "NVIDIA's 64 GB DGX Spark lands on 23 October from $4,999. It is still a Grace Blackwell box for local models, just with less soldered memory than the 128 GB original.",
+      "imageUrl": "blog/nvidia-dgx-spark.jpg",
+      "youtubeUrl": "",
+      "externalUrl": "https://www.tomshardware.com/pc-components/gpus/nvidia-introduces-64gb-dgx-spark-to-throw-local-ai-fans-a-lifeline-amid-the-rampocalypse-new-gb10-config-starts-at-usd4999-for-those-who-can-work-with-less",
+      "fullDescription": "NVIDIA is selling a smaller DGX Spark. The 64 GB GB10 systems from Acer, Asus, Dell, Gigabyte, HP, and MSI are due on 23 October from $4,999. The 128 GB Founder's Edition is now listed around $6,950, and street prices for the larger box have been higher. About 8 GB of the 64 GB kit is reserved for the system, which leaves roughly 56 GB for weights and cache. The 20-core Arm CPU and 273 GB/s of shared bandwidth stay the same.\n\nNVIDIA's own list of what fits is the useful part: Gemma 4 26B, Qwen 3.8 27B, Meta Muse Glimmer, Nemotron 3.5 Lightning, with NVFP4 quantization, vLLM, and llama.cpp. Two 64 GB nodes running Qwen 3.8-27B are claimed to reach about 1.7 times one box. Up to four Sparks can cluster, and the Sync toolkit can set up the network so you drive them from a normal PC in VS Code or Cursor.\n\n## Why a sales consultant reads the memory line first\n\nAt IT CITY the question this year is often not which GPU. It is whether the memory in the quote will still be sane next week. A soldered 128 GB LPDDR5X package became a tax. A 64 GB Spark is NVIDIA admitting that many local jobs, including dense 27B-class models with a short context, do not need the full bag. I would still tell a customer the limit out loud: fine-tunes, long context, and fat agents will want the 128 GB kit or a real GPU server.\n\n## Where it sits next to my rack\n\nThe home lab is a 10-inch Proxmox cluster with a Wyse, an HP server, and Ollama in a container. A Spark is not that. It is a desk-side inferencing appliance with CUDA already decided. Iron Dome already uses CUDA on Windows when a GPU is there. A clustered Spark would be the expensive way to keep larger local models off the public cloud, the same instinct as Tailscale and a private Ollama. For a student budget, the news is the shape of the product, not a shopping list. Unified memory, a quoted model list, and a four-node ceiling are the specs I would write on a card in the shop.\n\nGigabyte's AI TOP ATOM 64 GB, announced 2 October for the same 23 October date, is the same platform in a partner chassis. The SKU is multiplying. The physics is one Superchip and a memory bill.\n\nSources: Tom's Hardware on the 64 GB DGX Spark, Guru3D's launch notes, and Gigabyte's AI TOP ATOM 64 GB announcement.",
+      "mediaUrls": [
+        "https://www.tomshardware.com/pc-components/gpus/nvidia-introduces-64gb-dgx-spark-to-throw-local-ai-fans-a-lifeline-amid-the-rampocalypse-new-gb10-config-starts-at-usd4999-for-those-who-can-work-with-less",
+        "https://www.prnewswire.com/news-releases/gigabyte-ai-top-atom-64gb-unified-memory-version-expands-possibilities-for-desktop-ai-development-302897201.html"
+      ]
+    },
+    {
+      "id": "post-mini-pc-local-ai",
+      "title": "The New Mini PCs Are Trying to Be Local AI Racks You Can Carry",
+      "category": "Hardware",
+      "date": "2026-10-02",
+      "summary": "MSI's 4-litre Ryzen AI Max+ box and Framework's 192 GB Desktop are compact machines that treat unified memory as the product. They look more like the next homelab node than a gaming tower.",
+      "imageUrl": "projects/homelab-real-02.jpg",
+      "youtubeUrl": "",
+      "externalUrl": "https://www.club386.com/msi-pro-max-edge-ai-launch/",
+      "fullDescription": "On 2 October 2026 MSI put the Pro Max Edge AI+ on sale: a 4-litre mini PC, about 97 by 188 by 248 mm, with AMD's Ryzen AI Max+ 395, 16 Zen 5 cores, a Radeon 8060S, a 50 TOPS NPU, and up to 128 GB of unified LPDDR5x-8000. MSI says 96 GB of that can go to the GPU, enough on paper for GPT-OSS 120B or Qwen 3.6 35B at home. Scan had the 128 GB kit around £4,799.\n\nFramework is aiming higher and later. Preorders are open for a Desktop with Ryzen AI Max+ PRO 495 and 192 GB of LPDDR5X-8533, DIY from $6,799, shipping in November. Bandwidth is quoted at 273 GB/s. A firmware note lifts USB4 machine-to-machine networking from about 9 Gbps to about 30 Gbps, which is a hobby cluster, not InfiniBand, but it is a cluster you can cable on a desk.\n\n## This is closer to my rack than a tower\n\nThe Wyse in the 10-inch bay is already a small computer doing a real job. The Shapr3D mount exists because a mini PC had to become rack hardware. These new boxes are the same instinct with more unified memory: run Ollama, a vision test, or an agent without a full-size GPU screaming in a living room. Wi-Fi 7, 2.5 or 5 GbE, and a pile of display outputs are the ports I already explain to customers who want a quiet machine that can drive more than one screen.\n\n## What I would say across the counter\n\nUnified memory is not HBM. Fitting a 120B model and enjoying it are different. I would ask what has to stay private. A care log, a family photo library, or a course dataset is a reason to pay for local weights. A weekend chatbot is not a reason to spend six thousand dollars. Iron Dome already taught me that the GPU only helps if the rest of the pipeline is ready. A 4-litre AI PC is a node. It is not a substitute for Proxmox, backups, or a network that still works when the model is busy.\n\nIf I add a machine to the lab this year, I would still start from power, airflow, and whether it can live in a 10-inch bay. The MSI and Framework announcements are useful because they make that conversation specific: how many GB for the GPU, what model they claim, and how you cable two of them together.\n\nSources: Club386 on the MSI Pro Max Edge AI+, and Guru3D on the Framework Desktop 192 GB preorder.",
+      "mediaUrls": [
+        "https://www.club386.com/msi-pro-max-edge-ai-launch/",
+        "https://www.guru3d.com/story/framework-desktop-adds-ryzen-ai-pro-495-and-192gb-lpddr5x-for/"
+      ]
+    },
+    {
+      "id": "post-gemini-4-argon",
+      "title": "Gemini 4 Argon: A Frontier Model That Still Has to Wait at the Door",
+      "category": "Current Tech",
+      "date": "2026-10-03",
+      "summary": "Google's Gemini 4 Argon is rolling out first to trusted cyber defenders, not to every developer. The interesting part is the wait: long-horizon coding and defense work are being tested before the API opens.",
+      "imageUrl": "blog/deepmind-hq.jpg",
+      "youtubeUrl": "",
+      "externalUrl": "https://blog.google/intl/en-mena/company-news/technology/gemini-4-argon-our-next-era-of-frontier-intelligence/",
+      "fullDescription": "On 1 October 2026 Google announced Gemini 4 Argon, a frontier model it is sending first to a Fairwind Program of trusted cyber defenders. The public line is that Argon can hold a long, complicated job: real-world software engineering, legal and finance knowledge work, and cybersecurity defense. The quieter line is that Google is not opening the door all at once. It is in the U.S. government's voluntary pre-release process, gathering tester feedback, and saying developers, enterprises, and consumers will get access after the guardrails have been tried.\n\n## Why the phased release is the news\n\nA model that can write and reason across hundreds of thousands of tokens is useful. A model that can also sit inside a defender's workflow is a different product. Google says thousands of people inside the company already use Argon for specialized coding, deeper research, and writing. That is an internal vote of confidence. The public still has to wait for paid API customers and Google AI Ultra subscribers.\n\nI read that as a systems problem, not a marketing delay. Iron Dome taught me the same lesson at a smaller scale. A detector that scores well in training is not the same thing as a pipeline that keeps a box on a plume while video, inference, and telemetry share one machine. A frontier model that is good at long-horizon coding still has to survive the room it is put in: tools, permissions, logs, and a human who can say no.\n\n## What I take from it as a student builder\n\nArgon will matter when it becomes an API I can actually call. Until then, the useful signal is the order of the rollout. Cyber defense and enterprise work get the first keys. Consumer chat comes later. That order matches how I want to treat AI on this site: the interesting question is not only how smart the model is, but what it is allowed to touch.\n\nSource: Google's Gemini 4 Argon announcement, 1 October 2026.",
+      "mediaUrls": [
+        "https://blog.google/intl/en-mena/company-news/technology/gemini-4-argon-our-next-era-of-frontier-intelligence/"
+      ]
+    },
+    {
+      "id": "post-jetbrains-air-copilot",
+      "title": "The IDE Is Becoming a Room for Agents, Not One Chat Box",
+      "category": "Current Tech",
+      "date": "2026-10-02",
+      "summary": "JetBrains opened Air in its IDEs, and GitHub's September Copilot releases pushed agents from write-code to merge. The editor is turning into a desk where several agents share the same project.",
+      "imageUrl": "blog/ide-laptop.jpg",
+      "youtubeUrl": "",
+      "externalUrl": "https://blog.jetbrains.com/ai/2026/10/air-in-ides-eap/",
+      "fullDescription": "Two posts landed in the same week, and they are really one story. JetBrains opened the Early Access Program for Air inside its IDEs: a plugin, or a native path in the 2026.3 EAP builds. Air is built to host the agents you already have. Codex, GitHub Copilot, Junie, Cursor, Claude, Gemini, and other ACP-compatible agents can sit in the same editor. GitHub's September Copilot notes for VS Code 1.136 through 1.140, published on 1 October, describe the other half of that desk: scheduled automations, an agent merge path, sessions that stay organized, and chats that can pick up a Codex thread from the ChatGPT app without copying files by hand.\n\n## Why this is not just another assistant\n\nThe last two years trained people to think of AI in the IDE as a sidebar that completes a function. Air and the Copilot agent window are closer to a control room. You attach a GitHub issue or a pull request. You start a chat without a folder, then drop a workspace on it. An agent can keep working while you stay in another turn. JetBrains is even keeping the older AI Assistant plugin alive, which is a quiet admission that one chat product is no longer the whole story.\n\nI felt a smaller version of this at Cursor Build Salaya. Lovedrop was built in 2.5 hours because the editor, the agent, and the pitch had to share one clock. The new tools are trying to make that feel normal for a weekday, not only for a hackathon.\n\n## The part I will watch\n\nJunie Lite is free for everyday tasks. Copilot automations can run on a schedule. That is useful, and it is also how a messy repository gets a lot of unreviewed commits. Qodo's 3.0 release this week is the other side of the same news: if agents write more of the factory, someone still has to group the pull requests and apply the team's rules before merge.\n\nSources: JetBrains Air in IDEs EAP, GitHub Copilot in VS Code September 2026 releases, and Qodo 3.0.",
+      "mediaUrls": [
+        "https://blog.jetbrains.com/ai/2026/10/air-in-ides-eap/",
+        "https://github.blog/changelog/2026-10-01-github-copilot-in-vs-code-september-2026-releases/",
+        "https://www.qodo.ai/blog/introducing-qodo-3-0/"
+      ]
+    },
+    {
+      "id": "post-ollama-local-decisions",
+      "title": "Ollama Can Now Answer Yes, No, and How Sure It Is",
+      "category": "AI Engineering",
+      "date": "2026-10-01",
+      "summary": "Ollama added Jev-style decision models on 29 September: typed yes-or-no answers, choices, and scores with a probability on each option, running locally at low latency.",
+      "imageUrl": "projects/homelab-proxmox-live-cluster.jpg",
+      "youtubeUrl": "",
+      "externalUrl": "https://ollama.com/blog",
+      "fullDescription": "On 29 September 2026 Ollama added support for decision models based on TypeSafe's Jev API. The job is narrower than a chat model. You give it text. It answers a yes-or-no question, picks from a list, or scores something, and it attaches a probability to each option. Ollama says those calls can run locally, with low latency and no per-token bill.\n\nThat is a different shape of local AI from the chat window most people install first. A chat model writes. A decision model classifies. If you ask whether a message is a refund request, how urgent it is, or how angry the writer sounds, you want a label and a confidence, not a paragraph.\n\n## Why this belongs next to the home lab\n\nMy rack already runs Ollama beside Grafana, Jellyfin, and Home Assistant. Until now, the interesting local experiments were long answers: a coding helper, a summary, a caption. Decision models fit the rest of the lab better. A Pi-hole board, a Home Assistant scene, or a media stack is full of small choices. Is this query junk. Is this disk too warm. Should this title go on the hidden-gem list. Those are Jev-shaped questions.\n\nCineMatch already does a cousin of this work. The hybrid score is half semantic closeness and half a quality number. A local decision model would not replace that rank, but it could sit in front of it: is this query a mood, a title, or a year. That is the kind of cheap, typed gate I want on my own hardware.\n\n## The limit to remember\n\nA probability on a label is not the same as being right. Iron Dome prints range and speed because the detector and the HUD agree on one object. A decision model that is 91 percent sure still needs a human, or another check, before it moves a file or a patient record. Local and cheap is a reason to try it. It is not a reason to skip the second look.\n\nSource: Ollama blog, decision-model support, 29 September 2026.",
+      "mediaUrls": [
+        "https://ollama.com/blog"
+      ]
+    },
+    {
+      "id": "post-android-hybrid-inference",
+      "title": "Android AI Is Learning to Stay on the Phone When It Can",
+      "category": "App Development",
+      "date": "2026-09-30",
+      "summary": "Firebase AI Logic now routes Android inference between Gemini Nano on the device and a cloud model. For a care app like BF Connect, that split is a product decision, not only a cost one.",
+      "imageUrl": "blog/android-phone.jpg",
+      "youtubeUrl": "",
+      "externalUrl": "https://developer.android.com/blog/posts/build-intelligent-android-apps-cloud-and-hybrid-inference",
+      "fullDescription": "Android developers now have an official way to keep some AI on the phone. Firebase AI Logic's hybrid inference can try Gemini Nano on the device and fall back to a cloud model, or the other way around. The modes are plain: prefer on-device, prefer in-cloud, only on-device, or only in-cloud. On-device work uses the ML Kit Prompt API, is still in beta, and only runs on some devices. Since early July 2026, Firebase App Check is enforced on the AI Logic path so a shipped app cannot call Gemini with a naked key.\n\nGoogle's own Jetpacker sample drafts a restaurant review on the phone first, then uses the cloud when Nano is missing. A custom router can also send a simple language pair to the device and a harder one to Gemini 3 Flash. The point of the post is not a new chatbot. It is a routing table.\n\n## Why I read this through BF Connect\n\nBF Connect is three roles on one Firebase record: mother, nurse, and administrator. A feeding timer, an EPDS screen, and a consultation reply are not restaurant reviews. Some of that work should never leave the device if the phone can do it. A draft of a community post might be fine in the cloud. A raw log of which side a baby fed, or a screening score, is a different class of data.\n\nHybrid inference gives a vocabulary for that split. Prefer on-device for anything that is a short, private classification. Prefer in-cloud when the phone is old or the prompt is long. Only in-cloud when the feature is not ready on Nano. App Check is the other half: if the cloud is in the path, the app has to prove it is the app.\n\n## What I would not do yet\n\nI would not put a clinical decision on Nano because the API is in beta and the token window is small. I would use it for drafts, language, and UI help, and keep the care record in Firestore with the same role rules the app already has. The news is that Android is finally treating on-device and cloud as one API, which is the right shape for a phone that sometimes has no signal.\n\nSources: Android Developers on cloud and hybrid inference, and the Firebase AI Logic hybrid guide for Android.",
+      "mediaUrls": [
+        "https://developer.android.com/blog/posts/build-intelligent-android-apps-cloud-and-hybrid-inference",
+        "https://firebase.google.com/docs/ai-logic/hybrid/android/get-started"
+      ]
+    },
+    {
+      "id": "post-agent-quality-week",
+      "title": "If Agents Write the Code, Someone Still Has to Sort the Pull Requests",
+      "category": "Software Engineering",
+      "date": "2026-10-01",
+      "summary": "Qodo 3.0, Copilot automations, and Earendil's Pi 1.0 landed in the same week. The new problem is not getting an agent to write. It is keeping the output in a package a human can review.",
+      "imageUrl": "blog/github-app.jpg",
+      "youtubeUrl": "",
+      "externalUrl": "https://www.qodo.ai/blog/introducing-qodo-3-0/",
+      "fullDescription": "The first week of October 2026 was crowded with agent news, and the useful one was not another demo that writes a file. Qodo 3.0 is a quality and governance layer for what it calls the agentic software factory. It tries to put a team's rules in front of the agent while the agent is writing, then group related pull requests across GitHub, GitLab, Bitbucket, Azure DevOps, and Gerrit. PR Triage, in research preview, is a morning view: here is the feature, here are the PRs that belong to it.\n\nGitHub Copilot's September VS Code releases add scheduled automations and an agent merge path. Earendil shipped Pi 1.0, a stable open-source agent harness with a full-screen terminal, cheaper codemode prompts, harder MCP OAuth, and a Durable package that can checkpoint a long run so it survives a crash.\n\n## The factory problem\n\nI can already get an agent to open a repo and change six files. Lovedrop was a 2.5-hour proof of that. A furniture store, a care app, or this portfolio is a different size. BoonSonClon has a public shop and an admin desk. BF Connect has three roles. This site has an admin panel that writes content.json. An agent that \"helps\" all of those at once will produce pull requests that look busy and review like noise.\n\nQodo's bet is that the unit of work is the package, not the single diff. Copilot's bet is that merge can be a step an agent proposes. Pi's bet is that a long agent should be a process you can pause. I agree with all three in a small way. I still want a human on the merge of anything that touches money, health, or the live site.\n\n## What I will actually try\n\nFor course work and this portfolio, a local harness like Pi is more interesting than a full enterprise dashboard. For a team project, grouping PRs by feature is the part I want first. The news this week is that the industry finally named the boring half of agent coding: quality, sessions, and review. That is the half that decides whether the extra code is progress.\n\nSources: Qodo 3.0 announcement, GitHub Copilot VS Code September 2026 releases, and Earendil Pi 1.0.",
+      "mediaUrls": [
+        "https://www.qodo.ai/blog/introducing-qodo-3-0/",
+        "https://github.blog/changelog/2026-10-01-github-copilot-in-vs-code-september-2026-releases/",
+        "https://ai-tldr.dev/releases/earendil-pi-1-0/"
+      ]
+    },
+    {
+      "id": "post-portfolio-site-map",
+      "title": "How This Site Holds the Work Together",
+      "category": "Web Development",
+      "date": "2026-10-03",
+      "summary": "The portfolio is one record: featured projects on the home page, full case pages, certificates, and a blog that explains the engineering behind each build.",
+      "imageUrl": "blog/portfolio-desk.jpg",
+      "youtubeUrl": "",
+      "externalUrl": "",
+      "fullDescription": "This website is the public record of the work I study and build at the Faculty of Information and Communication Technology, Mahidol University, plus the personal systems I run at home. The home page leads with featured projects. The Projects page keeps the full set. Certificates, skills, and the about page sit beside that work so a visitor can see both the builds and the path that produced them.\n\n## What the pages are for\n\n- **Home** introduces the current focus: real-time AI, recommendation systems, full-stack web apps, and the systems around them.\n- **Projects** is the case library. Each entry has a short description, the stack, and a longer write-up with screenshots.\n- **Blog** is where the decisions get explained. A project page shows what shipped. A post explains why the system was shaped that way.\n- **Certificates, skills, and about** keep the academic path, IT CITY sales work, and technical range in the same place as the code.\n\n## Why the blog sits next to the projects\n\nIron Dome, CineMatch, BoonSonClon, BF Connect, the home lab, and Lovedrop are different kinds of software. A grid of titles does not show that. The posts let each one be read as an engineering note: operating-system limits around a vision model, hybrid scoring for movie search, a storefront that also has an admin desk, a care app with three roles, or a hackathon prototype that had to be real in two and a half hours.\n\nThe site is also editable. Project copy, posts, images, and certificates can be updated from the admin panel, so the portfolio can grow when a course project or a personal system changes, without rewriting the layout each time.\n\nThe aim is simple. Someone opening the site should be able to move from a card on the home page, into the project, and then into a post about the same build.",
+      "mediaUrls": []
+    },
+    {
+      "id": "post-lovedrop-salaya",
+      "title": "Lovedrop in 2.5 Hours at Cursor Build Salaya",
+      "category": "Web Development",
+      "date": "2026-09-28",
+      "summary": "Team Lovedrop won Judges' Pick at Cursor Build Salaya by shipping a location-based postcard app, from idea to pitch, inside a 2.5-hour hackathon.",
+      "imageUrl": "https://i.postimg.cc/Z0kQmymp/S-36593671-0.jpg",
+      "youtubeUrl": "",
+      "externalUrl": "https://digilovedrop.vercel.app/",
+      "fullDescription": "Cursor Build Salaya asked more than 100 builders, in 22 teams, to go from an idea to a working prototype and a pitch in 2.5 hours. I was on Team Lovedrop. We won Judges' Pick and 8,000 baht in Cursor credits.\n\n## The product we could actually finish\n\nLovedrop is a location-based social app. You drop a virtual postcard at a real place. Someone nearby can pick it up. A drop can hold a photo, a drawing, Spotify lyrics, or an invitation to a local event. The constraint was the clock, so the prototype had to prove one loop: pin something to a place, limit it to people who are there, and show it in an interface we could demo live.\n\n## What the time limit changed\n\nA longer project would have started with accounts, moderation, and a map that handles every edge case. In 2.5 hours those are the wrong first problems. We spent the time on the interaction a judge could try: geographic pinning, postcard types, and a clear screen for dropping and discovering them. The pitch was five minutes, in front of Cursor community ambassadors and industry tech leads. The demo had to survive that room.\n\nThe build is live, and the repository sits with the Cursor Salaya project. On this portfolio, Lovedrop is the reminder that a small, finished loop is more convincing than a large plan that never runs.",
+      "mediaUrls": [
+        "https://i.postimg.cc/NLhntrtx/S-36593672-0.jpg",
+        "https://i.postimg.cc/vDRKy6yX/S-36593673-0.jpg",
+        "https://i.postimg.cc/MXkLwjwd/S-36593674-0.jpg",
+        "https://github.com/PracticalRyan/Cursor-Salaya"
+      ]
+    },
+    {
+      "id": "post-boonsonclon-storefront",
+      "title": "BoonSonClon Needs a Storefront and a Back Office",
+      "category": "Web Development",
+      "date": "2026-09-21",
+      "summary": "The ITCS223 furniture store is a full-stack shop: catalog, cart, and orders for customers, plus an admin desk for products, members, and messages.",
+      "imageUrl": "projects/boonsonclon-banner.jpg",
+      "youtubeUrl": "",
+      "externalUrl": "https://boonsonclon-furniture.onrender.com",
+      "fullDescription": "BoonSonClon is the final project for ITCS223 Web Development: a premium furniture store that has to work for a shopper and for the person running the shop. The public site is a responsive, card-based catalog with category filters, a cart, and an order flow. Behind that is an admin panel for products, orders, members, messages, and order status.\n\n## Two surfaces, one system\n\nA furniture catalog looks simple until someone has to add a product, correct an order, or answer a contact message. The project separates a REST API from the storefront so those jobs do not live inside the page that customers see. Authentication uses JWT and sessions. The database layer can run on PostgreSQL or SQLite, and the app seeds itself on startup so a fresh environment is usable without a manual import.\n\n## Why the layout is part of the engineering\n\nThe interface is mobile-first and still has to hold a product grid, an about page, a contact map, and admin tables. On a phone the shop should feel like a catalog. On a desktop the admin should feel like a desk. The live deployment is on Render, which means the same flows have to survive outside a local machine: routing, empty states, and an order detail page that still makes sense when the data is real.\n\nBoonSonClon is the web project on this site that is closest to a complete product. The interesting part is not a single page. It is that browsing, buying, and operating the store are one system.",
+      "mediaUrls": [
+        "projects/boonsonclon-shop-grid.jpg",
+        "projects/boonsonclon-desktop-overview.jpg",
+        "projects/boonsonclon-admin-orders.jpg",
+        "https://github.com/JirathiwatSun/ITCS223_WebDev"
+      ]
+    },
+    {
+      "id": "post-homelab-private-cloud",
+      "title": "A 10-Inch Rack as a Private Cloud",
+      "category": "Infrastructure",
+      "date": "2026-09-14",
+      "summary": "The home lab is a Proxmox VE 9.2.3 cluster in a compact rack, used for DNS, monitoring, media, local AI, and services I can reach through Tailscale.",
+      "imageUrl": "projects/homelab-real-banner.jpg",
+      "youtubeUrl": "",
+      "externalUrl": "",
+      "fullDescription": "The home lab is a compact 10-inch rack: managed switching, patch cabling, a mini PC, and HP server hardware. It is the machine that stays on, not a diagram of a cloud.\n\n## What actually runs\n\nThe cluster is Proxmox VE 9.2.3, with nodes named pve1 and pve2. Lightweight LXC containers and virtual machines hold the services: AdGuard, InfluxDB, Grafana, Immich, Jellyfin, Ollama, Seerr, Radarr, Prowlarr, Open WebUI, Hermes Agent, Home Assistant, and Ubuntu workloads for automation and media. Each service is small. Together they are a private stack for DNS, monitoring, photos, media, and local models.\n\n## Why the lab stays off the public internet\n\nRemote access goes through Tailscale. That gives me an encrypted path back to the rack without publishing it to the open internet. The useful lesson is operational. Services need updates, storage, and a network that still resolves when I am not at the desk. The rack, the Shapr3D mount, and the Proxmox cluster are one project: hardware, virtualization, and the software I want to run myself.",
+      "mediaUrls": [
+        "projects/homelab-real-02.jpg",
+        "projects/homelab-real-03.jpg",
+        "projects/homelab-proxmox-live-cluster.jpg"
+      ]
+    },
+    {
+      "id": "post-bf-connect-roles",
+      "title": "BF Connect Is Three Apps Sharing One Record",
+      "category": "App Development",
+      "date": "2026-09-07",
+      "summary": "The Android app gives mothers, nurses, and administrators different dashboards for feeding logs, consultations, community questions, and clinical follow-up.",
+      "imageUrl": "projects/bf-connect-banner.png",
+      "youtubeUrl": "",
+      "externalUrl": "https://github.com/JirathiwatSun/BF-Connect",
+      "fullDescription": "BF Connect is an Android application for breastfeeding support and clinical follow-up. The product only works if three people can use it without sharing the same screen: the mother, the nurse, and the administrator.\n\n## What each role is allowed to do\n\nMothers keep a profile, log breastfeeding and pumping, track goals, complete an EPDS screening, request a consultation, ask a community question, and read educational content. Nurses see patient lists, open a mother detail page, reply to consultations, moderate the community, and follow a case. Administrators approve nurses, manage knowledge, news, and quizzes, and handle reporting, notifications, and role setup.\n\n## Why the backend is part of the care workflow\n\nThe app uses Firebase Authentication with Google sign-in, Cloud Firestore, and Firebase Storage for images, PDFs, and video. Firebase Cloud Messaging sends role-based notifications. Crashlytics, Remote Config, and Cloud Functions v2 cover failures, configuration, and server-side work. A log that never syncs, or a nurse view that shows the wrong mother, is not a small bug in this app. The data model has to respect the role before the interface can.\n\nBF Connect is the mobile project on this site. It is less about a single feature and more about keeping a clinical conversation attached to the right person.",
+      "mediaUrls": [
+        "projects/bf-connect-home.png",
+        "projects/bf-connect-feed-log.png",
+        "projects/bf-connect-nurse-dashboard.png"
+      ]
+    },
+    {
+      "id": "post-shapr3d-rack-mount",
+      "title": "Drawing the Rack Mount Before the Servers Move In",
+      "category": "Product Design",
+      "date": "2026-08-31",
+      "summary": "The Shapr3D server rack mount turns measured hardware clearances into a 10-inch frame so the home lab hardware has a place to sit.",
+      "imageUrl": "projects/server-rack-shapr3d-frame.png",
+      "youtubeUrl": "",
+      "externalUrl": "",
+      "fullDescription": "Before the home lab could look like a rack, the hardware needed a mount. I modeled that frame in Shapr3D for a compact 10-inch setup, using reference dimensions from rack accessories instead of guessing the fit on screen.\n\n## What the model had to respect\n\nThe frame is functional geometry: measured spans around 237 mm, mounting holes, front-panel clearance, side supports, and screw holes. The question was whether a mini PC or motherboard-style server could sit in the rack with airflow and a panel that still closes. A render does not answer that. Hole spacing and panel cutouts do.\n\nThis piece of the portfolio sits next to the Proxmox cluster on purpose. The services, the switching, and the CAD model are one homelab. The software has to live inside a physical constraint, and the model is where that constraint was decided.",
+      "mediaUrls": [
+        "projects/server-rack-shapr3d-panel.png",
+        "projects/server-rack-shapr3d-reference.png"
+      ]
+    },
+    {
+      "id": "post-early-competitions",
+      "title": "The Work That Came Before the University Projects",
+      "category": "Software Engineering",
+      "date": "2026-08-24",
+      "summary": "Object detection, an air-quality alert app, an elder-care prototype, and an international computer olympiad are the earlier projects still listed on this site.",
+      "imageUrl": "https://i.postimg.cc/zBgLYVvH/Screenshot-2026-07-16-165426.png",
+      "youtubeUrl": "",
+      "externalUrl": "",
+      "fullDescription": "Several projects on this site are from secondary school at Matthayom Watnairong, before the Mahidol ICT coursework. They stay on the site because they are the same interests: software that watches something in the real world, and software meant to help a community.\n\n## Competitions\n\nIn November 2022 I represented Thailand at the COFAS 21st International Computer Olympiad in Lucknow. The FOOTAGE entry, on a sustainable development goal in our locality, received a first-place honorable mention. TEENOVATION, on creating something from electronic waste, received a second-place honorable mention.\n\nThe 70th Student Arts and Crafts competition was a software entry: real-time object detection with OpenCV, built to recognize more than 80 kinds of objects and report them as text. It won a gold medal at district level. Iron Dome, later, is a different system, but the question is related. Can the program keep up with what the camera sees?\n\nAt the South Asian STEM Education Fair the project was color classification for an industrial mechanical prototype. The GLOBE Student Research Competition entry was a real-time atmospheric monitoring and alert app for the Wat Nairong community. It reached the final round among 39 teams from across the country.\n\n## A prototype for elder support\n\nWith the Faculty of Nursing at Mahidol University, and with planning advice from Asst. Prof. Benjamat Olanratmanee, I helped design an application prototype for a community supporting older people in urban areas. The team is still developing it. It belongs here because BF Connect later asks a similar product question: how an app should support care, not only display information.\n\nThose early builds are smaller than the current course projects. They are the reason the newer ones exist.",
+      "mediaUrls": [
+        "https://i.postimg.cc/GtNdLj5V/Screenshot-2026-07-16-170649.png",
+        "https://i.postimg.cc/Hn38BFVg/Screenshot-2026-07-16-170342.png",
+        "https://i.postimg.cc/tRnc8y5H/Screenshot-2026-07-16-170059.png",
+        "https://i.postimg.cc/ZRHqSpZn/Screenshot-2026-07-16-170548.png"
+      ]
+    },
+    {
       "id": "post-apple-wwdc26-ai-siri",
       "title": "Apple WWDC26: Siri AI, Apple Intelligence, and the Developer Platform Shift",
       "category": "Current Tech",
       "date": "2026-06-26",
       "summary": "Apple's latest WWDC push puts Siri AI, Apple Intelligence, stronger parental controls, and platform-wide software upgrades at the center of its next developer cycle.",
-      "imageUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80",
+      "imageUrl": "blog/iphone.jpg",
       "youtubeUrl": "https://www.youtube.com/watch?v=hF8swzNR1-o",
       "externalUrl": "https://www.apple.com/newsroom/2026/06/apple-unveils-next-generation-of-apple-intelligence-siri-ai-and-more/",
       "fullDescription": "Apple's WWDC26 announcement is important because it shows where the company wants the next software cycle to go: more AI inside everyday workflows, a stronger Siri AI experience, platform-wide improvements across iOS, iPadOS, macOS, watchOS, visionOS, and tvOS, and more attention on safety and family controls.\n\nFor developers, the interesting part is not only the headline AI branding. The real question is how deeply Apple will let developers connect their apps into intelligent system experiences. If Siri AI becomes more capable and Apple Intelligence becomes more useful across apps, the value of clean app architecture, privacy-first design, and native platform integration becomes even higher.\n\nMy take: this is Apple trying to make AI feel less like a separate chatbot and more like a system layer. That direction fits Apple's strengths, but developers will need clear APIs, strong tooling, and predictable behavior before it becomes a real productivity jump.\n\nSources: Apple Newsroom WWDC26 announcement and Apple Developer WWDC26 video.",
@@ -359,7 +604,7 @@
       "category": "Movie Tech",
       "date": "2026-06-25",
       "summary": "IMAX is expanding new laser locations while immersive venues like Cosm attract major investment, showing that the theater experience is becoming a technology product again.",
-      "imageUrl": "https://www.boxofficepro.com/wp-content/uploads/2022/04/IMAX-with-laser-scaled.jpg",
+      "imageUrl": "blog/imax-screen.jpg",
       "youtubeUrl": "",
       "externalUrl": "https://investors.imax.com/news-events/news",
       "fullDescription": "A good IMAX theater is still one of the clearest examples of technology changing how content feels. The screen scale, projection brightness, image stability, and tuned audio system make the movie feel less like a file being played and more like a physical event.\n\nThe current theater market is interesting because premium formats are growing while ordinary cinema has to fight harder for attention. IMAX has announced new IMAX with Laser locations in 2026, including expansion partnerships in India and the southeastern United States. At the same time, immersive shared-reality venues such as Cosm are attracting major entertainment investment, which suggests that audiences still want large-scale experiences when the technology is special enough.\n\nMy review angle: IMAX is strongest when the movie is designed for it. For large-format sci-fi, action, space, or practical-camera spectacle, the format adds real value. For smaller dialogue-heavy films, the benefit is less dramatic. The future of theaters will likely depend on this kind of premium differentiation: bigger screens, better sound, higher brightness, and experiences that cannot be recreated on a laptop.\n\nSources: IMAX investor news on 2026 IMAX with Laser expansion, IMAX official theater experience information, and recent reporting on Sony's investment in Cosm.",
@@ -375,7 +620,7 @@
       "category": "AI Engineering",
       "date": "2026-06-26",
       "summary": "A technical note on why real-time computer vision is not only about model accuracy, but also memory flow, scheduling, synchronization, and predictable execution.",
-      "imageUrl": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1400&q=80",
+      "imageUrl": "projects/iron-dome-banner.jpg",
       "youtubeUrl": "",
       "externalUrl": "https://github.com/JirathiwatSun/missile-detection-static-main",
       "fullDescription": "Real-time AI systems fail when the software around the model cannot keep up with the model itself. In the Iron Dome Missile Tracker project, the core challenge was not simply detecting objects in video. The system also needed stable frame handling, low-latency inference, and predictable write-backs while many tasks were competing for resources.\n\nThis post highlights the engineering mindset behind that work: treat computer vision as a complete system. Memory management, thread coordination, queue design, and I/O behavior all affect how intelligent software behaves under pressure.\n\nThe result is a portfolio case study that connects AI, operating systems, and software engineering into one production-style build.",
@@ -387,7 +632,7 @@
       "category": "Data Science",
       "date": "2026-06-24",
       "summary": "A behind-the-scenes look at semantic movie search, hybrid scoring, hidden-gem discovery, and why recommendation systems should understand intent instead of only keywords.",
-      "imageUrl": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1400&q=80",
+      "imageUrl": "projects/cinematch-semantic-search.jpg",
       "youtubeUrl": "",
       "externalUrl": "https://github.com/JirathiwatSun/Movie-Recommendation",
       "fullDescription": "CineMatch 2.0 was designed around a simple idea: people do not always search for movies by title, actor, or genre. Sometimes they search by mood, visual style, emotional impact, or narrative complexity.\n\nThe platform uses metadata soup, semantic embeddings, cosine similarity, and weighted statistical quality to recommend films that match the user intent. It also includes a Hidden Gem Radar to reduce blockbuster bias and surface interesting films that might otherwise be buried.\n\nFor me, this project is a strong example of how data science can become a real product experience when the model, ranking logic, and interface all work together.",
@@ -399,7 +644,7 @@
       "category": "Web Development",
       "date": "2026-06-22",
       "summary": "How this portfolio moved from a static website idea into a full editable portfolio with admin controls, posts, certificates, media uploads, and Vercel-ready backend support.",
-      "imageUrl": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1400&q=80",
+      "imageUrl": "blog/ide-laptop.jpg",
       "youtubeUrl": "",
       "externalUrl": "",
       "fullDescription": "This portfolio is built to be more than a profile page. It is a content system for projects, experience, certificates, skills, blog posts, images, and embedded videos.\n\nThe backend/admin panel makes it possible to edit portfolio information without changing code every time. Since the site is now prepared for Vercel, it can use backend routes and storage patterns that were not available in a GitHub Pages-only deployment.\n\nThe goal is to make the portfolio feel alive: animated, editable, visual, and ready to grow with each new project.",
@@ -457,7 +702,7 @@
     {
       "id": "f9cb7cec-02d8-4f01-a959-ad32afdc594f",
       "name": "Cursor Build Salaya",
-      "description": "Cursor Build Salaya Mini-Hackathon | Judges' Pick Award Winner (Team Lovedrop)\n\nCompeted in a fast-paced 2.5-hour coding challenge among 22 teams and 100+ participants to conceptualize, build, and pitch [Brief project description].\n\nAwarded the \"Judges' Pick\" and a grand prize of 8,000฿ in Cursor credits by official Cursor Community ambassadors and industry tech leads.\n\nApplied web development and user interface design principles to rapidly deliver a functional, well-designed prototype under strict time constraints.",
+      "description": "Cursor Build Salaya Mini-Hackathon | Judges' Pick Award Winner (Team Lovedrop)\n\nCompeted in a fast-paced 2.5-hour coding challenge among 22 teams and 100+ participants to conceptualize, build, and pitch.\n\nAwarded the \"Judges' Pick\" and a grand prize of 8,000฿ in Cursor credits by official Cursor Community ambassadors and industry tech leads.\n\nApplied web development and user interface design principles to rapidly deliver a functional, well-designed prototype under strict time constraints.",
       "fullDescription": "Lovedrop Team\nAward: Judges' Pick (8,000 Baht in Cursor credits)\nEvent: Cursor Build Salaya (August 2026)\n\n[media: 4]\n\nThe Challenge\nCompeted in a fast-paced mini-hackathon featuring over 100 builders and 22 teams. We were challenged to conceptualize, develop, and present a functional application from scratch within a strict 2.5-hour time limit.\n\n[media: 8]\n\nThe Solution\nOur team created Lovedrop, a location-based social application that connects people through geographical discovery. Users can \"drop\" virtual postcards at specific physical locations for others in that area to find and \"pick up.\" These interactive postcards serve as digital time capsules that can contain personalized multimedia content, including Spotify lyrics, uploaded images, custom drawings, or localized group event invitations.\n\n[media: 7]\n\nTechnical Execution & Highlights\n\nRapid Prototyping: Applied web development and user interface design principles to deliver a clean, functional prototype before the 2.5-hour countdown ended.\n\nLocation-Based Logic: Developed the core mechanics allowing virtual items to be pinned to specific geographic coordinates and restricted access to users within that physical vicinity.\n\nMultimedia Integration: Built engaging UI components to support diverse postcard types, seamlessly handling image rendering, a drawing interface, and dynamic Spotify lyric displays.\n\nThe Pitch: Delivered a high-pressure, 5-minute presentation to a judging panel of official Cursor Ambassadors and industry tech leads, successfully demonstrating the app's interactive user interface.\n\n[media: 10]\n\nResult: Stood out among 22 competing projects to win the Judges' Pick award and secure a massive platform grant for our build.\n\n[media: 5]\n",
       "language": "Cursor",
       "repoUrl": "https://github.com/PracticalRyan/Cursor-Salaya",
@@ -491,8 +736,8 @@
     {
       "id": "project-iron-dome",
       "name": "Iron Dome Missile Tracker v3.1",
-      "description": "A high-performance real-time tactical computer vision application that optimizes resource-heavy AI inference pipelines inside bounded, time-critical software environments. The system demonstrates how custom OS resource management can accelerate machine learning workloads while handling HD video processing, deep learning inference, and telemetry write-backs without dropping frames.",
-      "language": "Python",
+      "description": "Iron Dome Missile Tracker v3.1 is a real-time vision system whose screen looks like a tactical HUD. In daylight it circles a launch plume and prints range, altitude, and speed. At night the same pipeline locks an infrared plume and keeps one active track on screen. The model is a custom YOLOv8 trained on more than 9,200 missile images, and the software around it is built so HD video, inference, and telemetry can run together without dropping frames.",
+      "language": "Missile tracking",
       "repoUrl": "https://github.com/JirathiwatSun/missile-detection-static-main",
       "liveUrl": "",
       "imageUrl": "projects/iron-dome-banner.jpg",
@@ -501,22 +746,19 @@
       "period": "Mar 2026 - Present",
       "associated": "Faculty of Information and Communication Technology, Mahidol University",
       "skills": [
-        "Computer Vision",
-        "AI",
-        "Operating Systems",
-        "Real-Time Systems"
+        "Computer vision",
+        "YOLOv8",
+        "Operating systems",
+        "Real-time video",
+        "Python"
       ],
       "highlights": [
-        "Perfect ITCS225 grading rubric score of 16/16",
-        "Custom system-level architecture for memory",
-        "scheduling",
-        "and synchronization",
-        "Deterministic execution with ultra-low latency and frame-rate stability",
-        "Simultaneous HD video processing",
-        "inference",
-        "and telemetry write-backs"
+        "Daylight and thermal tracking HUD",
+        "YOLOv8 trained on 9,200 missile images",
+        "Memory, scheduling, and frame sync",
+        "16/16 on the ITCS225 rubric"
       ],
-      "fullDescription": "The Iron Dome Missile Tracker v3.1 is a production-ready system demonstrating practical applications of Operating Systems concepts in a high-performance real-time environment. Built as a capstone-level project for the ITCS225 course, it achieved a perfect 16/16 grading rubric score. The system seamlessly integrates four major OS components—Synchronization, Memory Management, Task Scheduling, and File I/O—into a functional object detection pipeline that sustains 60fps performance without dropping frames.\n\n[media: 2]\n\nPowered by a custom-trained YOLOv8 AI engine fine-tuned on a curated Roboflow dataset of over 9,200 missile images, the tracker handles high-definition video processing, deep learning inference, and telemetry write-backs simultaneously. \n\n[media: 3]\n\nTo achieve this deterministic execution, the architecture utilizes custom system-level memory management, strict thread scheduling, and advanced synchronization techniques. The application is cross-platform, offering native CPU tracking on all operating systems alongside GPU-accelerated CUDA support on Windows and Metal support on macOS.\n\n[media: 5]\n\n",
+      "fullDescription": "The project image is the tracking view itself. A green radar ring sits over a sunset launch. A red box labels TARGET-015 as a missile and reads range 133.2 km, altitude 07608 m, and speed 1125 m/s. The footer stays plain: threat caution, one active missile. That HUD is the product, not a decoration on top of a model demo.\n\n[image: projects/iron-dome-03.png | Daylight track: the plume is boxed, with range, altitude, and speed printed beside the radar ring.]\n\n## Thermal lock, same pipeline\n\nSwitch the filter to thermal and the picture goes black except for the exhaust. An amber diamond marks TGT-039 as locked in infrared, with its own range, altitude, and speed, while the status line still says one missile is tracked. The interface is doing the same job in a harder image: find the bright object, ignore the ground, and keep the numbers stable.\n\n[image: projects/iron-dome-04.png | Night thermal mode locks the infrared plume and keeps a single active track.]\n\n## The model behind the box\n\nThe detector is a custom YOLOv8 fine-tuned on a Roboflow set of more than 9,200 missile images. The training board shows box, class, and distribution-focal loss falling across the run, while precision, recall, and mAP climb. A normalized confusion matrix compares missile and background so the misses are visible, not hidden in a single accuracy number.\n\n[image: projects/iron-dome-02.png | Training curves: detection loss falls while precision, recall, and mAP rise.]\n\n[image: projects/iron-dome-01.png | Normalized confusion matrix for missile versus background.]\n\n## Why the operating system is part of the AI\n\nITCS225 graded this 16/16 because the hard part was not only the detector. HD frames, inference, and telemetry write-backs share one machine. Synchronization, memory, scheduling, and file I/O decide whether the box stays on the plume or the frame drops. The app can track on CPU everywhere, with CUDA on Windows and Metal on macOS when a GPU is there. The HUD only looks calm when that pipeline is on time.",
       "mediaUrls": [
         "projects/iron-dome-banner.jpg",
         "projects/iron-dome-03.png",
@@ -528,8 +770,8 @@
     {
       "id": "project-cinematch",
       "name": "CineMatch 2.0: The Cinematic Oracle",
-      "description": "A production-grade movie discovery platform for ITCS227 that uses GPU-accelerated semantic search, high-dimensional embeddings, and hybrid recommendation logic to understand the soul and vibe of more than 436,000 movies.",
-      "language": "Jupyter Notebook",
+      "description": "CineMatch 2.0 is a movie discovery app for people who search by mood instead of a title. The semantic screen takes a phrase like \"astronaut movie\" and returns Space Race, The Old Negro Space Program, Carving Out Our Name, and The Hitchhiker's Guide to the Galaxy on the same row. Behind that row, a dashboard counts 429,365 films, an average rating of 6.23, and 20 genres, with drama and comedy carrying the largest share.",
+      "language": "Movie discovery",
       "repoUrl": "https://github.com/JirathiwatSun/Movie-Recommendation",
       "liveUrl": "",
       "imageUrl": "projects/cinematch-banner.jpg",
@@ -538,24 +780,19 @@
       "period": "2026",
       "associated": "Faculty of Information and Communication Technology, Mahidol University",
       "skills": [
-        "AI",
-        "Data Science",
-        "CSS",
-        "Recommendation Systems"
+        "Semantic search",
+        "Embeddings",
+        "Recommendation ranking",
+        "Streamlit",
+        "Data visualization"
       ],
       "highlights": [
-        "Metadata Soup fingerprint using title",
-        "overview",
-        "genre",
-        "keywords",
-        "and era tags",
-        "50/50 hybrid score combining semantic similarity and IMDB weighted quality",
-        "Mood Fusion intent parser for visual style",
-        "emotion",
-        "and narrative complexity",
-        "Hidden Gem Radar and interactive Plotly 3D discovery explorer"
+        "Search by vibe, not only by title",
+        "429,365 films on the dashboard",
+        "Meaning plus IMDb quality score",
+        "Hidden gems beside blockbusters"
       ],
-      "fullDescription": "\nCineMatch 2.0 is a production-grade movie discovery platform designed for the ITCS227 Data Science course. It transcends simple keyword matching by understanding the 'Soul' and 'Vibe' of over 436,000 movies using high-dimensional embeddings and a custom Hybrid Scoring Engine. \n\n[media: 3]\n\n[media: 5]\n\n\nThe platform features an advanced architecture encompassing data engineering (processing datasets into a 'Metadata Soup' fingerprint using Title, Overview, Genre, Keywords, and Era Tags), an AI Core utilizing the all-MiniLM-L6-v2 model for GPU-accelerated vectorization, and a modern Streamlit web interface.\\n\\nUnlike standard search engines, CineMatch uses a 50/50 Hybrid Score. \n\n[media: 4]\n\n[media: 6]\n\n\n\nIt combines Semantic Similarity—measured using Cosine Similarity of query embeddings—with a Weighted Statistical Quality based on the IMDB rating formula. The system also features a Mood Fusion Intent Parser that automatically detects if a query matches Visual Styles (e.g., Neon, Noir), Emotional Impacts, or Narrative Complexity to adjust scoring weights on the fly. Finally, a Hidden Gem Radar specifically surfaces highly-rated independent films with lower vote counts to prevent blockbuster bias, while a Plotly 3D network graph allows users to visually explore cinematic relationships.\n\n[media: 7]\n\n",
+      "fullDescription": "CineMatch is built for the search people actually type. The discovery screen shows the query \"astronaut movie\" and a row of posters that are not the same film repeated: Space Race (2005), The Old Negro Space Program (2004), Carving Out Our Name (2001), and The Hitchhiker's Guide to the Galaxy (1981). The match is the idea of space and voyage, not the keyword sitting in a title field.\n\n[image: projects/cinematch-semantic-search.jpg | Semantic discovery for \"astronaut movie,\" with four different space films on one row.]\n\n## What the catalog looks like\n\nThe data dashboard is the other half of the same app. Key metrics read 429,365 total movies, an average rating of 6.23, a highest rating of 10.0, a latest year of 2026, and 20 unique genres. The genre chart is led by drama, then comedy, romance, and thriller. That picture matters because a recommender trained on this catalog will drift toward drama unless the ranking pushes back.\n\n[image: projects/cinematch-dashboard-genres.jpg | Genre board: 429,365 films, with drama and comedy as the largest slices.]\n\n## How a result is scored\n\nEach film is turned into a metadata fingerprint of title, overview, genre, keywords, and era. An all-MiniLM-L6-v2 embedding places that fingerprint in a vector space, and cosine similarity measures how close a query is. The final rank is a hybrid: half of that semantic closeness, half a weighted quality score in the IMDb style. A mood parser can tell a visual request, such as neon or noir, from an emotional one or a request about how complicated the story is, and it shifts the weights.\n\nThe Hidden Gem Radar is the correction for the genre chart. Highly rated films with fewer votes are allowed to surface so the row is not only famous titles. A Plotly 3D view then lets someone walk the relationships the model found. CineMatch was the ITCS227 data science build: the model, the rank, and the screen are one product.",
       "mediaUrls": [
         "projects/cinematch-banner.jpg",
         "projects/cinematch-oracle-filters.jpg",
@@ -573,8 +810,8 @@
     {
       "id": "project-boonsonclon",
       "name": "BoonSonClon Premium Furniture Store",
-      "description": "A high-performance full-stack e-commerce platform designed for premium furniture retail, featuring storefront browsing, product filtering, cart and order flows, admin product management, order inspection, member management, contact forms, and responsive UI pages.",
-      "language": "JavaScript",
+      "description": "BoonSonClon is a premium furniture shop and the back office that runs it. The storefront grid shows pieces such as the KLEPPSTAD bed, a luxury table lamp, and a decorative vase, with price and category filters beside them. The same system opens an admin panel for the catalog and an order inspection page, where a purchase can be marked shipped and the total broken into subtotal, VAT, and logistics.",
+      "language": "Furniture store",
       "repoUrl": "https://github.com/JirathiwatSun/ITCS223_WebDev",
       "liveUrl": "https://boonsonclon-furniture.onrender.com",
       "imageUrl": "projects/boonsonclon-banner.jpg",
@@ -583,29 +820,20 @@
       "period": "2026",
       "associated": "Faculty of Information and Communication Technology, Mahidol University",
       "skills": [
-        "Web Applications",
-        "Full-Stack Development",
-        "JavaScript",
-        "Responsive Design",
-        "E-Commerce",
-        "Admin Dashboard"
+        "Full-stack web",
+        "REST API",
+        "PostgreSQL",
+        "SQLite",
+        "JWT auth",
+        "Responsive layout"
       ],
       "highlights": [
-        "Premium furniture e-commerce platform",
-        "Hybrid database system",
-        "Storefront product catalog",
-        "category filters",
-        "cart",
-        "and order flow",
-        "Admin dashboard for products",
-        "orders",
-        "members",
-        "messages",
-        "and order status updates",
-        "Fully responsive customer and admin pages",
-        "Live production deployment on Render"
+        "Catalog with price and category filters",
+        "Cart, checkout, and order inspection",
+        "Admin desk for products and members",
+        "PostgreSQL or SQLite behind a REST API"
       ],
-      "fullDescription": "[image: https://i.postimg.cc/c4T5THY2/Screenshot-2026-06-27-172948.png]\n\nBoonSonClon is a high-performance, full-stack e-commerce platform designed exclusively for premium furniture retail, developed as the final project for the ITCS223 Web Development course. \n\n[media: 2]\n\nThe platform features a robust Hybrid Database System compatible with both PostgreSQL and SQLite, and a fully responsive Mobile-First card-based layout optimized for all viewports from mobile devices to desktop monitors.\\n\\nThe system is built with a clear separation of concerns, featuring a dedicated RESTful web service API and a polished storefront frontend. \n\n[media: 3]\n\nIt supports advanced e-commerce features, including clean server-side URL routing, dynamic product grids, and a comprehensive Admin Panel with secure JWT and session-based authentication for order and inventory management. The platform is designed for a seamless developer experience, featuring fully automated database seeding upon initialization, ensuring rapid deployment and testing environments.\n\n[media: 7]\n\n\n",
+      "fullDescription": "BoonSonClon is the ITCS223 web project, and the screens are a shop someone could browse plus the desk someone has to operate. The storefront is a furniture catalog: a weekend sale banner, a price slider, category counts for beds, lighting, and decor, and product cards with a heart, a price, and a featured mark. On the grid, the KLEPPSTAD bed, a luxury table lamp, and a decorative vase set sit in the same row.\n\n[image: projects/boonsonclon-shop-grid.jpg | Shop grid with price and category filters beside beds, lighting, and decor.]\n\n## The order after the click\n\nThe order inspection screen is where the catalog becomes a purchase. Order #13 lists a luxury table lamp and the KLEPPSTAD bed, a status control set to shipped, and a summary of subtotal, VAT, logistics, and grand total. That page is the reason the storefront cannot be a static gallery. Someone has to change the status, and the customer has to see a total that adds up.\n\n[image: projects/boonsonclon-admin-order-detail.jpg | Order inspection with line items, a shipped status, and the cost summary.]\n\n## One API, two rooms\n\nThe admin panel counts products, revenue, and members, then lists the catalog for edits. Authentication uses JWT and sessions so that room is not the public shop. The API is separate from the pages. The database can be PostgreSQL or SQLite, and a new environment seeds itself so the grid is not empty on first launch. The layout is mobile-first and still has to hold the desktop admin tables. The live shop is deployed on Render.\n\n[image: projects/boonsonclon-admin-products.jpg | Admin catalog, where products, prices, and stock are managed away from the public shop.]",
       "mediaUrls": [
         "projects/boonsonclon-banner.jpg",
         "projects/boonsonclon-desktop-overview.jpg",
@@ -621,9 +849,9 @@
     {
       "id": "project-homelab",
       "name": "Personal Home Lab Server",
-      "description": "A real compact home lab server rack running a Proxmox VE 9.2.3 cluster with LXC containers and virtual machines for networking, self-hosting, storage, automation, media, AI experiments, and infrastructure monitoring.",
-      "fullDescription": "[media: 7]\n\nBuilding a Personal Home Lab Server is an ongoing journey of creating a private, self-hosted cloud environment from real hardware. The setup is built around a compact 10-inch rack with managed switching, structured patch cabling, mini PC hardware, and HP server hardware, giving the lab a practical footprint while still supporting multiple always-on services.\n\n[media: 8]\n\nThe core of the infrastructure is powered by Proxmox VE 9.2.3. The cluster currently uses pve1 and pve2 nodes, with lightweight LXC containers and virtual machines for services such as AdGuard, InfluxDB, Grafana, Immich, Jellyfin, Ollama, Seerr, Radarr, Prowlarr, Open WebUI, Hermes Agent, Home Assistant, Ubuntu, and other automation or media workloads.\n\n[media: 6]\n\nNetworking and security are handled with a self-hosted network stack and Tailscale-enabled remote access. This keeps services reachable through an encrypted private network while reducing the need to expose home infrastructure directly to the public internet.\n\n[media: 5]\n\nThe lab serves as a learning and production-style environment for system administration, virtualization, Docker-based services, monitoring, media hosting, local AI experimentation, storage, and infrastructure operations. It connects physical hardware design with practical DevOps workflows and real service maintenance.\n\n",
-      "language": "Infrastructure",
+      "description": "The home lab is a real 10-inch rack, not a diagram. Blue honeycomb light, a row of yellow patch cables, a Wyse mini PC, and an HP server sit in one rolling frame. Next to it, the Proxmox VE 9.2.3 board lists the containers and virtual machines, and a second screen shows the room and the nodes together: Pi-hole query counts, an air purifier, and CPU, RAM, and disk for pve and pve01.",
+      "fullDescription": "The cover photograph is the machine. A compact rolling rack glows blue through a honeycomb panel. Yellow patch leads drop in a neat row onto a switch, a Wyse unit sits in the middle with its power light on, and an HP server fills the lower bay. The small frames under the Proxmox window repeat that cabling and a colorful monitoring page, because the lab is both hardware and the services on it.\n\n## What the cluster is running\n\nProxmox VE 9.2.3 is the host. Lightweight LXC containers and virtual machines carry AdGuard, InfluxDB, Grafana, Immich, Jellyfin, Ollama, Seerr, Radarr, Prowlarr, Open WebUI, Hermes Agent, Home Assistant, and Ubuntu workloads. The point of the list is that DNS, photos, media, local models, and home control stay on hardware I can see.\n\n## The wall that watches it\n\nOne monitor in the lab shows the services as a single board. The left side is the room: lights, weather, an air purifier, and Pi-hole with total queries, blocked queries, and a block percentage. The right side is the cluster: node pve and node pve01, each with CPU, RAM, storage, and a short history. Containers such as Grafana, AdGuard, Influx, and Tailscale are tiles along the bottom. That screen is how the rack is operated day to day.\n\n[image: projects/homelab-real-03.jpg | Operations board: Pi-hole and room controls beside CPU, RAM, and disk for both nodes.]\n\nRemote access uses Tailscale, so the same board is reachable without publishing the rack to the public internet. The Shapr3D mount on this site is the frame that lets this hardware sit in the 10-inch bay.",
+      "language": "Home lab rack",
       "repoUrl": "",
       "liveUrl": "",
       "imageUrl": "projects/homelab-real-banner.jpg",
@@ -632,37 +860,19 @@
       "period": "2026 - Present",
       "associated": "Personal Project",
       "skills": [
-        "Server & Networking",
         "Proxmox",
-        "Docker",
-        "Ubuntu",
+        "LXC and VMs",
         "Tailscale",
-        "AdGuard",
         "Grafana",
         "Jellyfin",
         "Ollama",
         "Home Assistant"
       ],
       "highlights": [
-        "Built a real compact rack with managed switching",
-        "patch cabling",
-        "mini PC hardware",
-        "and HP server hardware",
-        "Runs a Proxmox VE 9.2.3 cluster with pve1 and pve2 nodes",
-        "Hosts LXC containers and VMs for AdGuard",
-        "Grafana",
-        "Jellyfin",
-        "Ollama",
-        "Home Assistant",
-        "Ubuntu",
-        "and media automation",
-        "Used for secure remote access",
-        "DNS/network services",
-        "monitoring",
-        "media hosting",
-        "local AI",
-        "storage",
-        "and self-hosted application experiments"
+        "10-inch rack with yellow patch cables",
+        "Proxmox VE 9.2.3 cluster",
+        "Pi-hole, rooms, and node health on one wall",
+        "Tailscale reach without a public port"
       ],
       "mediaUrls": [
         "projects/homelab-real-banner.jpg",
@@ -678,9 +888,9 @@
     {
       "id": "project-bf-connect",
       "name": "BF Connect Android Application",
-      "description": "An Android application for breastfeeding support and clinical follow-up that connects mothers, nurses, and administrators through role-based dashboards, feeding and pumping logs, consultations, community moderation, knowledge content, and Firebase-backed data sync.",
-      "fullDescription": "BF Connect is a production-oriented Android application for breastfeeding support, care coordination, and clinical follow-up. The app is designed around three primary roles: mothers, nurses, and administrators, each with dedicated workflows and dashboards.\n\n[media: 2]\n\nFor mothers, the application supports profile management, breastfeeding and pumping logs, goal tracking, EPDS mental-health screening, consultation requests, community questions, and educational content. For nurses, it provides patient monitoring views, mother detail pages, consultation replies, community moderation, schedule support, and case follow-up. For administrators, it includes nurse approval, knowledge/news/quiz management, reporting, notifications, role oversight, and system setup.\n\n[media: 4]\n\n\nThe backend is configured with Firebase Authentication, Google sign-in, Cloud Firestore, Firebase Storage for images/PDFs/videos, Firebase Cloud Messaging for role notifications, Firebase Crashlytics, Firebase Remote Config, and Cloud Functions v2. The project also includes production launch documentation, Play Store build notes, data-safety drafts, and Firebase deployment rules.",
-      "language": "Java / Android",
+      "description": "BF Connect is an Android app for breastfeeding support, and the cover shows four phones because the product has more than one job. A mother sees a daily summary. A nurse opens a feeding and pumping timer with left, right, and both-sides controls. Another phone is the nurse list of mothers, and the last is a patient lookup by name or hospital number. Each role gets a different home screen over the same Firebase record.",
+      "fullDescription": "The banner is four phones on one desk, and that is the design. The first and third use a teal mother home: a daily summary and shortcuts. The second phone is purple and titled Feeding / Pumping Log for a nurse account, with a large 00:00 timer. The fourth phone is a patient list with a search field. BF Connect only works if those people do not share one menu.\n\n## The log a nurse actually fills\n\nOpen the timer and the screen is a clinical form, not a generic stopwatch. Start, stop-and-save, left side, right side, and both sides are separate controls. The last entry can record which side, how long, and whether there was pain. Under that are actions for breast-milk feeding, formula, supplement, and a problem note. The Thai labels sit on the buttons the nurse taps during a visit.\n\n[image: projects/bf-connect-feed-log.png | Nurse feeding and pumping log with a timer, side selection, and the last session.]\n\n## Three jobs, one record\n\nMothers keep a profile, log feeding and pumping, track goals, complete an EPDS screening, request a consultation, ask a community question, and read teaching material. Nurses see a mother list, open a detail page, reply to consultations, moderate the community, and follow a case. Administrators approve nurses and manage knowledge, news, quizzes, reports, and notifications.\n\nThe record lives in Firebase: Authentication with Google sign-in, Cloud Firestore, Storage for images and documents, Cloud Messaging for role alerts, Crashlytics, Remote Config, and Cloud Functions. A timer that never syncs, or a nurse list that shows the wrong mother, breaks the care conversation. The interface is only as trustworthy as that split.",
+      "language": "Care coordination",
       "repoUrl": "https://github.com/JirathiwatSun/BF-Connect",
       "liveUrl": "",
       "imageUrl": "projects/bf-connect-banner.png",
@@ -691,29 +901,16 @@
       "skills": [
         "Android",
         "Java",
-        "Firebase",
-        "Cloud Firestore",
         "Firebase Auth",
-        "Firebase Storage",
-        "Cloud Functions",
-        "Mobile UI"
+        "Cloud Firestore",
+        "Cloud Messaging",
+        "Role-based UI"
       ],
       "highlights": [
-        "Role-based dashboards for mothers",
-        "nurses",
-        "and administrators",
-        "Breastfeeding and pumping log workflows with clinical follow-up support",
-        "EPDS screening",
-        "consultation",
-        "community",
-        "knowledge",
-        "and moderation modules",
-        "Firebase-backed sync with authentication",
-        "storage",
-        "messaging",
-        "Crashlytics",
-        "Remote Config",
-        "and Cloud Functions"
+        "Mother summary and nurse timer",
+        "Left, right, and both-sides feeding log",
+        "Patient lookup by name or number",
+        "Firebase auth, data, files, and alerts"
       ],
       "mediaUrls": [
         "projects/bf-connect-home.png",
@@ -726,9 +923,9 @@
     {
       "id": "project-shapr3d-server-rack",
       "name": "Shapr3D Custom Server Rack Mount",
-      "description": "A custom 3D-modeled server rack mount designed in Shapr3D for a compact 10-inch homelab rack setup. The design translates real product reference dimensions into a practical rack-mounted frame concept for mini PC and motherboard/server hardware mounting.",
-      "fullDescription": "This project documents my custom 3D CAD design workflow for a compact server rack mounting component, modeled in Shapr3D as part of my personal home lab infrastructure work.\n\n[media: 3]\n\n\nThe design process started from practical hardware requirements: adapting a compact mini PC / motherboard-style server setup into a clean 10-inch rack form factor. I used reference dimensions from rack-mount accessories and translated them into a custom frame with measured spacing, panel cutouts, side supports, screw holes, and structural geometry.\n\n[media: 1]\n\n\n\nThe model focuses on functional hardware design rather than only visual rendering. The rack frame includes measured spans around 237 mm, mounting holes, front-panel clearance, and reinforced side geometry so the concept can be evaluated for fit, airflow, and physical installation inside a small server rack.\n\nThis project shows my ability to connect software engineering, networking infrastructure, and physical product design: planning server hardware, studying rack dimensions, designing CAD geometry, and iterating toward a usable homelab mounting solution.",
-      "language": "Shapr3D / CAD",
+      "description": "This is the mount that lets the home-lab hardware sit in a 10-inch rack. In Shapr3D the frame is an isometric bracket with a measured span of 237 mm, side walls, and screw holes. The top view shows the same part as a front panel: a long opening, a corner cutout, and mounting holes at the ends. The model was drawn from rack-accessory dimensions so the mini PC and server have a real place to go.",
+      "fullDescription": "The thumbnail is the CAD model, not a render of a finished product shot. In Shapr3D the part stands in isometric view on the grid: a grey folded frame, a 237 mm dimension across the top flange, side walls that drop back, and dark mounting holes. The span is the constraint. A 10-inch rack does not forgive a bracket that is a few millimetres long.\n\n## The panel the hardware has to pass through\n\nThe top view turns that frame into a plate. A long rectangular opening runs down the middle, a chamfered cutout sits at one end, and pairs of holes mark both ends. A shorter dimension, about 33 mm, sets the height of the end tab. This is the clearance for the mini PC and the front of the server, plus the screws that hold the plate to the rack.\n\n[image: projects/server-rack-shapr3d-panel.png | Top view of the panel: center opening, corner cutout, and mounting holes.]\n\nThe reference beside the model is a product page for a GeeekPi 1U shelf made for a 10-inch rack and a Mini-ITX board, shown on the same screen as the CAD view. I used that kind of measured accessory as the starting hole pattern, then checked the geometry for fit, airflow, and whether the panel still closes. The home-lab photographs show the Wyse unit and the HP server in the bays this mount was drawn for.\n\n[image: projects/server-rack-shapr3d-reference.png | The 237 mm CAD panel next to the 10-inch rack shelf used as the measured reference.]",
+      "language": "Rack hardware",
       "repoUrl": "",
       "liveUrl": "",
       "imageUrl": "projects/server-rack-shapr3d-frame.png",
@@ -739,18 +936,15 @@
       "skills": [
         "Shapr3D",
         "CAD",
-        "3D Modeling",
-        "Product Design",
-        "Hardware Prototyping",
-        "Server & Networking"
+        "Measured geometry",
+        "Rack mounting",
+        "Hardware fit"
       ],
       "highlights": [
-        "Modeled a custom 10-inch server rack mounting frame in Shapr3D",
-        "Translated real product reference dimensions into CAD geometry",
-        "Designed measured panel openings",
-        "screw holes",
-        "and support structures",
-        "Connected homelab infrastructure planning with practical hardware design"
+        "237 mm span measured in Shapr3D",
+        "Front opening and corner cutout",
+        "Screw holes for a 10-inch bay",
+        "Drawn to fit the live rack"
       ],
       "mediaUrls": [
         "projects/server-rack-shapr3d-frame.png",
@@ -761,87 +955,151 @@
     {
       "id": "22b8859b-be18-4c56-b444-633a6621737f",
       "name": "INTERNATIONAL COMPETITION",
-      "description": "Participated and represented Thailand in the international computer competition in the COFAS 21st INTERNATIONAL COMPUTER OLYMPIAD from 26 - 29 November 2022. Received first place honorable mention in the FOOTAGE competition on the topic of “Sustainable Development Goal in your locality” and Received second place honorable mention in the TEENOVATION competition on the topic of “Creating Innovations From Electronic Waste” in the Republic of India, Lucknow.",
-      "fullDescription": "Participated and represented Thailand in the international computer competition in the COFAS 21st INTERNATIONAL COMPUTER OLYMPIAD from 26 - 29 November 2022. Received first place honorable mention in the FOOTAGE competition on the topic of “Sustainable Development Goal in your locality” and received second place honorable mention in the TEENOVATION competition on the topic of “Creating Innovations From Electronic Waste” in the Republic of India, Lucknow.\nhttps://i.postimg.cc/WbLsH50x/Screenshot-2026-07-16-171044.png\n\n[image: https://i.postimg.cc/KjpC7v7n/Screenshot-2026-07-16-165822.png | https://i.postimg.cc/KjpC7v7n/Screenshot-2026-07-16-165822.png]\n",
-      "language": "Python",
+      "description": "This board is the record of representing Thailand at the COFAS 21st International Computer Olympiad in Lucknow, 26–29 November 2022. The collage gathers certificates of merit, a certificate of participation, the Footage and Teenovation stages, school news pages, and the team photographs. Footage, on a local sustainable development goal, received a first-place honorable mention. Teenovation, on making something from electronic waste, received a second-place honorable mention.",
+      "fullDescription": "The project image is a results board, not a single certificate. COFAS certificates of merit and a certificate of participation sit next to a QR code for the Footage video, photographs of the stage, a laptop session, and pages from the school news. It is the trip and the two entries in one frame.\n\n## Two entries, one olympiad\n\nFrom 26 to 29 November 2022 I represented Thailand at the COFAS 21st International Computer Olympiad in Lucknow. The Footage competition asked for a sustainable development goal in our own locality and received a first-place honorable mention. Teenovation asked for an innovation made from electronic waste and received a second-place honorable mention.\n\nThe board matters because the work was public. There is a stage photograph, a team lineup, and a school report beside the paper. Those are the same habits as the later builds on this site: a camera or a sensor pointed at a real place, then a result someone else can check.",
+      "language": "Computer olympiad",
       "repoUrl": "",
       "liveUrl": "",
       "imageUrl": "https://i.postimg.cc/zBgLYVvH/Screenshot-2026-07-16-165426.png",
-      "mediaUrls": [],
+      "mediaUrls": [
+        "https://i.postimg.cc/zBgLYVvH/Screenshot-2026-07-16-165426.png",
+        "https://i.postimg.cc/KjpC7v7n/Screenshot-2026-07-16-165822.png",
+        "https://i.postimg.cc/WbLsH50x/Screenshot-2026-07-16-171044.png"
+      ],
       "updated": "2026-07-16",
       "featuredRank": 7,
       "period": "2023",
       "associated": "Matthayom Watnairong School",
-      "skills": [],
-      "highlights": []
+      "skills": [
+        "Competition project",
+        "Video documentary",
+        "E-waste innovation",
+        "Team presentation"
+      ],
+      "highlights": [
+        "Thailand team at COFAS in Lucknow",
+        "Footage first-place honorable mention",
+        "Teenovation e-waste honorable mention",
+        "Certificates, stage, and school report"
+      ]
     },
     {
       "id": "36568278-27b7-44ab-88fb-e6e6c0aeb02b",
       "name": "Volunteer Project",
-      "description": "Create and design an application prototype on the research topic “Community joins forces Join together to support the elderly in urban areas”. of the Faculty of Nursing Mahidol University, with Asst. Prof. Benjamat Olanratmanee (Department of Pediatrics Nursing) is in charge of planning and providing work advice. This application is still being developed continuously by me and my team members. If completed and ready for service, it will benefit the elderly, people in society, and the nation in the future.",
-      "fullDescription": "Create and design an application prototype on the research topic “Community joins forces Join together to support the elderly in urban areas”. of the Faculty of Nursing Mahidol University, with Asst. Prof. Benjamat Olanratmanee (Department of Pediatrics Nursing) is in charge of planning and providing work advice. This application is still being developed continuously by my team members and me. If completed and ready for service, it will benefit the elderly, people in society, and the nation in the future.\n\n[image: https://i.postimg.cc/tRnc8y5H/Screenshot-2026-07-16-170059.png | https://i.postimg.cc/tRnc8y5H/Screenshot-2026-07-16-170059.png]\n\n[image: https://i.postimg.cc/RhxLkrMb/Screenshot-2026-07-16-170220.png | https://i.postimg.cc/RhxLkrMb/Screenshot-2026-07-16-170220.png]",
-      "language": "Volunteer Project",
+      "description": "This prototype was designed with the Faculty of Nursing at Mahidol University for a community supporting older people in the city. The board shows the working table, a wall of mobile screens, a meal-logging flow titled around daily health, a schedule, and QR codes for the presentation and the UI. It is still being built with the team. The pictures are the research prototype, not a store listing.",
+      "fullDescription": "The collage is the prototype in the room where it was made. Students sit at a table with laptops under a screen titled as a health app. Beside that is a grid of phone screens, a meal page, a colorful schedule, outdoor team photos, and three QR codes for the presentation video, the prototype report, and a UI preview.\n\n## Who the app is for\n\nThe research topic, with Asst. Prof. Benjamat Olanratmanee in the Department of Pediatric Nursing at Mahidol University, is a community joining to support older people in urban areas. The screens explore that as a daily tool: meals, a schedule, and a phone layout a family or a nurse could actually open. I designed the prototype with the team. It is still in development, so this page keeps the boards and the intent rather than a finished store build.\n\nBF Connect, later on this site, asks a related product question with a different clinical focus: one app, several roles, and a record that has to stay attached to the right person.",
+      "language": "Community health",
       "repoUrl": "",
       "liveUrl": "",
       "imageUrl": "https://i.postimg.cc/RhxLkrMb/Screenshot-2026-07-16-170220.png",
-      "mediaUrls": [],
+      "mediaUrls": [
+        "https://i.postimg.cc/RhxLkrMb/Screenshot-2026-07-16-170220.png",
+        "https://i.postimg.cc/tRnc8y5H/Screenshot-2026-07-16-170059.png"
+      ],
       "updated": "2026-07-16",
       "featuredRank": 8,
       "period": "2023",
       "associated": "Matthayom Watnairong School",
-      "skills": [],
-      "highlights": []
+      "skills": [
+        "Mobile prototype",
+        "Community health",
+        "UI flow",
+        "Team research"
+      ],
+      "highlights": [
+        "Nursing-faculty community prototype",
+        "Mobile screens for daily health",
+        "Meal log and a care schedule",
+        "Presentation and UI linked by QR"
+      ]
     },
     {
       "id": "a6e642e7-d6f1-4b61-93e8-bebe27a79870",
       "name": "Student Arts And Crafts Competition",
-      "description": "Participated in “The 70th Student Arts And Crafts Competition” topic of “Computer project competition in the software category” which the topic that we competed on is Real-time Object Detection Software, which can recognize more than 80 types of objects and report them in text form. This can be further developed in the protection and security system by using OpenCV as a library to run the program. The result is a Gold Medal in the district-level competition.",
-      "fullDescription": "\n\nParticipated in “The 70th Student Arts And Crafts Competition” topic of “Computer project competition in the software category” which the topic that we competed on is Real-time Object Detection Software, which can recognize more than 80 types of objects and report them in text form. This can be further developed in the protection and security system by using OpenCV as a library to run the program. The result is a Gold Medal in the district-level competition.\n\n\n[image: https://i.postimg.cc/GtNdLj5V/Screenshot-2026-07-16-170649.png | https://i.postimg.cc/GtNdLj5V/Screenshot-2026-07-16-170649.png]",
-      "language": "Python / OpenCV / YOLO",
+      "description": "The 70th Student Arts and Crafts entry was real-time object detection in the software category, and the board shows the system rather than only the medal. A camera frame is drawn with boxes around a person, an OpenCV loop is printed beside a YOLO-style diagram, and the team stands with the project display. The program recognized more than 80 kinds of objects and wrote the result as text. It won a gold medal at district level.",
+      "fullDescription": "The poster puts the detector and the proof in one place. The title is the 70th Student Arts and Crafts Competition, software category. Under it, a photograph shows bounding boxes on a person in a room of lamps and furniture. Next to that is a pipeline diagram and a short OpenCV loop: open the camera, read a frame, and keep going. A gold medal and the team photograph close the board.\n\n## What the program reported\n\nThe entry recognized more than 80 kinds of objects and reported them as text, with the idea that the same loop could later serve a protection or security system. The gold medal was at district level. Iron Dome, much later, is a different detector and a different course, but the question started here: can the box stay on the thing the camera is seeing, and can the program say what it saw?",
+      "language": "Object detection",
       "repoUrl": "",
       "liveUrl": "",
       "imageUrl": "https://i.postimg.cc/GtNdLj5V/Screenshot-2026-07-16-170649.png",
-      "mediaUrls": [],
+      "mediaUrls": [
+        "https://i.postimg.cc/GtNdLj5V/Screenshot-2026-07-16-170649.png"
+      ],
       "updated": "2026-07-16",
       "featuredRank": 9,
       "period": "2023",
       "associated": "Matthayom Watnairong School",
-      "skills": [],
-      "highlights": []
+      "skills": [
+        "OpenCV",
+        "YOLO",
+        "Python",
+        "Real-time video",
+        "Object detection"
+      ],
+      "highlights": [
+        "Live boxes on a camera frame",
+        "More than 80 object types",
+        "OpenCV loop written beside the diagram",
+        "District gold medal in software"
+      ]
     },
     {
       "id": "f0762ac5-4760-43e0-8f2a-1c23022cf9af",
       "name": "Color classification for industrial mechanical prototype",
-      "description": "Participated in the international competition \"South Asian STEM Education Fair & Exposition\" on the topic of the innovation project “Color classification for industrial mechanical prototypes”.",
-      "fullDescription": "[image: https://i.postimg.cc/ZRHqSpZn/Screenshot-2026-07-16-170548.png | https://i.postimg.cc/ZRHqSpZn/Screenshot-2026-07-16-170548.png]\n\nParticipated in the international competition \"South Asian STEM Education Fair & Exposition\" on the topic of the innovation project “Color classification for industrial mechanical prototypes”.",
-      "language": "Python",
+      "description": "At the Southeast Asian STEM Education Fair and Exposition 2023, our entry was a mechanical prototype that classifies objects by color. The board shows the bench: students around a laptop, a close view of the machine and its wiring, and the team in front of the booth. A QR code points at the machine working. The fair photograph is the build, not a slide about a build.",
+      "fullDescription": "The poster is the fair entry. The title reads color classification for an industrial mechanical prototype, next to the Southeast Asian STEM Education Fair and Exposition 2023 mark. The photographs show the work at bench height: a group around a laptop, hands on a small machine and its cables, and the team lined up at the booth in matching shirts. A QR code is labeled as the video of the machine working.\n\n## What we took to the fair\n\nThe competition topic was an innovation that sorts by color for an industrial-style mechanical prototype. The interesting part of the photograph is that the classifier is attached to hardware. A laptop, a mechanism, and a team demo had to agree in the same booth. That is the same pairing as the later vision projects: a model is only useful when the thing in front of the camera can act on the label.",
+      "language": "Color sorting",
       "repoUrl": "",
       "liveUrl": "",
       "imageUrl": "https://i.postimg.cc/ZRHqSpZn/Screenshot-2026-07-16-170548.png",
-      "mediaUrls": [],
+      "mediaUrls": [
+        "https://i.postimg.cc/ZRHqSpZn/Screenshot-2026-07-16-170548.png"
+      ],
       "updated": "2026-07-16",
       "featuredRank": 10,
       "period": "2023",
       "associated": "Matthayom Watnairong School",
-      "skills": [],
-      "highlights": []
+      "skills": [
+        "Python",
+        "Color classification",
+        "Mechanical prototype",
+        "STEM exhibition"
+      ],
+      "highlights": [
+        "STEM Fair and Expo 2023 entry",
+        "Mechanical prototype sorts by color",
+        "Bench wiring beside the laptop",
+        "Booth photo and a working-machine video"
+      ]
     },
     {
       "id": "8af1aaa0-b268-441c-bb37-25449f290b34",
       "name": "GLOBE STUDENT RESEARCH COMPETITION",
-      "description": "Participated in the national competition “GLOBE STUDENT RESEARCH COMPETITION”. The research project topic participating in this competition was “Real-Time Atmospheric Monitoring & Alert Mobile Application for WatNairong Community” which passed the final round of 39 teams from all over the country.",
-      "fullDescription": "Participated in the national competition “GLOBE STUDENT RESEARCH COMPETITION”. The research project topic participating in this competition was “Real-Time Atmospheric Monitoring & Alert Mobile Application for WatNairong Community” which passed the final round of 39 teams from all over the country.\n\n[image: https://i.postimg.cc/Hn38BFVg/Screenshot-2026-07-16-170342.png | https://i.postimg.cc/Hn38BFVg/Screenshot-2026-07-16-170342.png]",
-      "language": "C++/ C# / C",
+      "description": "The GLOBE research entry was a real-time atmospheric monitor and phone alert for the Wat Nairong community. The board shows the sensor rig with its wiring, a laptop dashboard, a rainy street, and a phone screen with temperature and humidity tiles. The project reached the final round among 39 teams from across the country. QR codes on the poster open the presentation and the research report.",
+      "fullDescription": "The poster is a field project. A rainy street photograph sits beside a tangle of sensors and wires, a laptop showing a live dashboard, and a phone UI with circular readings for temperature and humidity. A certificate and two QR codes, one for the presentation and one for the research report, frame the same story: measure the air where people live, then put the number on a phone.\n\n## The alert for Wat Nairong\n\nThe national competition was the GLOBE Student Research Competition. Our topic was a real-time atmospheric monitoring and alert app for the Wat Nairong community. It reached the final round of 39 teams from across the country. The phone tiles are the part a neighbor would see. The wiring is the part that had to keep producing those tiles. The home lab on this site is a later version of the same instinct: sensors, a dashboard, and a machine that stays on.",
+      "language": "Air-quality alerts",
       "repoUrl": "",
       "liveUrl": "",
       "imageUrl": "https://i.postimg.cc/Hn38BFVg/Screenshot-2026-07-16-170342.png",
-      "mediaUrls": [],
+      "mediaUrls": [
+        "https://i.postimg.cc/Hn38BFVg/Screenshot-2026-07-16-170342.png"
+      ],
       "updated": "2026-07-16",
       "featuredRank": 11,
       "period": "2023",
       "associated": "Matthayom Watnairong School",
-      "skills": [],
-      "highlights": []
+      "skills": [
+        "Sensor data",
+        "Mobile alerts",
+        "Community research",
+        "Dashboard"
+      ],
+      "highlights": [
+        "Finalist among 39 national teams",
+        "Sensor rig for a local street",
+        "Phone tiles for temperature and humidity",
+        "Presentation and report by QR"
+      ]
     }
   ]
 }

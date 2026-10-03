@@ -1337,33 +1337,85 @@ p {
   contain: paint;
 }
 
-.project-preview-stage img {
+.project-preview-stage img,
+.project-media.thumb img,
+.project-detail-hero img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center top;
-  background: #ffffff;
+  object-position: center;
+  background: transparent;
   transform: scale(1);
   transition:
     transform 700ms ease,
     filter 700ms ease;
 }
 
-.project-preview-stage:hover img {
-  transform: scale(1.045) translateY(-0.2rem);
-  filter: saturate(1.16) contrast(1.08);
+.project-preview-stage .thumb-fill,
+.project-media.thumb .thumb-fill,
+.project-detail-hero .thumb-fill {
+  z-index: 0;
+  object-fit: cover;
+  filter: blur(22px) saturate(1.28) brightness(0.58);
+  transform: scale(1.14);
+}
+
+.project-preview-stage .thumb-subject,
+.project-media.thumb .thumb-subject,
+.project-detail-hero .thumb-subject {
+  z-index: 1;
+  object-fit: contain;
+  object-position: center;
+  filter: saturate(1.08) contrast(1.04) brightness(1.02);
+}
+
+.project-preview-stage:hover .thumb-subject,
+.project-card:hover .project-media.thumb .thumb-subject {
+  transform: scale(1.035);
+  filter: saturate(1.16) contrast(1.06) brightness(1.04);
 }
 
 .project-preview-stage::after {
   position: absolute;
   inset: 0;
+  z-index: 2;
   content: "";
-  background:
-    linear-gradient(180deg, transparent 0%, rgba(5, 7, 13, 0.18) 48%, rgba(5, 7, 13, 0.78) 100%);
-  mix-blend-mode: screen;
-  opacity: 0.54;
+  background: linear-gradient(180deg, transparent 0%, transparent 62%, rgba(5, 7, 13, 0.55) 100%);
+  pointer-events: none;
+}
+
+.project-detail-hero {
+  position: relative;
+  width: min(100%, 980px);
+  aspect-ratio: 16 / 9;
+  margin: 0 auto 3rem;
+  overflow: hidden;
+  border: 1px solid rgba(101, 232, 255, 0.26);
+  border-radius: 12px;
+  background: #070b12;
+  isolation: isolate;
+}
+
+.project-media.thumb .thumb-subject {
+  z-index: 2;
+}
+
+.project-media.thumb::before {
+  z-index: 3;
+  background: linear-gradient(180deg, transparent 0%, transparent 76%, rgba(3, 5, 12, 0.28) 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  opacity: 1;
+}
+
+.project-card:hover .project-media.thumb::before {
+  opacity: 1;
+}
+
+.project-card:hover .project-media.thumb .thumb-fill {
+  transform: scale(1.14);
+  filter: blur(22px) saturate(1.28) brightness(0.58);
 }
 
 .project-scanline {
@@ -1427,7 +1479,7 @@ p {
   margin-bottom: 0;
   overflow: hidden;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: 8;
 }
 
 .project-highlights.mini {
@@ -1559,15 +1611,8 @@ p {
   z-index: 2;
 }
 
-.home-post-card img {
-  width: 100%;
-  height: 190px;
-  object-fit: cover;
-  border-bottom: 1px solid rgba(101, 232, 255, 0.18);
-  filter: saturate(1.08) contrast(1.03);
-  transition:
-    transform 260ms ease,
-    filter 260ms ease;
+.home-post-media {
+  border-bottom: 1px solid color-mix(in srgb, var(--page-accent) 20%, transparent);
 }
 
 .home-post-copy {
@@ -1615,12 +1660,6 @@ p {
   animation: cardSheen 760ms ease-out;
   opacity: 1;
 }
-
-.home-post-card:hover img {
-  transform: scale(1.035);
-  filter: saturate(1.2) contrast(1.08);
-}
-
 .quick-card,
 .faq-card {
   position: relative;
@@ -1976,12 +2015,10 @@ p {
     inset 0 0 34px color-mix(in srgb, var(--page-accent-2) 8%, transparent);
 }
 
-.post-image {
+.post-image.thumb {
   width: calc(100% + 2.7rem);
-  height: 230px;
   margin: -1.35rem -1.35rem 1.25rem;
-  object-fit: cover;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid color-mix(in srgb, var(--page-accent) 20%, transparent);
 }
 
 .project-card img {
@@ -2008,25 +2045,90 @@ p {
     rgba(4, 8, 15, 0.82);
 }
 
-.project-media img {
+.thumb {
   position: relative;
-  z-index: 1;
+  display: block;
   width: 100%;
-  height: 100%;
-  max-height: none;
-  padding: 0;
-  object-fit: cover;
-  object-position: center;
-  border-radius: 0;
-  filter: saturate(0.92) contrast(0.98);
-  transition:
-    transform 320ms ease,
-    filter 320ms ease;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  isolation: isolate;
+  background:
+    linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.06) 50%, transparent 70%) 0 0 / 220% 100%,
+    radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--page-accent) 16%, transparent), transparent 70%),
+    rgba(4, 8, 15, 0.82);
+  animation: thumbShimmer 1.6s linear 4;
 }
 
-.project-card:hover .project-media img {
-  transform: scale(1.025);
-  filter: saturate(1.05) contrast(1.04);
+.thumb img {
+  position: relative;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  object-fit: cover;
+  object-position: center;
+  border: 0;
+  border-radius: 0;
+  filter: saturate(1.04) contrast(1.02) brightness(0.94);
+  transform: scale(1.001);
+  transition:
+    transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    filter 600ms ease;
+}
+
+.thumb::before,
+.thumb::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+}
+
+.thumb::before {
+  z-index: 1;
+  background:
+    radial-gradient(120% 85% at 50% 0%, transparent 58%, rgba(3, 5, 12, 0.38) 100%),
+    linear-gradient(180deg, rgba(3, 5, 12, 0) 52%, rgba(3, 5, 12, 0.58) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -18px 30px -18px color-mix(in srgb, var(--page-accent) 40%, transparent);
+  transition: opacity 500ms ease;
+}
+
+.thumb::after {
+  z-index: 2;
+  background: linear-gradient(115deg, transparent 36%, rgba(255, 255, 255, 0.2) 50%, transparent 64%);
+  transform: translateX(-120%);
+  transition: transform 1000ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.post-card:hover .thumb img,
+.project-card:hover .thumb img,
+.home-post-card:hover .thumb img {
+  transform: scale(1.06);
+  filter: saturate(1.16) contrast(1.06) brightness(1.02);
+}
+
+.post-card:hover .thumb::before,
+.project-card:hover .thumb::before,
+.home-post-card:hover .thumb::before {
+  opacity: 0.7;
+}
+
+.post-card:hover .thumb::after,
+.project-card:hover .thumb::after,
+.home-post-card:hover .thumb::after {
+  transform: translateX(120%);
+}
+
+@keyframes thumbShimmer {
+  from {
+    background-position: 120% 0, 0 0, 0 0;
+  }
+  to {
+    background-position: -120% 0, 0 0, 0 0;
+  }
 }
 
 /* Adjust the Link wrapper for post/certificate to have the negative margins instead if needed, 
@@ -2070,15 +2172,15 @@ p {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: saturate(1.08) contrast(1.04);
+  filter: saturate(1.04) contrast(1.02) brightness(0.94);
   transition:
-    transform 320ms ease,
-    filter 320ms ease;
+    transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    filter 600ms ease;
 }
 
 .certificate-card:hover .certificate-visual img {
-  transform: scale(1.035);
-  filter: saturate(1.16) contrast(1.08);
+  transform: scale(1.06);
+  filter: saturate(1.16) contrast(1.06) brightness(1.02);
 }
 
 .certificate-visual::before,
@@ -2240,12 +2342,12 @@ p {
   display: -webkit-box;
   overflow: hidden;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 8;
 }
 
 .project-body .project-highlights {
-  max-height: 8.2rem;
-  overflow: hidden;
+  max-height: none;
+  overflow: visible;
 }
 
 .project-highlights {

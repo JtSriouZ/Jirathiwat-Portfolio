@@ -23,8 +23,16 @@ export default function Blog({ content }) {
           {sortedPosts.map((post) => (
             <article className="post-card" key={post.id}>
               {post.imageUrl && (
-                <Link to={`/blog/${post.id}`} style={{ display: "block" }}>
-                  <img className="post-image" src={resolveMediaUrl(post.imageUrl)} alt="" loading="lazy" />
+                <Link className="post-image thumb" to={`/blog/${post.id}`}>
+                  <img
+                    src={resolveMediaUrl(post.imageUrl)}
+                    alt=""
+                    loading="lazy"
+                    onError={(event) => {
+                      const frame = event.currentTarget.closest(".thumb");
+                      if (frame) frame.hidden = true;
+                    }}
+                  />
                 </Link>
               )}
               <div className="post-meta">

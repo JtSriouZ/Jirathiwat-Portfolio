@@ -575,7 +575,10 @@ export default function Home({ content, language }) {
             <div className="project-preview-column">
               <Link className="project-preview-stage" to={`/projects/${activeProjectData.id}`}>
                 {activeProjectData.imageUrl && (
-                  <img src={resolveMediaUrl(activeProjectData.imageUrl)} alt={activeProjectData.name} />
+                  <>
+                    <img className="thumb-fill" src={resolveMediaUrl(activeProjectData.imageUrl)} alt="" aria-hidden="true" />
+                    <img className="thumb-subject" src={resolveMediaUrl(activeProjectData.imageUrl)} alt={activeProjectData.name} />
+                  </>
                 )}
                 <div className="project-scanline" />
                 <div className="project-preview-badge">
@@ -641,7 +644,17 @@ export default function Home({ content, language }) {
             {latestPosts.map((post) => (
               <Link className="home-post-card" key={post.id} to={`/blog/${post.id}`}>
                 {post.imageUrl && (
-                  <img src={resolveMediaUrl(post.imageUrl)} alt="" loading="lazy" />
+                  <span className="home-post-media thumb">
+                    <img
+                      src={resolveMediaUrl(post.imageUrl)}
+                      alt=""
+                      loading="lazy"
+                      onError={(event) => {
+                        const frame = event.currentTarget.closest(".thumb");
+                        if (frame) frame.hidden = true;
+                      }}
+                    />
+                  </span>
                 )}
                 <div className="home-post-copy">
                   <div className="post-meta">

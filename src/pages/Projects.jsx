@@ -26,8 +26,9 @@ export default function Projects({ content }) {
           {projects.map((project) => (
             <article className="project-card" key={project.id}>
               {project.imageUrl && (
-                <Link className="project-media" to={`/projects/${project.id}`}>
-                  <img src={resolveMediaUrl(project.imageUrl)} alt="" loading="lazy" />
+                <Link className="project-media thumb" to={`/projects/${project.id}`}>
+                  <img className="thumb-fill" src={resolveMediaUrl(project.imageUrl)} alt="" aria-hidden="true" loading="lazy" />
+                  <img className="thumb-subject" src={resolveMediaUrl(project.imageUrl)} alt={project.name} loading="lazy" onError={(event) => { event.currentTarget.style.visibility = "hidden"; }} />
                 </Link>
               )}
               <div className="project-body">

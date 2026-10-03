@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { Github, ExternalLink, ArrowLeft, Calendar, Building2, Code2 } from "lucide-react";
 import { normalizeList, resolveMediaUrl } from "../utils";
 import MediaGallery from "../components/MediaGallery";
-import RichContent from "../components/RichContent";
+import RichContent, { getInlineMediaUsage } from "../components/RichContent";
 
 export default function ProjectDetail({ content }) {
   const { id } = useParams();
@@ -26,6 +26,8 @@ export default function ProjectDetail({ content }) {
   const mediaUrls = normalizeList(project.mediaUrls);
   
   const descriptionText = project.fullDescription || project.description;
+  const inlineMedia = getInlineMediaUsage(descriptionText, mediaUrls);
+  const galleryUrls = mediaUrls.filter((url, index) => !inlineMedia.usedIndexes.has(index) && !inlineMedia.usedUrls.has(url));
 
   return (
     <div className="page-content">
@@ -72,12 +74,9 @@ export default function ProjectDetail({ content }) {
         </div>
 
         {project.imageUrl && (
-          <div className="project-detail-image" style={{ marginBottom: "3rem", borderRadius: "12px", overflow: "hidden", border: "1px solid var(--line)" }}>
-            <img 
-              src={resolveMediaUrl(project.imageUrl)} 
-              alt={project.name} 
-              style={{ width: "100%", height: "auto", display: "block" }} 
-            />
+          <div className="project-detail-hero">
+            <img className="thumb-fill" src={resolveMediaUrl(project.imageUrl)} alt="" aria-hidden="true" />
+            <img className="thumb-subject" src={resolveMediaUrl(project.imageUrl)} alt={project.name} />
           </div>
         )}
 
@@ -96,7 +95,7 @@ export default function ProjectDetail({ content }) {
             </>
           )}
 
-          <MediaGallery urls={mediaUrls} itemTitle="Project media" />
+          <MediaGallery urls={galleryUrls} itemTitle="Project media" />
 
           {skills.length > 0 && (
             <>
