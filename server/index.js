@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import crypto from "node:crypto";
 import { promisify } from "node:util";
 import { get, put } from "@vercel/blob";
+import { getRandomMuseumArt, warmMuseumArt } from "./museumArt.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -145,6 +146,17 @@ app.get("/api/content", async (_req, res, next) => {
     res.json(content);
   } catch (error) {
     next(error);
+  }
+});
+
+app.get("/api/art/random", async (req, res) => {
+  const count = Math.min(24, Math.max(1, Number.parseInt(req.query.count, 10) || 12));
+  try {
+    const result = await getRandomMuseumArt(count);
+    res.set("Cache-Control", "no-store");
+    res.json(result);
+  } catch (error) {
+    res.status(502).json({ art: [], message: error.message });
   }
 });
 
@@ -758,6 +770,7 @@ app.use((error, _req, res, _next) => {
 if (!isVercelRuntime) {
   app.listen(port, "127.0.0.1", () => {
     console.log(`Portfolio backend running on http://127.0.0.1:${port}`);
+    warmMuseumArt();
   });
 }
 

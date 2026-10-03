@@ -9,6 +9,7 @@ export const siteCopyGroups = [
       ["navSkills", "Nav · Skills", "Skills"],
       ["navAbout", "Nav · About", "About"],
       ["navBlog", "Nav · Blog", "Blog"],
+      ["navAdmin", "Nav · Admin", "Admin"],
     ],
   },
   {
@@ -20,6 +21,7 @@ export const siteCopyGroups = [
       ["heroContact", "Primary button", "Contact"],
       ["heroWork", "Secondary button", "View the work"],
       ["portraitIndex", "Portrait index", "Fig. I"],
+      ["portraitFig", "Portrait figure prefix", "Fig."],
       ["portraitCaption", "Portrait caption", "Portrait · Bangkok"],
       ["statProjects", "Count label · Projects", "Projects"],
       ["statExperience", "Count label · Experience", "Experience"],
@@ -127,6 +129,8 @@ export const siteCopyGroups = [
       ["soundMute", "Sound control, mute", "Mute"],
       ["soundUnmute", "Sound control, unmute", "Hear"],
       ["soundVolume", "Sound control, volume", "Volume"],
+      ["soundSink", "Sound control, tuck away", "Sink player"],
+      ["soundRaise", "Sound control, open", "Open player"],
     ],
   },
 ];

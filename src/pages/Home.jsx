@@ -19,6 +19,7 @@ import {
 import { Link } from "react-router-dom";
 import { resolveMediaUrl } from "../utils";
 import ArtFrame from "../components/ArtFrame";
+import PortraitReel, { hasPortrait } from "../components/PortraitReel";
 import StillGrid from "../components/StillGrid";
 import { siteLabel } from "../siteCopy";
 
@@ -59,6 +60,7 @@ export default function Home({ content, language }) {
   const [typingIndex, setTypingIndex] = useState(0);
   const [isDeletingRole, setIsDeletingRole] = useState(false);
   const [activeProject, setActiveProject] = useState(0);
+  const [portraitStep, setPortraitStep] = useState(0);
   const [isPreviewPaused, setIsPreviewPaused] = useState(false);
   const previewDelay = 4200;
 
@@ -217,16 +219,20 @@ export default function Home({ content, language }) {
               ))}
             </div>
           </div>
-          {profile.avatar && (
+          {hasPortrait(profile) && (
             <div className="hero-seal-col">
               <div className="hero-seal" tabIndex={0} aria-label={`${profile.name} portrait`}>
                 <div className="hero-seal-plate">
-                  <img src={resolveMediaUrl(profile.avatar)} alt="" />
+                  <PortraitReel
+                    profile={profile}
+                    alt=""
+                    onIndex={setPortraitStep}
+                  />
                 </div>
                 <ArtFrame />
               </div>
               <p className="hero-seal-caption" aria-hidden="true">
-                <span>{siteLabel(profile, "portraitIndex")}</span>
+                <span>{siteLabel(profile, "portraitFig")} {String(portraitStep + 1).padStart(2, "0")}</span>
                 <span>{siteLabel(profile, "portraitCaption")}</span>
               </p>
             </div>

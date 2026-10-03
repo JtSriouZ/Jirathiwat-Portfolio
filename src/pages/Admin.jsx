@@ -3,6 +3,7 @@ import { Bold, Code2, Edit3, Heading2, Image as ImageIcon, Italic, Link as LinkI
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { getUrlLabel, getYoutubeEmbedUrl, isImageUrl, resolveMediaUrl, normalizeList } from "../utils";
 import { siteCopy, siteCopyGroups } from "../siteCopy";
+import { EUROPEAN_ART } from "../europeanArt";
 
 const blankPost = { title: "", category: "News", date: new Date().toISOString().slice(0, 10), summary: "", fullDescription: "", imageUrl: "", mediaUrls: "", youtubeUrl: "", externalUrl: "" };
 const blankExperience = { role: "", company: "", period: "", description: "" };
@@ -49,6 +50,56 @@ export async function api(path, options = {}) {
   return response.json();
 }
 
+const DEFAULT_TRACKS = [
+  {
+    src: "/music/deep-house-sunset.mp3",
+    title: "Deep House Sunset",
+    artist: "Alex Morgan",
+    artistUrl: "https://freemusicarchive.org/music/alex-morgan/",
+    license: "CC BY",
+    licenseUrl: "https://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+    src: "/music/cocktail-bar.mp3",
+    title: "Cocktail Bar",
+    artist: "Alex Morgan",
+    artistUrl: "https://freemusicarchive.org/music/alex-morgan/",
+    license: "CC BY",
+    licenseUrl: "https://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+    src: "/music/midnight-club.mp3",
+    title: "Midnight Club",
+    artist: "Alex Morgan",
+    artistUrl: "https://freemusicarchive.org/music/alex-morgan/",
+    license: "CC BY",
+    licenseUrl: "https://creativecommons.org/licenses/by/4.0/"
+  }
+];
+
+function portraitEntries(source) {
+  const raw = Array.isArray(source.avatars) && source.avatars.length
+    ? source.avatars
+    : [source.avatar, "instagram/07.jpg", "instagram/05.jpg"].filter(Boolean);
+  return raw.map((item, index) => {
+    if (typeof item === "string") return { id: `portrait-${index}`, image: item, crop: "" };
+    return { id: item.id || `portrait-${index}`, image: item.image || "", crop: item.crop || "" };
+  });
+}
+
+function trackEntries(source) {
+  const raw = Array.isArray(source.tracks) && source.tracks.length ? source.tracks : DEFAULT_TRACKS;
+  return raw.map((item, index) => ({
+    id: item.id || `track-${index}`,
+    src: item.src || "",
+    title: item.title || "",
+    artist: item.artist || "",
+    artistUrl: item.artistUrl || "",
+    license: item.license || "",
+    licenseUrl: item.licenseUrl || ""
+  }));
+}
+
 function editableProfile(source) {
   const safeSkills = Array.isArray(source.skills)
     ? source.skills
@@ -58,6 +109,12 @@ function editableProfile(source) {
     skills: safeSkills.join(", "),
     labels: { ...siteCopy, ...(source.labels || {}) },
     stills: Array.isArray(source.stills) ? source.stills : [],
+    avatars: portraitEntries(source),
+    tracks: trackEntries(source),
+    backgrounds: Array.isArray(source.backgrounds) && source.backgrounds.length
+      ? source.backgrounds
+      : [...EUROPEAN_ART],
+    museumBackgrounds: source.museumBackgrounds !== false
   };
 }
 
@@ -72,8 +129,6 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
   const [certificates, setCertificates] = useState(content.certificates || []);
   const [projects, setProjects] = useState(content.projects || []);
   const [expertiseList, setExpertiseList] = useState(content.expertise || []);
-  
-  const [avatarPreview, setAvatarPreview] = useState(resolveMediaUrl(content.profile.avatar || ""));
   const [saving, setSaving] = useState("");
   const [message, setMessage] = useState("");
   const canSave = canEdit && Boolean(adminToken);
@@ -152,9 +207,101 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
     reader.readAsDataURL(file);
   };
 
+  const updatePortrait = (id, patch) => {
+    setProfile((current) => ({
+      ...current,
+      avatars: (current.avatars || []).map((item) => (item.id === id ? { ...item, ...patch } : item))
+    }));
+  };
+
+  const addPortrait = () => {
+    setProfile((current) => ({
+      ...current,
+      avatars: [...(current.avatars || []), { id: `temp-${Date.now()}`, image: "", crop: "50% 20%" }]
+    }));
+  };
+
+  const removePortrait = (id) => {
+    setProfile((current) => ({
+      ...current,
+      avatars: (current.avatars || []).filter((item) => item.id !== id)
+    }));
+  };
+
+  const movePortrait = (index, direction) => {
+    setProfile((current) => {
+      const next = [...(current.avatars || [])];
+      const target = index + direction;
+      if (target < 0 || target >= next.length) return current;
+      const [item] = next.splice(index, 1);
+      next.splice(target, 0, item);
+      return { ...current, avatars: next };
+    });
+  };
+
+  const uploadPortrait = async (id, file) => {
+    if (!file || !canSave) return;
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        setSaving(`portrait-${id}`);
+        const result = await api("/api/uploads", { method: "POST", body: JSON.stringify({ image: reader.result }) });
+        setProfile((current) => ({
+          ...current,
+          avatars: (current.avatars || []).map((item) => (item.id === id ? { ...item, image: result.url } : item))
+        }));
+        setMessage("Portrait uploaded. Save to publish it.");
+      } catch (err) {
+        setMessage(err.message);
+      } finally {
+        setSaving("");
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const updateTrack = (id, patch) => {
+    setProfile((current) => ({
+      ...current,
+      tracks: (current.tracks || []).map((item) => (item.id === id ? { ...item, ...patch } : item))
+    }));
+  };
+
+  const addTrack = () => {
+    setProfile((current) => ({
+      ...current,
+      tracks: [...(current.tracks || []), {
+        id: `temp-${Date.now()}`,
+        src: "",
+        title: "",
+        artist: "",
+        artistUrl: "",
+        license: "",
+        licenseUrl: ""
+      }]
+    }));
+  };
+
+  const removeTrack = (id) => {
+    setProfile((current) => ({
+      ...current,
+      tracks: (current.tracks || []).filter((item) => item.id !== id)
+    }));
+  };
+
+  const moveTrack = (index, direction) => {
+    setProfile((current) => {
+      const next = [...(current.tracks || [])];
+      const target = index + direction;
+      if (target < 0 || target >= next.length) return current;
+      const [item] = next.splice(index, 1);
+      next.splice(target, 0, item);
+      return { ...current, tracks: next };
+    });
+  };
+
   useEffect(() => {
     setProfile(editableProfile(content.profile));
-    setAvatarPreview(resolveMediaUrl(content.profile.avatar || ""));
     setPosts(content.posts || []);
     setExperiences(content.experiences || []);
     setEducations(content.education || []);
@@ -194,7 +341,11 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
     try {
       setSaving("profile");
       setMessage("");
-      await api("/api/profile", { method: "PUT", body: JSON.stringify(profile) });
+      const lead = (profile.avatars || []).find((item) => item.image);
+      await api("/api/profile", {
+        method: "PUT",
+        body: JSON.stringify({ ...profile, avatar: lead?.image || "" })
+      });
       await onRefresh();
       setMessage("Saved");
     } catch (err) {
@@ -202,25 +353,6 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
     } finally {
       setSaving("");
     }
-  };
-
-  const uploadAvatar = async (file) => {
-    if (!file || !canSave) return;
-    const reader = new FileReader();
-    reader.onload = async () => {
-      try {
-        setSaving("avatar");
-        const result = await api("/api/profile/avatar", { method: "POST", body: JSON.stringify({ image: reader.result }) });
-        setProfile((current) => ({ ...current, avatar: result.avatar }));
-        setAvatarPreview(resolveMediaUrl(result.avatar));
-        await onRefresh();
-      } catch (err) {
-        setMessage(err.message);
-      } finally {
-        setSaving("");
-      }
-    };
-    reader.readAsDataURL(file);
   };
 
   // Generic Save and Delete
@@ -359,16 +491,6 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
             <TextInput label="Instagram" value={profile.instagram} onChange={(instagram) => setProfile({ ...profile, instagram })} />
             <TextInput label="Handle" value={profile.handle || ""} onChange={(handle) => setProfile({ ...profile, handle })} />
             <TextInput label="Persona ticker (comma separated)" value={(profile.persona || []).join(", ")} onChange={(persona) => setProfile({ ...profile, persona: persona.split(",").map((item) => item.trim()).filter(Boolean) })} />
-            <div className="avatar-editor">
-              <img src={avatarPreview || resolveMediaUrl(profile.avatar || "")} alt="" />
-              <div>
-                <TextInput label="Avatar URL" value={profile.avatar || ""} onChange={(avatar) => setProfile({ ...profile, avatar })} />
-                <label className="file-field">
-                  <span>Upload profile image</span>
-                  <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => uploadAvatar(event.target.files?.[0])} />
-                </label>
-              </div>
-            </div>
             <TextArea label="Headline" value={profile.headline} onChange={(headline) => setProfile({ ...profile, headline })} />
           </div>
         </section>
@@ -451,6 +573,108 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
                 </div>
               </article>
             ))}
+          </div>
+        </section>
+
+        <section className="editor-panel wide-panel">
+          <div className="panel-title">
+            <h2>Portrait frames</h2>
+            <div className="admin-actions">
+              <button className="secondary-button" onClick={addPortrait} disabled={!canSave}>
+                <Plus size={18} /> Add portrait
+              </button>
+              <button className="primary-button" onClick={saveProfile} disabled={!canSave || saving === "profile"}>
+                <Save size={18} /> Save
+              </button>
+            </div>
+          </div>
+          <p className="section-note">These photos rotate inside the frame on Home and About. Click the frame on the site to move to the next one.</p>
+          <div className="record-list">
+            {(profile.avatars || []).map((item, index) => (
+              <article className="record-card" key={item.id || index}>
+                <div className="record-fields">
+                  {item.image && (
+                    <img src={resolveMediaUrl(item.image)} alt="" style={{ width: "100%", maxHeight: 220, objectFit: "cover" }} />
+                  )}
+                  <TextInput label="Image path or URL" value={item.image || ""} onChange={(image) => updatePortrait(item.id, { image })} />
+                  <TextInput label="Crop position (for example 50% 20%)" value={item.crop || ""} onChange={(crop) => updatePortrait(item.id, { crop })} />
+                  <label className="file-field">
+                    <span>{saving === `portrait-${item.id}` ? "Uploading..." : "Upload image"}</span>
+                    <input type="file" accept="image/png,image/jpeg,image/webp" disabled={!canSave} onChange={(event) => uploadPortrait(item.id, event.target.files?.[0])} />
+                  </label>
+                  <div className="project-actions">
+                    <button className="secondary-button" type="button" onClick={() => movePortrait(index, -1)} disabled={!canSave || index === 0}>Up</button>
+                    <button className="secondary-button" type="button" onClick={() => movePortrait(index, 1)} disabled={!canSave || index === profile.avatars.length - 1}>Down</button>
+                    <button className="secondary-button" type="button" onClick={() => removePortrait(item.id)} disabled={!canSave}>
+                      <Trash2 size={16} /> Remove
+                    </button>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="editor-panel wide-panel">
+          <div className="panel-title">
+            <h2>Soundtrack</h2>
+            <div className="admin-actions">
+              <button className="secondary-button" onClick={addTrack} disabled={!canSave}>
+                <Plus size={18} /> Add track
+              </button>
+              <button className="primary-button" onClick={saveProfile} disabled={!canSave || saving === "profile"}>
+                <Save size={18} /> Save
+              </button>
+            </div>
+          </div>
+          <div className="record-list">
+            {(profile.tracks || []).map((item, index) => (
+              <article className="record-card" key={item.id || index}>
+                <div className="record-fields">
+                  <TextInput label="Title" value={item.title || ""} onChange={(title) => updateTrack(item.id, { title })} />
+                  <TextInput label="Audio path or URL" value={item.src || ""} onChange={(src) => updateTrack(item.id, { src })} />
+                  <TextInput label="Artist" value={item.artist || ""} onChange={(artist) => updateTrack(item.id, { artist })} />
+                  <TextInput label="Artist link" value={item.artistUrl || ""} onChange={(artistUrl) => updateTrack(item.id, { artistUrl })} />
+                  <TextInput label="License" value={item.license || ""} onChange={(license) => updateTrack(item.id, { license })} />
+                  <TextInput label="License link" value={item.licenseUrl || ""} onChange={(licenseUrl) => updateTrack(item.id, { licenseUrl })} />
+                  <div className="project-actions">
+                    <button className="secondary-button" type="button" onClick={() => moveTrack(index, -1)} disabled={!canSave || index === 0}>Up</button>
+                    <button className="secondary-button" type="button" onClick={() => moveTrack(index, 1)} disabled={!canSave || index === profile.tracks.length - 1}>Down</button>
+                    <button className="secondary-button" type="button" onClick={() => removeTrack(item.id)} disabled={!canSave}>
+                      <Trash2 size={16} /> Remove
+                    </button>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="editor-panel wide-panel">
+          <div className="panel-title">
+            <h2>Background paintings</h2>
+            <button className="primary-button" onClick={saveProfile} disabled={!canSave || saving === "profile"}>
+              <Save size={18} /> Save
+            </button>
+          </div>
+          <div className="form-grid">
+            <label className="admin-toggle">
+              <input
+                type="checkbox"
+                checked={profile.museumBackgrounds}
+                onChange={(event) => setProfile({ ...profile, museumBackgrounds: event.target.checked })}
+              />
+              <span>
+                Pull random European paintings from museum collections on every visit
+                (Louvre, Rijksmuseum, National Gallery, Prado, Uffizi, Orsay, Cleveland and more).
+                The list below fills any page the museums can't.
+              </span>
+            </label>
+            <TextArea
+              label="One image path or URL per line. These are the paintings behind the pages."
+              value={(profile.backgrounds || []).join("\n")}
+              onChange={(value) => setProfile({ ...profile, backgrounds: value.split("\n") })}
+            />
           </div>
         </section>
 

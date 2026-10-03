@@ -2,13 +2,35 @@ import { useEffect, useRef, useState } from "react";
 import { siteLabel } from "../siteCopy";
 
 const TRACKS = [
-  { src: "/music/deep-house-sunset.mp3", title: "Deep House Sunset" },
-  { src: "/music/cocktail-bar.mp3", title: "Cocktail Bar" },
-  { src: "/music/midnight-club.mp3", title: "Midnight Club" },
+  {
+    src: "/music/deep-house-sunset.mp3",
+    title: "Deep House Sunset",
+    artist: "Alex Morgan",
+    artistUrl: "https://freemusicarchive.org/music/alex-morgan/",
+    license: "CC BY",
+    licenseUrl: "https://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+    src: "/music/cocktail-bar.mp3",
+    title: "Cocktail Bar",
+    artist: "Alex Morgan",
+    artistUrl: "https://freemusicarchive.org/music/alex-morgan/",
+    license: "CC BY",
+    licenseUrl: "https://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+    src: "/music/midnight-club.mp3",
+    title: "Midnight Club",
+    artist: "Alex Morgan",
+    artistUrl: "https://freemusicarchive.org/music/alex-morgan/",
+    license: "CC BY",
+    licenseUrl: "https://creativecommons.org/licenses/by/4.0/"
+  }
 ];
 
 const LEVEL = 0.55;
 const STORAGE = "atelier-sound";
+const SUNK_STORAGE = "atelier-sound-sunk";
 
 let ctx = null;
 let gain = null;
@@ -89,6 +111,9 @@ function remember(on) {
 }
 
 export default function AtelierSound({ profile }) {
+  const tracks = Array.isArray(profile?.tracks) && profile.tracks.some((item) => item?.src)
+    ? profile.tracks.filter((item) => item?.src)
+    : TRACKS;
   const [index, setIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [volume, setVolume] = useState(Math.round(LEVEL * 100));
@@ -96,8 +121,15 @@ export default function AtelierSound({ profile }) {
   const [spot, setSpot] = useState(null);
   const [side, setSide] = useState("left");
   const [dragging, setDragging] = useState(false);
+  const [sunk, setSunk] = useState(() => {
+    try {
+      return sessionStorage.getItem(SUNK_STORAGE) === "on";
+    } catch {
+      return false;
+    }
+  });
   const dragRef = useRef(null);
-  const track = TRACKS[index];
+  const track = tracks[index % tracks.length];
 
   useEffect(() => {
     enabled = true;
@@ -118,7 +150,7 @@ export default function AtelierSound({ profile }) {
         }
         playBuffer(buffer, () => {
           if (!closed && mine === generation) {
-            setIndex((current) => (current + 1) % TRACKS.length);
+            setIndex((current) => (current + 1) % tracks.length);
           }
         });
         setPlaying(true);
@@ -170,7 +202,7 @@ export default function AtelierSound({ profile }) {
       remember(true);
       context.resume().then(() => loadBuffer(track.src)).then((buffer) => {
         if (!enabled) return;
-        playBuffer(buffer, () => setIndex((current) => (current + 1) % TRACKS.length));
+        playBuffer(buffer, () => setIndex((current) => (current + 1) % tracks.length));
         setPlaying(true);
       }).catch(() => setPlaying(false));
       return;
@@ -181,7 +213,7 @@ export default function AtelierSound({ profile }) {
     setPlaying(false);
   };
 
-  const skip = () => setIndex((current) => (current + 1) % TRACKS.length);
+  const skip = () => setIndex((current) => (current + 1) % tracks.length);
 
   const changeVolume = (value) => {
     const next = Number(value);
@@ -192,6 +224,19 @@ export default function AtelierSound({ profile }) {
       setIsMuted(false);
     }
     applyLevel();
+  };
+
+  const toggleSink = () => {
+    setSunk((current) => {
+      const next = !current;
+      try {
+        sessionStorage.setItem(SUNK_STORAGE, next ? "on" : "off");
+      } catch {
+        /* storage can be blocked */
+      }
+      return next;
+    });
+    setSpot(null);
   };
 
   const toggleMute = () => {
@@ -228,11 +273,14 @@ export default function AtelierSound({ profile }) {
     if (!dragRef.current) return;
     const box = event.currentTarget.getBoundingClientRect();
     const left = event.clientX - dragRef.current.x;
-    const nextSide = left + box.width / 2 < window.innerWidth / 2 ? "left" : "right";
+    const viewWidth = document.documentElement.clientWidth;
+    const viewHeight = document.documentElement.clientHeight;
+    const nextSide = left + box.width / 2 < viewWidth / 2 ? "left" : "right";
     const margin = 16;
+    const plate = 10;
     const target = {
-      x: nextSide === "left" ? margin : window.innerWidth - box.width - margin,
-      y: Math.max(margin, window.innerHeight - box.height - margin),
+      x: nextSide === "left" ? margin : viewWidth - box.width - margin - plate,
+      y: Math.max(margin, viewHeight - box.height - margin - plate),
     };
     dragRef.current = null;
     setSide(nextSide);
@@ -245,10 +293,11 @@ export default function AtelierSound({ profile }) {
   const skipLabel = siteLabel(profile, "soundSkip");
   const muteLabel = siteLabel(profile, isMuted ? "soundUnmute" : "soundMute");
   const volumeLabel = siteLabel(profile, "soundVolume");
+  const sinkLabel = siteLabel(profile, sunk ? "soundRaise" : "soundSink");
 
   return (
     <div
-      className={`atelier-sound${playing ? " is-playing" : ""}${isMuted ? " is-muted" : ""} is-dock-${side}${dragging ? " is-dragging" : ""}`}
+      className={`atelier-sound${playing ? " is-playing" : ""}${isMuted ? " is-muted" : ""}${sunk ? " is-sunk" : ""} is-dock-${side}${dragging ? " is-dragging" : ""}`}
       style={spot ? { left: spot.x, top: spot.y, right: "auto", bottom: "auto" } : undefined}
       onPointerDown={onDragStart}
       onPointerMove={onDragMove}
@@ -256,37 +305,66 @@ export default function AtelierSound({ profile }) {
       onPointerCancel={onDragEnd}
     >
       <div className="atelier-sound-grip" aria-hidden="true" />
-      <div className="atelier-sound-row">
+      <div className="atelier-sound-deck">
         <button
           type="button"
-          onClick={toggle}
-          aria-pressed={playing}
-          aria-label={`${playing ? onLabel : offLabel}. ${track.title} by Alex Morgan.`}
+          className="atelier-sound-turntable"
+          onClick={toggleSink}
+          aria-expanded={!sunk}
+          aria-label={sinkLabel}
+          title={sinkLabel}
         >
-          <i aria-hidden="true"><span /><span /><span /></i>
-          {playing ? onLabel : offLabel}
+          <span className="atelier-sound-disc"><span /></span>
+          <svg className="atelier-sound-arm" viewBox="0 0 22 36" aria-hidden="true">
+            <rect className="atelier-sound-arm-weight" x="13.6" y="0" width="4.8" height="3.4" rx="1" />
+            <path className="atelier-sound-arm-rod" d="M16 6 L14.6 25 L10.4 30.6" />
+            <path className="atelier-sound-arm-head" d="M9.28 29.76 L11.52 31.44 L9.42 34.24 L7.18 32.56 Z" />
+            <circle className="atelier-sound-arm-base" cx="16" cy="6" r="3.6" />
+            <circle className="atelier-sound-arm-pin" cx="16" cy="6" r="1.2" />
+          </svg>
         </button>
-        <button type="button" onClick={skip} aria-label={skipLabel}>{skipLabel}</button>
-        <button type="button" onClick={toggleMute} aria-pressed={isMuted} aria-label={muteLabel}>{muteLabel}</button>
+        <div className="atelier-sound-body" inert={sunk}>
+          <div className="atelier-sound-row">
+            <button
+              type="button"
+              onClick={toggle}
+              aria-pressed={playing}
+              aria-label={`${playing ? onLabel : offLabel}. ${track.title}${track.artist ? ` by ${track.artist}` : ""}.`}
+            >
+              <i aria-hidden="true"><span /><span /><span /></i>
+              {playing ? onLabel : offLabel}
+            </button>
+            <button type="button" onClick={skip} aria-label={skipLabel}>{skipLabel}</button>
+            <button type="button" onClick={toggleMute} aria-pressed={isMuted} aria-label={muteLabel}>{muteLabel}</button>
+          </div>
+          <label className="atelier-sound-volume">
+            <span className="atelier-sound-sr">{volumeLabel}</span>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              step="1"
+              value={isMuted ? 0 : volume}
+              aria-label={volumeLabel}
+              onChange={(event) => changeVolume(event.target.value)}
+            />
+          </label>
+          <p>
+            <span>{String((index % tracks.length) + 1).padStart(2, "0")} / {String(tracks.length).padStart(2, "0")}</span>
+            {track.title}
+            {track.artist && (
+              track.artistUrl
+                ? <a href={track.artistUrl} target="_blank" rel="noreferrer">{track.artist}</a>
+                : <span>{track.artist}</span>
+            )}
+            {track.license && (
+              track.licenseUrl
+                ? <a href={track.licenseUrl} target="_blank" rel="noreferrer">{track.license}</a>
+                : <span>{track.license}</span>
+            )}
+          </p>
+        </div>
       </div>
-      <label className="atelier-sound-volume">
-        <span className="atelier-sound-sr">{volumeLabel}</span>
-        <input
-          type="range"
-          min="0"
-          max="100"
-          step="1"
-          value={isMuted ? 0 : volume}
-          aria-label={volumeLabel}
-          onChange={(event) => changeVolume(event.target.value)}
-        />
-      </label>
-      <p>
-        <span>{String(index + 1).padStart(2, "0")} / {String(TRACKS.length).padStart(2, "0")}</span>
-        {track.title}
-        <a href="https://freemusicarchive.org/music/alex-morgan/" target="_blank" rel="noreferrer">Alex Morgan</a>
-        <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY</a>
-      </p>
     </div>
   );
 }

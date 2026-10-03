@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { Code2, BriefcaseBusiness, GraduationCap, MapPin, Sparkles, Github, Linkedin, Instagram, Mail } from "lucide-react";
 import * as THREE from "three";
-import { normalizeList, resolveMediaUrl } from "../utils";
+import { normalizeList } from "../utils";
 import StillGrid from "../components/StillGrid";
 import ArtFrame from "../components/ArtFrame";
+import PortraitReel, { hasPortrait } from "../components/PortraitReel";
 import { siteLabel } from "../siteCopy";
 
 function clamp(value, min, max) {
@@ -289,9 +290,9 @@ export default function About({ content }) {
 
           <aside className="about-profile-card" aria-label="Jirathiwat profile summary">
             <div className="about-portrait-wrap">
-              {profile.avatar && (
+              {hasPortrait(profile) && (
                 <div className="about-portrait-plate">
-                  <img className="about-portrait" src={resolveMediaUrl(profile.avatar)} alt={profile.name} />
+                  <PortraitReel profile={profile} alt={profile.name} />
                 </div>
               )}
               <ArtFrame />

@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { createVisitArtMap, getArtRouteKey, preloadEuropeanArt } from "./europeanArt";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { createVisitArtMap, fetchMuseumArt, getArtRouteKey, keepLandscapeArt, preloadEuropeanArt } from "./europeanArt";
 import { Routes, Route, Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { Landmark, Share2, Search, Globe, Edit3, X, Menu, Linkedin, Github, Instagram, Mail } from "lucide-react";
 import Home from "./pages/Home";
@@ -432,17 +432,45 @@ function App() {
   const [canPublish, setCanPublish] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [navScrolled, setNavScrolled] = useState(false);
   const [language, setLanguage] = useState("en");
   const navigate = useNavigate();
   const location = useLocation();
-  const artMapRef = useRef(null);
-  if (!artMapRef.current) {
-    artMapRef.current = createVisitArtMap();
-  }
+  const artSeedRef = useRef(`${Date.now()}-${Math.random()}`);
+  const shownArtRef = useRef({ key: "", routes: {} });
+  const [museumArt, setMuseumArt] = useState([]);
+  const museumEnabled = !isStaticSite && Boolean(content) && content.profile?.museumBackgrounds !== false;
+  const backgroundKey = (content?.profile?.backgrounds || []).join("|");
+  const museumKey = museumEnabled ? museumArt.map((item) => item.src).join("|") : "";
+  const artMap = useMemo(() => {
+    if (shownArtRef.current.key !== backgroundKey) {
+      shownArtRef.current = { key: backgroundKey, routes: {} };
+    }
+    const next = createVisitArtMap(
+      artSeedRef.current,
+      content?.profile?.backgrounds,
+      museumEnabled ? museumArt.map((item) => item.src) : []
+    );
+    return { ...next, ...shownArtRef.current.routes };
+  }, [backgroundKey, museumKey]);
 
   useEffect(() => {
-    preloadEuropeanArt();
-  }, []);
+    preloadEuropeanArt(content?.profile?.backgrounds);
+  }, [backgroundKey]);
+
+  useEffect(() => {
+    if (!museumEnabled) return undefined;
+    let cancelled = false;
+    fetchMuseumArt()
+      .then((items) => keepLandscapeArt(items))
+      .then((kept) => {
+        if (!cancelled && kept.length) setMuseumArt(kept);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [museumEnabled]);
 
   useEffect(() => {
     const cardSelector = [
@@ -594,6 +622,23 @@ function App() {
     script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
     script.async = true;
     document.body.appendChild(script);
+  }, []);
+
+  useEffect(() => {
+    let frame = 0;
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        setNavScrolled(window.scrollY > 28);
+      });
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   // Replay reveal animation whenever sections re-enter the viewport.
@@ -792,7 +837,9 @@ function App() {
   const pathParts = location.pathname.split("/").filter(Boolean);
   const routeKey = pathParts[0] || "home";
   const subRouteKey = pathParts.join("-") || "home";
-  const pageArt = artMapRef.current[getArtRouteKey(location.pathname)] || artMapRef.current.home;
+  const artRouteKey = getArtRouteKey(location.pathname);
+  const pageArt = artMap[artRouteKey] || artMap.home;
+  shownArtRef.current.routes[artRouteKey] = pageArt;
 
   return (
     <div className={`portfolio page-${routeKey} route-${subRouteKey}`}>
@@ -804,7 +851,7 @@ function App() {
       </div>
       <GildedCursor />
 
-      <header className="topbar">
+      <header className={`topbar${navScrolled ? " is-scrolled" : ""}`}>
         <nav className="topbar-nav">
           {/* Logo / Brand */}
           <Link className="brand" to="/" aria-label={`${siteLabel(profile, "brand")} home`} onClick={handleNavClick}>
@@ -837,7 +884,7 @@ function App() {
             {import.meta.env.DEV && !isStaticSite && (
               <Link className="ghost-button nav-admin" to="/admin" onClick={handleNavClick}>
                 <Edit3 size={16} />
-                Admin
+                {siteLabel(profile, "navAdmin")}
               </Link>
             )}
             {/* Hamburger — mobile only */}

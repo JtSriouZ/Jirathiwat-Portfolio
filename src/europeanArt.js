@@ -65,16 +65,59 @@ export function getArtRouteKey(pathname) {
   return parts[0];
 }
 
-export function createVisitArtMap(seed = `${Date.now()}-${Math.random()}`) {
-  const deck = shuffle(EUROPEAN_ART, seed);
+export function createVisitArtMap(seed = `${Date.now()}-${Math.random()}`, paintings, museumArt = []) {
+  const custom = Array.isArray(paintings) ? paintings.filter(Boolean) : [];
+  const local = shuffle(custom.length ? custom : EUROPEAN_ART, seed);
+  const art = [...shuffle(museumArt.filter(Boolean), seed), ...local];
   return ART_ROUTES.reduce((map, route, index) => {
-    map[route] = deck[index % deck.length];
+    map[route] = art[index % art.length];
     return map;
   }, {});
 }
 
-export function preloadEuropeanArt() {
-  EUROPEAN_ART.forEach((src) => {
+export const ART_ROUTE_COUNT = ART_ROUTES.length;
+
+export async function fetchMuseumArt(count = ART_ROUTES.length + 6) {
+  const response = await fetch(`/api/art/random?count=${count}`, { cache: "no-store" });
+  if (!response.ok) throw new Error(`Museum art request failed (${response.status})`);
+  const data = await response.json();
+  return Array.isArray(data?.art) ? data.art.filter((item) => item?.src) : [];
+}
+
+export function keepLandscapeArt(items, needed = ART_ROUTES.length, timeout = 9000) {
+  return new Promise((resolve) => {
+    const kept = [];
+    let settled = 0;
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      window.clearTimeout(timer);
+      resolve(kept);
+    };
+    const timer = window.setTimeout(finish, timeout);
+    if (!items.length) finish();
+    items.forEach((item) => {
+      const image = new Image();
+      image.decoding = "async";
+      image.onload = () => {
+        if (image.naturalWidth >= 900 && image.naturalWidth > image.naturalHeight * 1.1) kept.push(item);
+        settled += 1;
+        if (kept.length >= needed || settled === items.length) finish();
+      };
+      image.onerror = () => {
+        settled += 1;
+        if (settled === items.length) finish();
+      };
+      image.src = item.src;
+    });
+  });
+}
+
+export function preloadEuropeanArt(paintings) {
+  const custom = Array.isArray(paintings) ? paintings.filter(Boolean) : [];
+  const art = custom.length ? custom : EUROPEAN_ART;
+  art.forEach((src) => {
     const image = new Image();
     image.src = src;
   });

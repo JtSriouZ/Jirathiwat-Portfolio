@@ -142,6 +142,54 @@
     "instagram": "https://www.instagram.com/jtsriouz_o/",
     "linkedin": "https://www.linkedin.com/in/jirathiwat-suntipreedatham-38a8a1193/?locale=th",
     "avatar": "profile-photo.png",
+    "avatars": [
+      { "id": "portrait-profile", "image": "profile-photo.png", "crop": "50% 24%" },
+      { "id": "portrait-night-market", "image": "instagram/07.jpg", "crop": "50% 18%" },
+      { "id": "portrait-chill", "image": "instagram/05.jpg", "crop": "40% 12%" }
+    ],
+    "tracks": [
+      {
+        "id": "deep-house-sunset",
+        "src": "/music/deep-house-sunset.mp3",
+        "title": "Deep House Sunset",
+        "artist": "Alex Morgan",
+        "artistUrl": "https://freemusicarchive.org/music/alex-morgan/",
+        "license": "CC BY",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      {
+        "id": "cocktail-bar",
+        "src": "/music/cocktail-bar.mp3",
+        "title": "Cocktail Bar",
+        "artist": "Alex Morgan",
+        "artistUrl": "https://freemusicarchive.org/music/alex-morgan/",
+        "license": "CC BY",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      {
+        "id": "midnight-club",
+        "src": "/music/midnight-club.mp3",
+        "title": "Midnight Club",
+        "artist": "Alex Morgan",
+        "artistUrl": "https://freemusicarchive.org/music/alex-morgan/",
+        "license": "CC BY",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+      }
+    ],
+    "backgrounds": [
+      "/ornament/european-swing.png",
+      "/ornament/european-riders.png",
+      "/ornament/european-starry.png",
+      "/ornament/european-sunrise.png",
+      "/ornament/european-garden-night.jpg",
+      "/ornament/european-hunt-dusk.jpg",
+      "/ornament/european-venice-night.jpg",
+      "/ornament/european-gallery.jpg",
+      "/ornament/european-ruins.jpg",
+      "/ornament/european-tempest.jpg",
+      "/ornament/european-salon.jpg",
+      "/ornament/european-chateau.jpg"
+    ],
     "skills": [
       "Computer Vision",
       "Artificial Intelligence",
