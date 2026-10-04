@@ -143,6 +143,24 @@ function sample(list, count) {
   return picked;
 }
 
+function sampleAcrossMuseums(items, count) {
+  const byMuseum = new Map();
+  for (const item of items) {
+    const key = item.museum || "other";
+    if (!byMuseum.has(key)) byMuseum.set(key, []);
+    byMuseum.get(key).push(item);
+  }
+  const groups = sample([...byMuseum.values()], byMuseum.size).map((group) => sample(group, count));
+  const picked = [];
+  while (picked.length < count && groups.some((group) => group.length)) {
+    for (const group of groups) {
+      if (picked.length >= count) break;
+      if (group.length) picked.push(group.shift());
+    }
+  }
+  return picked;
+}
+
 export async function getRandomMuseumArt(count = 12) {
   const names = Object.keys(SOURCES);
   const results = await Promise.allSettled(names.map((name) => getPool(name)));
@@ -158,7 +176,7 @@ export async function getRandomMuseumArt(count = 12) {
   const weights = available.map((entry) => Math.sqrt(entry.items.length));
   const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
   const picked = available.flatMap((entry, index) =>
-    sample(entry.items, Math.ceil((count * weights[index]) / totalWeight))
+    sampleAcrossMuseums(entry.items, Math.ceil((count * weights[index]) / totalWeight))
   );
   return {
     art: await resolveCommonsThumbs(sample(picked, count)),

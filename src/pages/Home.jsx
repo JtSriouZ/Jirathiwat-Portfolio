@@ -21,6 +21,7 @@ import { resolveMediaUrl } from "../utils";
 import ArtFrame from "../components/ArtFrame";
 import PortraitReel, { hasPortrait } from "../components/PortraitReel";
 import StillGrid from "../components/StillGrid";
+import Ornament from "../components/Ornament";
 import { siteLabel } from "../siteCopy";
 
 function actualRecords(value) {
@@ -179,6 +180,9 @@ export default function Home({ content, language }) {
         "Vol. MMXXVI"
       ];
   const tickerMarks = [...personaMarks, ...personaMarks];
+  const splitWords = (text) => String(text || "").split("·").map((word) => word.trim()).filter(Boolean);
+  const marqueeWords = splitWords(siteLabel(profile, "marqueeWords"));
+  const marqueeAccent = splitWords(siteLabel(profile, "marqueeAccent"));
 
   return (
     <div className="home-cinematic-page">
@@ -192,9 +196,16 @@ export default function Home({ content, language }) {
                 ? siteLabel(profile, "heroGreetingZh")
                 : siteLabel(profile, "heroGreeting")}
             </p>
-            <h1 className="hero-title">
-              <span>{givenName}</span>
-              {familyName ? <span>{familyName}</span> : null}
+            <h1 className="hero-title" aria-label={[givenName, familyName].filter(Boolean).join(" ")}>
+              {[givenName, familyName].filter(Boolean).map((word, wordIndex) => (
+                <span className="hero-title-line" key={`${word}-${wordIndex}`} aria-hidden="true">
+                  {Array.from(word).map((letter, letterIndex) => (
+                    <i key={letterIndex} style={{ "--i": letterIndex + wordIndex * 4 }}>
+                      {letter}
+                    </i>
+                  ))}
+                </span>
+              ))}
             </h1>
             <p className="hero-copy">{profile.headline}</p>
             <div className="hero-actions">
@@ -238,6 +249,10 @@ export default function Home({ content, language }) {
             </div>
           )}
         </div>
+        <div className="hero-scroll-cue" aria-hidden="true">
+          <span>{siteLabel(profile, "scrollCue")}</span>
+          <i />
+        </div>
         <div className="hero-ticker" aria-hidden="true">
           <div className="hero-ticker-track">
             {tickerMarks.map((mark, index) => (
@@ -251,6 +266,29 @@ export default function Home({ content, language }) {
       </section>
 
       <StillGrid profile={profile} />
+
+      <section className="editorial-marquee" aria-hidden="true">
+        <div className="editorial-marquee-row is-outline">
+          <div className="editorial-marquee-track">
+            {[...marqueeWords, ...marqueeWords].map((word, index) => (
+              <span key={`${word}-${index}`}>
+                {word}
+                <b />
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className="editorial-marquee-row is-band">
+          <div className="editorial-marquee-track">
+            {[...marqueeAccent, ...marqueeAccent, ...marqueeAccent, ...marqueeAccent].map((word, index) => (
+              <span key={`${word}-${index}`}>
+                {word}
+                <b />
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {activeProjectData && (
         <section
@@ -335,6 +373,8 @@ export default function Home({ content, language }) {
         </section>
       )}
 
+      <Ornament />
+
       {latestPosts.length > 0 && (
         <section className="section home-blog-section reveal">
           <div className="section-kicker">
@@ -381,6 +421,8 @@ export default function Home({ content, language }) {
           </div>
         </section>
       )}
+
+      <Ornament />
 
       <section className="section quick-section reveal">
         <div className="section-kicker">

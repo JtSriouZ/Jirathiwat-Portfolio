@@ -26,11 +26,15 @@ export const siteCopyGroups = [
       ["statProjects", "Count label · Projects", "Projects"],
       ["statExperience", "Count label · Experience", "Experience"],
       ["statCertificates", "Count label · Certificates", "Certificates"],
+      ["scrollCue", "Scroll cue", "Scroll"],
+      ["entranceTagline", "Opening curtain line", "Portfolio · MMXXVI"],
     ],
   },
   {
     title: "Home sections",
     fields: [
+      ["marqueeWords", "Moving banner words, split with ·", "Software · Real-time AI · Full-stack · Deep house · Night stills · Bangkok"],
+      ["marqueeAccent", "Moving banner accent words, split with ·", "Engineered by night · Composed by hand · Built to be felt"],
       ["kickerWorks", "Featured projects kicker", "Curated Works"],
       ["viewPiece", "Featured project button", "View the piece"],
       ["nextPrefix", "Next project prefix", "Next:"],
@@ -116,6 +120,10 @@ export const siteCopyGroups = [
     fields: [
       ["footerBlurb", "Footer description", "Software Engineer, AI & Full-Stack Developer in Bangkok City, Thailand."],
       ["footerStatus", "Footer status", "Atelier open · MMXXVI"],
+      ["railMotto", "Side inscription, wide screens", "Ars longa · Vita brevis"],
+      ["placardLabel", "Painting label heading", "On the wall"],
+      ["placardSource", "Painting label link", "View source"],
+      ["placardHouse", "Painting label, built-in paintings", "European school · Atelier collection"],
       ["footerExplore", "Footer · Explore", "Explore"],
       ["footerConnect", "Footer · Connect", "Connect"],
       ["footerShare", "Footer · Share", "Share"],

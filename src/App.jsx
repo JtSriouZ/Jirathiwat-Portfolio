@@ -1,12 +1,11 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useCallback, useMemo, useRef } from "react";
 import {
   ART_ROUTE_COUNT,
-  artBrightness,
   createVisitArtMap,
   fetchMuseumArt,
   getArtRouteKey,
   keepLandscapeArt,
-  measureArtLuma,
+  localEuropeanArt,
   preloadEuropeanArt
 } from "./europeanArt";
 import { Routes, Route, Link, NavLink, useNavigate, useLocation } from "react-router-dom";
@@ -24,6 +23,12 @@ import Admin from "./pages/Admin";
 import { triggerGoogleTranslate } from "./utils";
 import { siteLabel } from "./siteCopy";
 import AtelierSound from "./components/AtelierSound";
+import GrandEntrance from "./components/GrandEntrance";
+import Ornament from "./components/Ornament";
+import ArtPlacard from "./components/ArtPlacard";
+import ArtBackdrop from "./components/ArtBackdrop";
+import RouteCurtain from "./components/RouteCurtain";
+import { holdDecrypt, startHeadingDecrypt } from "./decrypt";
 import staticContent from "../data/content.json";
 
 const languageOptions = [
@@ -36,103 +41,28 @@ const languageOptions = [
 ];
 
 const isStaticSite = import.meta.env.VITE_STATIC_SITE === "true";
+const ART_SLIDE_MS = 20000;
+const ART_POOL_LIMIT = 40;
 // Classical glyphs: Greek capitals and Roman numerals settle into the final text.
-const scrambleCharacters = "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ";
-const hashCharacters = "IVXLCDM";
+const ROUTE_LABELS = {
+  home: "navHome",
+  projects: "navProjects",
+  certificates: "navCertificates",
+  skills: "navSkills",
+  about: "navAbout",
+  blog: "navBlog",
+  admin: "navAdmin",
+};
 
-function getRandomCharacter(index) {
-  if (index % 6 === 0) return "·";
-  return scrambleCharacters[Math.floor(Math.random() * scrambleCharacters.length)];
-}
-
-function getHashCharacter() {
-  return hashCharacters[Math.floor(Math.random() * hashCharacters.length)];
-}
-
-function scrambleTextElement(element) {
-  if (!element || element.dataset.scrambling === "true" || element.dataset.scrambled === "true") return;
-  if (element.classList?.contains("hero-title") || element.closest(".hero-editorial, .ultra-band")) return;
-  if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
-
-  const finalText = element.dataset.scrambleText || element.textContent || "";
-  if (!finalText.trim()) return;
-
-  if (element._scrambleFrame) {
-    window.cancelAnimationFrame(element._scrambleFrame);
-  }
-
-  element.dataset.scrambleText = finalText;
-  element.dataset.scrambling = "true";
-  element.dataset.scrambled = "false";
-  element.classList.remove("scramble-complete");
-  element.classList.add("is-scrambling");
-
-  const start = performance.now();
-  const duration = Math.max(760, Math.min(1500, finalText.length * 44));
-  const hashDuration = 140;
-
-  const draw = (now) => {
-    const elapsed = now - start;
-    const progress = Math.max(0, Math.min(1, (elapsed - hashDuration) / (duration - hashDuration)));
-    const settledCount = Math.floor(finalText.length * progress);
-
-    element.textContent = Array.from(finalText)
-      .map((character, index) => {
-        if (character === " " || index < settledCount) return character;
-        if (elapsed < hashDuration) return getHashCharacter();
-        return getRandomCharacter(index);
-      })
-      .join("");
-
-    if (progress >= 1) {
-      element.textContent = finalText;
-      element.dataset.scrambling = "false";
-      element.dataset.scrambled = "true";
-      element.classList.remove("is-scrambling");
-      element.classList.add("scramble-complete");
-      element._scrambleFrame = null;
-      return;
-    }
-
-    element._scrambleFrame = window.requestAnimationFrame(draw);
+function houseArtInfo(src, houseLabel) {
+  const name = String(src || "").match(/\/ornament\/european-([a-z-]+)\.\w+$/)?.[1];
+  if (!name) return null;
+  const [artist, museum] = String(houseLabel || "").split("·").map((part) => part.trim());
+  return {
+    title: name.replace(/-/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase()),
+    artist,
+    museum,
   };
-
-  element._scrambleFrame = window.requestAnimationFrame(draw);
-}
-
-function isEditorialTitle(element) {
-  return Boolean(
-    element.classList?.contains("hero-title") ||
-    element.closest(".hero-editorial, .ultra-band, .still-copy")
-  );
-}
-
-function runScramble(root) {
-  const targets = root.matches?.("h1, h2, .project-count")
-    ? [root]
-    : Array.from(root.querySelectorAll("h1, h2, .project-count"));
-
-  targets.filter((target) => !isEditorialTitle(target)).forEach((target) => scrambleTextElement(target));
-}
-
-function resetScramble(root) {
-  const targets = root.matches?.("h1, h2, .project-count")
-    ? [root]
-    : Array.from(root.querySelectorAll("h1, h2, .project-count"));
-
-  targets.filter((target) => !isEditorialTitle(target)).forEach((target) => {
-    if (target._scrambleFrame) {
-      window.cancelAnimationFrame(target._scrambleFrame);
-      target._scrambleFrame = null;
-    }
-
-    if (target.dataset.scrambleText) {
-      target.textContent = target.dataset.scrambleText;
-    }
-    target.dataset.scrambling = "false";
-    target.dataset.scrambled = "false";
-    target.classList.remove("is-scrambling", "scramble-complete");
-  });
 }
 
 function AnimatedBackgroundCanvas({ routeKey }) {
@@ -442,13 +372,23 @@ function App() {
   const [languageOpen, setLanguageOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [navScrolled, setNavScrolled] = useState(false);
+  const [placardShown, setPlacardShown] = useState(false);
   const [language, setLanguage] = useState("en");
   const navigate = useNavigate();
   const location = useLocation();
   const artSeedRef = useRef(`${Date.now()}-${Math.random()}`);
   const shownArtRef = useRef({ key: "", routes: {} });
+  const progressRef = useRef(null);
+  const wipeRef = useRef({ path: location.pathname, count: 0 });
+  if (wipeRef.current.path !== location.pathname) {
+    wipeRef.current = { path: location.pathname, count: wipeRef.current.count + 1 };
+  }
+  useLayoutEffect(() => {
+    if (wipeRef.current.count > 0) holdDecrypt(620);
+  }, [location.pathname]);
+  useEffect(() => startHeadingDecrypt(document.body), []);
   const [museumArt, setMuseumArt] = useState([]);
-  const [artLight, setArtLight] = useState({ src: "", brightness: null });
+  const [artCycle, setArtCycle] = useState(0);
   const museumEnabled = !isStaticSite && Boolean(content) && content.profile?.museumBackgrounds !== false;
   const backgroundKey = (content?.profile?.backgrounds || []).join("|");
   const museumKey = museumEnabled ? museumArt.map((item) => item.src).join("|") : "";
@@ -489,16 +429,37 @@ function App() {
     };
   }, [museumEnabled]);
 
-  const currentArt = artMap[getArtRouteKey(location.pathname)] || artMap.home;
+  const artPool = useMemo(() => {
+    const museum = museumEnabled ? museumArt.map((item) => item.src) : [];
+    return museum.length ? museum : localEuropeanArt(content?.profile?.backgrounds);
+  }, [museumKey, backgroundKey]);
+
   useEffect(() => {
+    setArtCycle(0);
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return undefined;
+    const timer = window.setInterval(() => {
+      if (!document.hidden) setArtCycle((cycle) => cycle + 1);
+    }, ART_SLIDE_MS);
+    return () => window.clearInterval(timer);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!museumEnabled || !artCycle || artCycle % 5 || museumArt.length >= ART_POOL_LIMIT) return undefined;
     let cancelled = false;
-    measureArtLuma(currentArt).then((luma) => {
-      if (!cancelled) setArtLight({ src: currentArt, brightness: artBrightness(luma) });
-    });
+    fetchMuseumArt()
+      .then((items) => keepLandscapeArt(items, 6))
+      .then((more) => {
+        if (cancelled || !more.length) return;
+        setMuseumArt((current) => [
+          ...current,
+          ...more.filter((item) => !current.some((known) => known.src === item.src)),
+        ]);
+      })
+      .catch(() => {});
     return () => {
       cancelled = true;
     };
-  }, [currentArt]);
+  }, [artCycle]);
 
   useEffect(() => {
     const cardSelector = [
@@ -659,15 +620,25 @@ function App() {
       frame = window.requestAnimationFrame(() => {
         frame = 0;
         setNavScrolled(window.scrollY > 28);
+        const range = document.documentElement.scrollHeight - window.innerHeight;
+        setPlacardShown(range < 80 || window.scrollY > Math.min(window.innerHeight * 0.45, range * 0.5));
+        if (progressRef.current) {
+          const progress = range > 0 ? Math.min(1, window.scrollY / range) : 0;
+          progressRef.current.style.transform = `scaleX(${progress.toFixed(4)})`;
+        }
       });
     };
     onScroll();
+    const settle = window.setTimeout(onScroll, 700);
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
     return () => {
       window.cancelAnimationFrame(frame);
+      window.clearTimeout(settle);
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
     };
-  }, []);
+  }, [location.pathname, content]);
 
   // Replay reveal animation whenever sections re-enter the viewport.
   useEffect(() => {
@@ -698,14 +669,12 @@ function App() {
 
       const revealElement = (element) => {
         element.classList.add("is-visible");
-        runScramble(element);
       };
 
       const resetElement = (element) => {
         if (element.classList.contains("is-visible")) {
           element.classList.remove("is-visible");
           element.classList.add("is-reveal-reset");
-          resetScramble(element);
         }
       };
 
@@ -867,25 +836,50 @@ function App() {
   const subRouteKey = pathParts.join("-") || "home";
   const artRouteKey = getArtRouteKey(location.pathname);
   const pageArt = artMap[artRouteKey] || artMap.home;
-  shownArtRef.current.routes[artRouteKey] = pageArt;
+  if (!museumEnabled || museumArt.length) shownArtRef.current.routes[artRouteKey] = pageArt;
+  const shownArt =
+    artCycle && artPool.length ? artPool[(Math.max(0, artPool.indexOf(pageArt)) + artCycle) % artPool.length] : pageArt;
+  const pageArtInfo =
+    (museumEnabled && museumArt.find((item) => item.src === shownArt)) || houseArtInfo(shownArt, siteLabel(profile, "placardHouse"));
+  const brandLetters = Array.from(siteLabel(profile, "brand"));
 
   return (
-    <div className={`portfolio page-${routeKey} route-${subRouteKey}`}>
+    <div className={`portfolio page-${routeKey} route-${subRouteKey}${placardShown ? " is-placard-shown" : ""}`}>
       <div className="page-motion-bg" aria-hidden="true">
-        <div
-          className="page-art"
-          style={{
-            backgroundImage: `url("${pageArt}")`,
-            ...(artLight.src === pageArt && artLight.brightness != null
-              ? { "--art-brightness": artLight.brightness }
-              : {})
-          }}
-        />
+        <ArtBackdrop src={shownArt} />
         <div className="page-art-light" />
+        <div className="page-art-sheen" />
         <div className="page-art-wash" />
+        <div className="page-art-spot" />
         <AnimatedBackgroundCanvas routeKey={routeKey} />
       </div>
       <GildedCursor />
+      <div className="film-grain" aria-hidden="true" />
+      <div className="gallery-rail is-left" aria-hidden="true">
+        <span>{siteLabel(profile, "railMotto")}</span>
+      </div>
+      <div className="gallery-rail is-right" aria-hidden="true">
+        <span>{siteLabel(profile, "footerStatus")}</span>
+      </div>
+      <ArtPlacard
+        key={shownArt}
+        art={pageArtInfo}
+        index={Math.max(0, artPool.indexOf(shownArt))}
+        label={siteLabel(profile, "placardLabel")}
+        sourceLabel={siteLabel(profile, "placardSource")}
+      />
+      <div className="scroll-progress" aria-hidden="true">
+        <i ref={progressRef} />
+      </div>
+      <GrandEntrance name={profile.name} tagline={siteLabel(profile, "entranceTagline")} />
+      {wipeRef.current.count > 0 && (
+        <RouteCurtain
+          key={wipeRef.current.count}
+          label={siteLabel(profile, ROUTE_LABELS[routeKey] || "navHome")}
+          index={Math.max(0, Object.keys(ROUTE_LABELS).indexOf(routeKey))}
+          total={Object.keys(ROUTE_LABELS).length}
+        />
+      )}
 
       <header className={`topbar${navScrolled ? " is-scrolled" : ""}`}>
         <nav className="topbar-nav">
@@ -962,6 +956,7 @@ function App() {
           <Route path="*" element={<Home content={content} language={language} />} />
         </Routes>
 
+        <Ornament className="is-footer" />
         <footer className="site-footer">
           <span className="footer-orbit footer-orbit-one" aria-hidden="true" />
           <span className="footer-orbit footer-orbit-two" aria-hidden="true" />
@@ -1007,6 +1002,15 @@ function App() {
                 {siteLabel(profile, "copyLink")}
               </button>
             </div>
+          </div>
+          <div className="footer-wordmark" aria-hidden="true">
+            <span style={{ "--n": brandLetters.length }}>
+              {brandLetters.map((letter, index) => (
+                <i key={index} style={{ "--i": index }}>
+                  {letter}
+                </i>
+              ))}
+            </span>
           </div>
         </footer>
       </main>

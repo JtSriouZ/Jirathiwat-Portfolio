@@ -158,12 +158,12 @@ export function measureArtLuma(src) {
 }
 
 const LUMA_REFERENCE = 0.18;
-const ART_BRIGHTNESS = 0.54;
+const ART_BRIGHTNESS = 0.68;
 
 export function artBrightness(luma) {
-  if (luma == null) return 0.42;
+  if (luma == null) return 0.52;
   const scaled = ART_BRIGHTNESS * Math.sqrt(LUMA_REFERENCE / Math.max(luma, 0.01));
-  return Math.min(ART_BRIGHTNESS, Math.max(0.3, scaled));
+  return Math.min(ART_BRIGHTNESS, Math.max(0.42, scaled));
 }
 
 export function keepLandscapeArt(items, needed = ART_ROUTES.length, timeout = 9000) {
@@ -197,10 +197,13 @@ export function keepLandscapeArt(items, needed = ART_ROUTES.length, timeout = 90
   });
 }
 
-export function preloadEuropeanArt(paintings) {
+export function localEuropeanArt(paintings) {
   const custom = Array.isArray(paintings) ? paintings.filter(Boolean) : [];
-  const art = custom.length ? custom : EUROPEAN_ART;
-  art.forEach((src) => {
+  return custom.length ? custom : EUROPEAN_ART;
+}
+
+export function preloadEuropeanArt(paintings) {
+  localEuropeanArt(paintings).forEach((src) => {
     const image = new Image();
     image.src = src;
   });

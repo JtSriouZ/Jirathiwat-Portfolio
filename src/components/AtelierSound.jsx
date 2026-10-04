@@ -122,10 +122,12 @@ export default function AtelierSound({ profile }) {
   const [side, setSide] = useState("left");
   const [dragging, setDragging] = useState(false);
   const [sunk, setSunk] = useState(() => {
+    const smallScreen = window.matchMedia?.("(max-width: 640px)").matches ?? false;
     try {
-      return sessionStorage.getItem(SUNK_STORAGE) === "on";
+      const saved = sessionStorage.getItem(SUNK_STORAGE);
+      return saved ? saved === "on" : smallScreen;
     } catch {
-      return false;
+      return smallScreen;
     }
   });
   const dragRef = useRef(null);

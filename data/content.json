@@ -143,9 +143,21 @@
     "linkedin": "https://www.linkedin.com/in/jirathiwat-suntipreedatham-38a8a1193/?locale=th",
     "avatar": "profile-photo.png",
     "avatars": [
-      { "id": "portrait-profile", "image": "profile-photo.png", "crop": "50% 24%" },
-      { "id": "portrait-night-market", "image": "instagram/07.jpg", "crop": "50% 18%" },
-      { "id": "portrait-chill", "image": "instagram/05.jpg", "crop": "40% 12%" }
+      {
+        "id": "portrait-profile",
+        "image": "profile-photo.png",
+        "crop": "50% 24%"
+      },
+      {
+        "id": "portrait-night-market",
+        "image": "instagram/07.jpg",
+        "crop": "50% 18%"
+      },
+      {
+        "id": "portrait-chill",
+        "image": "instagram/05.jpg",
+        "crop": "40% 12%"
+      }
     ],
     "tracks": [
       {
@@ -607,6 +619,20 @@
   ],
   "posts": [
     {
+      "id": "post-ictpc-event",
+      "title": "ICTPC 2025: A Team Programming Contest at Mahidol ICT",
+      "category": "Events",
+      "date": "2025-09-21",
+      "summary": "On 21 September 2025 I competed in the ICT Programming Contest (ICTPC) 2025, run by Dev Club with the Faculty of ICT, Mahidol University, as one of a team of three.",
+      "imageUrl": "blog/ictpc-team.jpg",
+      "youtubeUrl": "",
+      "externalUrl": "",
+      "fullDescription": "The ICT Programming Contest (ICTPC) 2025 was organized by Dev Club in association with the Faculty of Information and Communication Technology, Mahidol University, and held on 21 September 2025. I took part as one of a team of three, competing from the faculty computer lab.\n\n## Contest day\n\nThe format is a timed problem set solved as a team: read the problems, split the work, and submit solutions against the clock. Three people share one round of problems, so the work is as much about deciding who takes which problem as it is about writing the code.\n\n## Why it is on this site\n\nCompetitions like this sit alongside the course projects here. They train the same habit: understand the problem fast, pick an approach, and ship something that runs. The participation certificate, signed by ICTPC advisor Asst. Prof. Dr. Siripen Pongpaichet and organizer Poonyawatt Klumnaim, is listed on the Certificates page.",
+      "mediaUrls": [
+        "certificates/ictpc-2025-participation.jpg"
+      ]
+    },
+    {
       "id": "post-imax-sydney-laser",
       "title": "IMAX Sydney Reopens as a 692-Square-Metre Laser Room",
       "category": "Movie Tech",
@@ -920,6 +946,40 @@
     }
   ],
   "certificates": [
+    {
+      "id": "cert-depa-digital-intelligence",
+      "title": "Digital Intelligence: Google Cloud, Big Data & GenAI",
+      "issuer": "depa (Digital Economy Promotion Agency) × OpenIQ Education",
+      "date": "2026-08-25",
+      "credentialUrl": "",
+      "imageUrl": "certificates/depa-digital-intelligence.png",
+      "description": "Completed the Digital Intelligence course on Google Cloud, Big Data, and generative AI under depa's Digital Career Skill Roadmap, Digital-driven Career track.",
+      "skills": [
+        "Google Cloud",
+        "Big Data",
+        "Generative AI",
+        "Cloud Computing"
+      ],
+      "fullDescription": "Awarded by the Digital Economy Promotion Agency (depa) with OpenIQ Education on 25 August 2026 (B.E. 2569) for completing Digital Intelligence: Google Cloud, Big Data & GenAI.\n\nThe course is part of depa's Digital Career Skill Roadmap programme, in the Digital-driven Career skill group. It covers working with Google Cloud services, handling large datasets, and applying generative AI.",
+      "mediaUrls": []
+    },
+    {
+      "id": "cert-ictpc-2025",
+      "title": "ICT Programming Contest (ICTPC) 2025: Certificate of Participation",
+      "issuer": "Dev Club × Faculty of ICT, Mahidol University",
+      "date": "2025-09-21",
+      "credentialUrl": "",
+      "imageUrl": "certificates/ictpc-2025-participation.jpg",
+      "description": "Participated in the ICT Programming Contest (ICTPC) 2025, organized by Dev Club with the Faculty of Information and Communication Technology, Mahidol University.",
+      "skills": [
+        "Competitive Programming",
+        "Problem Solving",
+        "Algorithms",
+        "Teamwork"
+      ],
+      "fullDescription": "Presented on 21 September 2025 for actively taking part in the ICT Programming Contest (ICTPC) 2025, organized by Dev Club in association with the Faculty of Information and Communication Technology, Mahidol University, in recognition of commitment and enthusiasm in programming and problem-solving.\n\nSigned by Asst. Prof. Dr. Siripen Pongpaichet (ICTPC Advisor) and Poonyawatt Klumnaim (ICTPC Organizer).",
+      "mediaUrls": []
+    },
     {
       "id": "cert-python",
       "title": "Python Programming Archive",

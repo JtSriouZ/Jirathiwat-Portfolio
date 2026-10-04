@@ -4,6 +4,8 @@ import App from "./App.jsx";
 import { HashRouter } from "react-router-dom";
 import "./styles.css";
 import "./luxury.css";
+import "./wow.css";
+import "./curtain.css";
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
