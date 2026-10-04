@@ -19,8 +19,22 @@ export function romanYear(year = new Date().getFullYear()) {
 
 const YEAR = romanYear();
 
-export function GateDoors({ leftLabel, rightLabel = YEAR }) {
-  const [art] = useState(() => EUROPEAN_ART[Math.floor(Math.random() * EUROPEAN_ART.length)]);
+function pickArt(paintings = []) {
+  const pool = paintings.filter(Boolean);
+  const source = pool.length ? pool : EUROPEAN_ART;
+  return source[Math.floor(Math.random() * source.length)];
+}
+
+export function GateDoors({ leftLabel, rightLabel = YEAR, paintings = [] }) {
+  const poolKey = paintings.filter(Boolean).join("|");
+  const [art, setArt] = useState(() => pickArt(paintings));
+
+  useEffect(() => {
+    const pool = poolKey ? poolKey.split("|") : [];
+    if (!pool.length || pool.includes(art)) return;
+    setArt(pickArt(pool));
+  }, [poolKey, art]);
+
   const artStyle = { "--gate-art": `url("${art}")` };
 
   return (
@@ -43,7 +57,7 @@ export function GateDoors({ leftLabel, rightLabel = YEAR }) {
   );
 }
 
-export default function RouteCurtain({ label, index = 0, total = NUMERALS.length }) {
+export default function RouteCurtain({ label, index = 0, total = NUMERALS.length, paintings = [] }) {
   const [done, setDone] = useState(false);
   const letters = Array.from(String(label || ""));
   const numeral = NUMERALS[index] || NUMERALS[0];
@@ -57,7 +71,7 @@ export default function RouteCurtain({ label, index = 0, total = NUMERALS.length
 
   return (
     <div className="route-wipe" aria-hidden="true">
-      <GateDoors leftLabel={`Nº ${numeral}`} />
+      <GateDoors leftLabel={`Nº ${numeral}`} paintings={paintings} />
       <div className="gate-plaque">
         <i className="gate-sweep" />
         <span className="gate-mark is-numeral">

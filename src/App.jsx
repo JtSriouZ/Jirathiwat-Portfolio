@@ -980,7 +980,7 @@ function App() {
       <div className="scroll-progress" aria-hidden="true">
         <i ref={progressRef} />
       </div>
-      <GrandEntrance name={profile.name} tagline={siteLabel(profile, "entranceTagline")} />
+      <GrandEntrance name={profile.name} tagline={siteLabel(profile, "entranceTagline")} paintings={artPool} />
       <LockOn />
       {wipeRef.current.count > 0 && (
         <RouteCurtain
@@ -988,6 +988,7 @@ function App() {
           label={siteLabel(profile, ROUTE_LABELS[routeKey] || "navHome")}
           index={Math.max(0, Object.keys(ROUTE_LABELS).indexOf(routeKey))}
           total={Object.keys(ROUTE_LABELS).length}
+          paintings={artPool}
         />
       )}
 

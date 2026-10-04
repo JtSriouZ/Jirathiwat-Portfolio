@@ -19,7 +19,7 @@ function shouldPlay() {
 
 const easeOut = (t) => 1 - Math.pow(1 - t, 3);
 
-export default function GrandEntrance({ name, tagline }) {
+export default function GrandEntrance({ name, tagline, paintings = [] }) {
   const [phase, setPhase] = useState(() => (shouldPlay() ? "in" : "done"));
   const [count, setCount] = useState(0);
   const playing = useRef(phase !== "done");
@@ -70,7 +70,7 @@ export default function GrandEntrance({ name, tagline }) {
       aria-hidden="true"
       onClick={() => setPhase("out")}
     >
-      <GateDoors leftLabel="Nº I · Atelier" />
+      <GateDoors leftLabel="Nº I · Atelier" paintings={paintings} />
       <div className="gate-plaque">
         <i className="gate-sweep" />
         <span className="gate-mark">
