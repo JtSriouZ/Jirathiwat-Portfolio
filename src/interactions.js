@@ -119,3 +119,84 @@ export function startClickSeal(root = document) {
   root.addEventListener("pointerdown", onDown, { passive: true });
   return () => root.removeEventListener("pointerdown", onDown);
 }
+
+export function startGalleryLantern() {
+  let observer = null;
+  let watching = null;
+  let frame = 0;
+  let point = null;
+
+  const node = () => document.querySelector(".page-art-lantern");
+  const stage = () => document.querySelector(".page-art-stage");
+  const galleryOpen = () => document.querySelector(".portfolio.is-gallery");
+
+  const syncArt = () => {
+    const lantern = node();
+    const root = stage();
+    if (!lantern || !root) return;
+    if (watching !== root) {
+      observer?.disconnect();
+      observer = new MutationObserver(syncArt);
+      observer.observe(root, { subtree: true, attributes: true, attributeFilter: ["style", "class"] });
+      watching = root;
+    }
+    const art = root.querySelector(".page-art:not(.is-leaving)") || root.querySelector(".page-art");
+    if (!art) return;
+    const image = art.style.backgroundImage;
+    if (image && lantern.style.backgroundImage !== image) lantern.style.backgroundImage = image;
+  };
+
+  const place = () => {
+    frame = 0;
+    const lantern = node();
+    if (!lantern) return;
+    syncArt();
+    if (!point || !galleryOpen()) {
+      lantern.classList.remove("is-lit");
+      return;
+    }
+    const box = lantern.getBoundingClientRect();
+    const x = ((point.x - box.left) / Math.max(1, box.width)) * lantern.offsetWidth;
+    const y = ((point.y - box.top) / Math.max(1, box.height)) * lantern.offsetHeight;
+    lantern.style.setProperty("--lx", `${x.toFixed(1)}px`);
+    lantern.style.setProperty("--ly", `${y.toFixed(1)}px`);
+    lantern.classList.add("is-lit");
+  };
+
+  const queue = (x, y) => {
+    if (!galleryOpen()) return;
+    point = { x, y };
+    if (!frame) frame = requestAnimationFrame(place);
+  };
+
+  const onMove = (event) => queue(event.clientX, event.clientY);
+  const onDown = (event) => {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    queue(event.clientX, event.clientY);
+  };
+  const onEnd = (event) => {
+    if (event.pointerType === "mouse") return;
+    point = null;
+    node()?.classList.remove("is-lit");
+  };
+  const onLeave = () => {
+    point = null;
+    node()?.classList.remove("is-lit");
+  };
+
+  window.addEventListener("pointermove", onMove, { passive: true });
+  window.addEventListener("pointerdown", onDown, { passive: true });
+  window.addEventListener("pointerup", onEnd, { passive: true });
+  window.addEventListener("pointercancel", onEnd, { passive: true });
+  document.documentElement.addEventListener("mouseleave", onLeave);
+
+  return () => {
+    observer?.disconnect();
+    if (frame) cancelAnimationFrame(frame);
+    window.removeEventListener("pointermove", onMove);
+    window.removeEventListener("pointerdown", onDown);
+    window.removeEventListener("pointerup", onEnd);
+    window.removeEventListener("pointercancel", onEnd);
+    document.documentElement.removeEventListener("mouseleave", onLeave);
+  };
+}

@@ -1412,7 +1412,7 @@ p {
   margin: 0 auto 3rem;
   overflow: hidden;
   border: 1px solid rgba(36, 22, 242, 0.26);
-  border-radius: 12px;
+  border-radius: 0;
   background: #100e26;
   isolation: isolate;
 }

@@ -32,7 +32,7 @@ import GalleryMode from "./components/GalleryMode";
 import Codex from "./components/Codex";
 import RouteCurtain from "./components/RouteCurtain";
 import { holdDecrypt, startHeadingDecrypt, startHoverCipher } from "./decrypt";
-import { startClickSeal, startInfraredLens } from "./interactions";
+import { startClickSeal, startGalleryLantern, startInfraredLens } from "./interactions";
 import staticContent from "../data/content.json";
 
 const languageOptions = [
@@ -423,6 +423,10 @@ function App() {
   useEffect(() => startHoverCipher(document.body), []);
   useEffect(() => startInfraredLens(document), []);
   useEffect(() => startClickSeal(document), []);
+  useEffect(() => {
+    if (!content) return undefined;
+    return startGalleryLantern();
+  }, [content]);
   const [museumArt, setMuseumArt] = useState([]);
   const [artCycle, setArtCycle] = useState(0);
   const [galleryOpen, setGalleryOpen] = useState(false);
@@ -942,6 +946,7 @@ function App() {
         <div className="page-art-sheen" />
         <div className="page-art-wash" />
         <div className="page-art-spot" />
+        <div className="page-art-lantern" aria-hidden="true" />
         <AnimatedBackgroundCanvas routeKey={routeKey} />
       </div>
       <GildedCursor />

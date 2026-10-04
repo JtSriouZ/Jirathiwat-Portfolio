@@ -119,6 +119,7 @@ export default function StillGrid({ profile }) {
               </a>
             )}
           </div>
+          <span className="still-folio" aria-hidden="true">I</span>
         </div>
       </div>
     </section>

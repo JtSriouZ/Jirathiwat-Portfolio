@@ -28,7 +28,7 @@ let muted = false;
 function getAudio() {
   if (audio) return audio;
   audio = new Audio();
-  audio.preload = "none";
+  audio.preload = "auto";
   audio.volume = muted ? 0 : level;
   return audio;
 }
@@ -48,7 +48,9 @@ function stopSource() {
 function playTrack(src, onEnded) {
   const element = getAudio();
   const url = new URL(src, window.location.href).href;
-  if (element.src !== url) element.src = url;
+  const same = element.src === url;
+  if (!same) element.src = url;
+  else if (element.ended) element.currentTime = 0;
   element.onended = onEnded;
   applyLevel();
   return element.play();
@@ -83,22 +85,28 @@ export default function AtelierSound({ profile }) {
     }
   });
   const dragRef = useRef(null);
+  const tracksRef = useRef(tracks);
+  const indexRef = useRef(index);
+  const playAtRef = useRef(null);
+  tracksRef.current = tracks;
+  indexRef.current = index;
   const track = tracks[index % tracks.length];
+  const listKey = tracks.map((item) => item.src).join("|");
 
   useEffect(() => {
     enabled = true;
-  }, []);
-
-  useEffect(() => {
     let closed = false;
     const mine = ++generation;
 
-    const start = () => {
-      if (!enabled || closed || mine !== generation) return;
-      playTrack(track.src, () => {
-        if (!closed && mine === generation) {
-          setIndex((current) => (current + 1) % tracks.length);
-        }
+    const playAt = (nextIndex) => {
+      if (!enabled || closed || mine !== generation) return Promise.resolve();
+      const list = tracksRef.current;
+      if (!list.length) return Promise.resolve();
+      const safe = ((nextIndex % list.length) + list.length) % list.length;
+      indexRef.current = safe;
+      setIndex(safe);
+      return playTrack(list[safe].src, () => {
+        playAt(safe + 1);
       }).then(() => {
         if (!enabled || closed || mine !== generation) {
           if (mine === generation) stopSource();
@@ -110,7 +118,10 @@ export default function AtelierSound({ profile }) {
       });
     };
 
-    start();
+    playAtRef.current = playAt;
+    playAt(indexRef.current);
+
+    const start = () => playAt(indexRef.current);
 
     const onGesture = (event) => {
       if (event.target instanceof Element && event.target.closest(".atelier-sound")) return;
@@ -137,6 +148,7 @@ export default function AtelierSound({ profile }) {
     return () => {
       closed = true;
       generation += 1;
+      playAtRef.current = null;
       stopSource();
       window.clearTimeout(scrollAttempt);
       window.removeEventListener("pointerdown", onGesture, true);
@@ -145,18 +157,13 @@ export default function AtelierSound({ profile }) {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("touchmove", onScroll);
     };
-  }, [track.src]);
+  }, [listKey]);
 
   const toggle = () => {
     if (!isPlaying()) {
       enabled = true;
       remember(true);
-      playTrack(track.src, () => setIndex((current) => (current + 1) % tracks.length))
-        .then(() => {
-          if (enabled) setPlaying(true);
-          else stopSource();
-        })
-        .catch(() => setPlaying(false));
+      playAtRef.current?.(indexRef.current);
       return;
     }
     enabled = false;
@@ -173,7 +180,11 @@ export default function AtelierSound({ profile }) {
     return () => window.removeEventListener("atelier:sound-toggle", onToggle);
   }, []);
 
-  const skip = () => setIndex((current) => (current + 1) % tracks.length);
+  const skip = () => {
+    enabled = true;
+    remember(true);
+    playAtRef.current?.(indexRef.current + 1);
+  };
 
   const changeVolume = (value) => {
     const next = Number(value);

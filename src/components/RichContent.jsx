@@ -282,9 +282,11 @@ export default function RichContent({ text = "", mediaUrls = [], itemTitle = "Co
           return <h3 key={`subhead-${index}`} className="rich-subhead">{renderInlineText(block.text)}</h3>;
         }
         if (block.type === "lead") {
+          const label = String(block.label).replace(/:\s*$/, "");
           return (
             <p key={`lead-${index}`} className="rich-lead">
-              <strong>{renderInlineText(block.label)}</strong> {renderInlineText(block.text)}
+              <span className="rich-kicker">{renderInlineText(label)}</span>
+              <span>{renderInlineText(block.text)}</span>
             </p>
           );
         }

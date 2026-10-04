@@ -1032,11 +1032,14 @@ html {
 }
 
 .page-art-stage .page-art {
-  filter: brightness(var(--art-brightness, 0.56)) saturate(0.3) contrast(1.16);
+  background-size: cover;
+  background-position: center;
+  translate: none;
+  filter: grayscale(0.12) brightness(min(1.1, calc(var(--art-brightness, 0.64) * 1.45))) contrast(1.32) saturate(0.72);
   animation:
     artReveal var(--art-fade, 2200ms) cubic-bezier(0.45, 0, 0.2, 1) both,
-    kbA 34s ease-in-out infinite alternate;
-  will-change: transform, opacity;
+    kbA 18s ease-in-out infinite alternate;
+  will-change: transform;
 }
 
 .page-art-stage .page-art.is-kb-b {
@@ -1058,15 +1061,14 @@ html {
 }
 
 .page-art-wash {
-  opacity: 0.62;
+  opacity: 0.46;
 }
 
 .page-motion-bg::after,
 .page-home .page-motion-bg::after {
   background:
-    radial-gradient(ellipse at 50% 42%, rgba(7, 6, 15, 0.14) 30%, rgba(7, 6, 15, 0.6) 100%),
-    linear-gradient(180deg, rgba(7, 6, 15, 0.4), rgba(7, 6, 15, 0.08) 22%, rgba(7, 6, 15, 0.08) 70%, rgba(7, 6, 15, 0.5)),
-    var(--grain) 0 0 / 280px 280px repeat;
+    radial-gradient(ellipse at 50% 44%, transparent 34%, rgba(7, 6, 15, 0.22) 100%),
+    linear-gradient(180deg, rgba(7, 6, 15, 0.2), rgba(16, 12, 114, 0.08) 46%, rgba(7, 6, 15, 0.24));
 }
 
 @keyframes artReveal {
@@ -1082,23 +1084,23 @@ html {
 }
 
 @keyframes kbA {
-  from { transform: translate3d(-2.5%, -1.5%, 0) scale(1.02); }
-  to { transform: translate3d(2.5%, 1.8%, 0) scale(1.16); }
+  from { transform: translate3d(-6%, -3.5%, 0) scale(1.14); }
+  to { transform: translate3d(6%, 4%, 0) scale(1.32); }
 }
 
 @keyframes kbB {
-  from { transform: translate3d(2.5%, -2%, 0) scale(1.16); }
-  to { transform: translate3d(-2%, 1.5%, 0) scale(1.03); }
+  from { transform: translate3d(6%, -4%, 0) scale(1.3); }
+  to { transform: translate3d(-5%, 3.2%, 0) scale(1.12); }
 }
 
 @keyframes kbC {
-  from { transform: translate3d(2%, 2%, 0) scale(1.04); }
-  to { transform: translate3d(-2.5%, -1.2%, 0) scale(1.18); }
+  from { transform: translate3d(4.5%, 4%, 0) scale(1.14); }
+  to { transform: translate3d(-6%, -3%, 0) scale(1.32); }
 }
 
 @keyframes kbD {
-  from { transform: translate3d(-2.5%, 1.8%, 0) scale(1.15); }
-  to { transform: translate3d(2%, -2%, 0) scale(1.02); }
+  from { transform: translate3d(-5.5%, 3.6%, 0) scale(1.3); }
+  to { transform: translate3d(5%, -3.6%, 0) scale(1.12); }
 }
 
 .page-art-sheen {
@@ -1136,6 +1138,14 @@ html {
 .film-grain,
 .page-art-light {
   animation: none;
+}
+
+.page-art-light {
+  opacity: 0.26;
+}
+
+.film-grain {
+  opacity: 0.02;
 }
 
 .page-art-sheen {
@@ -1249,8 +1259,13 @@ html {
   .ornament-rule svg :is(path, ellipse, circle),
   .footer-wordmark i,
   .page-art-stage .page-art,
-  .reveal.is-visible .section-heading::after {
+  .page-art-lantern,
+  .reveal.is-visible .section-heading::after,
+  .still-folio {
     animation: none !important;
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 
   .page-art-sheen {

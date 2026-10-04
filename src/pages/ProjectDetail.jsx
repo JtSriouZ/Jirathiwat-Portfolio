@@ -1,6 +1,22 @@
 import { useParams, Link } from "react-router-dom";
 import { Github, ExternalLink, ArrowLeft, Calendar, Building2, Code2 } from "lucide-react";
 import { normalizeList, resolveMediaUrl } from "../utils";
+
+function presentHighlights(value) {
+  const lines = normalizeList(value).flatMap((item) => String(item).split(/\n+/));
+  const highlights = [];
+  lines.forEach((line) => {
+    const text = line.trim();
+    if (!text) return;
+    const previous = highlights.at(-1);
+    if (previous && !/[.!?]$/.test(previous) && /^[a-z]/.test(text)) {
+      highlights[highlights.length - 1] = `${previous}, ${text}`;
+      return;
+    }
+    highlights.push(text);
+  });
+  return highlights;
+}
 import { siteLabel } from "../siteCopy";
 import MediaGallery from "../components/MediaGallery";
 import RichContent, { getInlineMediaUsage } from "../components/RichContent";
@@ -22,7 +38,7 @@ export default function ProjectDetail({ content }) {
     );
   }
 
-  const highlights = normalizeList(project.highlights);
+  const highlights = presentHighlights(project.highlights);
   const skills = normalizeList(project.skills);
   const mediaUrls = normalizeList(project.mediaUrls);
   
@@ -81,7 +97,7 @@ export default function ProjectDetail({ content }) {
           </div>
         )}
 
-        <div className="project-detail-content" style={{ maxWidth: "800px", margin: "0 auto" }}>
+        <div className="project-detail-content">
           <h2>{siteLabel(profile, "aboutProject")}</h2>
           <RichContent text={descriptionText} mediaUrls={mediaUrls} itemTitle={project.name} />
           
