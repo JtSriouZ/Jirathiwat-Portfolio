@@ -99,15 +99,6 @@ function AnimatedBackgroundCanvas({ routeKey }) {
     let width = 0;
     let height = 0;
     let dust = [];
-    let sparks = [];
-    let lastSparkAt = 0;
-    const pointer = {
-      x: window.innerWidth * 0.5,
-      y: window.innerHeight * 0.34,
-      targetX: window.innerWidth * 0.5,
-      targetY: window.innerHeight * 0.34,
-      active: false,
-    };
 
     const getPalette = () => {
       return {
@@ -143,24 +134,6 @@ function AnimatedBackgroundCanvas({ routeKey }) {
       }));
     };
 
-    const spawnSparks = (count) => {
-      for (let index = 0; index < count; index += 1) {
-        if (sparks.length > 90) break;
-        const angle = Math.random() * Math.PI * 2;
-        const speed = 0.4 + Math.random() * 1.6;
-        sparks.push({
-          x: pointer.x + (Math.random() - 0.5) * 8,
-          y: pointer.y + (Math.random() - 0.5) * 8,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed - 0.4,
-          life: 1,
-          decay: 0.012 + Math.random() * 0.02,
-          size: 0.8 + Math.random() * 1.8,
-          spin: Math.random() * Math.PI,
-        });
-      }
-    };
-
     let lastDrawAt = 0;
     const draw = (time = 0) => {
       if (!reduceMotion && time - lastDrawAt < FRAME_INTERVAL) {
@@ -178,25 +151,12 @@ function AnimatedBackgroundCanvas({ routeKey }) {
       context.globalAlpha = 1;
       context.globalCompositeOperation = "source-over";
 
-      if (!reduceMotion) {
-        const ease = 1 - 0.9 ** step;
-        pointer.x += (pointer.targetX - pointer.x) * ease;
-        pointer.y += (pointer.targetY - pointer.y) * ease;
-      }
       const damping = 0.985 ** step;
 
       context.globalCompositeOperation = "lighter";
 
       dust.forEach((mote) => {
         if (!reduceMotion) {
-          const dx = pointer.x - mote.x;
-          const dy = pointer.y - mote.y;
-          const distance = Math.hypot(dx, dy);
-          if (distance < 200 && distance > 0.001) {
-            const pull = ((200 - distance) / 200) * 0.012 * step;
-            mote.vx += (dx / distance) * pull;
-            mote.vy += (dy / distance) * pull;
-          }
           mote.vx *= damping;
           mote.vy = mote.vy * damping - 0.002 * step;
           mote.x += (mote.vx + Math.sin(seconds * 0.6 + mote.sway) * 0.12) * step;
@@ -219,33 +179,6 @@ function AnimatedBackgroundCanvas({ routeKey }) {
         context.fill();
       });
 
-      // Pointer sparks
-      sparks = sparks.filter((spark) => spark.life > 0);
-      sparks.forEach((spark) => {
-        spark.x += spark.vx * step;
-        spark.y += spark.vy * step;
-        spark.vy += 0.015 * step;
-        spark.vx *= 0.97 ** step;
-        spark.life -= spark.decay * step;
-        spark.spin += 0.1 * step;
-
-        // Crisp pixel sparks (squares and plus-signs), no glow
-        context.save();
-        context.translate(Math.round(spark.x), Math.round(spark.y));
-        context.globalAlpha = Math.max(0, spark.life) * 0.95;
-        const phase = spark.spin % Math.PI;
-        context.fillStyle = phase > Math.PI * 0.5 ? palette.giltLight : palette.ultra;
-        context.shadowBlur = 0;
-        const size = Math.max(1, Math.round(spark.size * (0.6 + spark.life * 0.9)));
-        if (phase > Math.PI * 0.75) {
-          context.fillRect(-size * 2, -0.5, size * 4, 1);
-          context.fillRect(-0.5, -size * 2, 1, size * 4);
-        } else {
-          context.fillRect(-size, -size, size * 2, size * 2);
-        }
-        context.restore();
-      });
-
       context.shadowBlur = 0;
       context.globalAlpha = 1;
       context.globalCompositeOperation = "source-over";
@@ -258,42 +191,11 @@ function AnimatedBackgroundCanvas({ routeKey }) {
     resize();
     draw();
 
-    const updatePointer = (event) => {
-      const point = event.touches?.[0] || event;
-      if (typeof point?.clientX !== "number" || typeof point?.clientY !== "number") return;
-
-      pointer.targetX = point.clientX;
-      pointer.targetY = point.clientY;
-      pointer.active = true;
-
-      const now = performance.now();
-      if (!reduceMotion && now - lastSparkAt > 28) {
-        lastSparkAt = now;
-        spawnSparks(2);
-      }
-    };
-
-    const deactivatePointer = () => {
-      pointer.active = false;
-    };
-
-    const burst = () => {
-      if (!reduceMotion) spawnSparks(18);
-    };
-
     window.addEventListener("resize", resize);
-    window.addEventListener("pointermove", updatePointer, { passive: true });
-    window.addEventListener("touchmove", updatePointer, { passive: true });
-    window.addEventListener("pointerdown", burst, { passive: true });
-    window.addEventListener("pointerleave", deactivatePointer, { passive: true });
 
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("resize", resize);
-      window.removeEventListener("pointermove", updatePointer);
-      window.removeEventListener("touchmove", updatePointer);
-      window.removeEventListener("pointerdown", burst);
-      window.removeEventListener("pointerleave", deactivatePointer);
     };
   }, [routeKey]);
 
@@ -315,45 +217,26 @@ function GildedCursor() {
     if (window.matchMedia?.("(hover: none), (pointer: coarse)").matches) return undefined;
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return undefined;
 
-    let frame = 0;
     let visible = false;
-    const target = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-    const ringPosition = { x: target.x, y: target.y };
     const interactiveSelector = "a, button, [role='button'], input, textarea, select, label, summary";
+    const textSelector = "input, textarea, select, [contenteditable='true']";
 
     const place = (element, x, y) => {
       element.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
     };
 
-    const render = () => {
-      ringPosition.x += (target.x - ringPosition.x) * 0.22;
-      ringPosition.y += (target.y - ringPosition.y) * 0.22;
-      const settled = Math.abs(target.x - ringPosition.x) < 0.3 && Math.abs(target.y - ringPosition.y) < 0.3;
-      if (settled) {
-        ringPosition.x = target.x;
-        ringPosition.y = target.y;
-      }
-      place(ring, ringPosition.x, ringPosition.y);
-      place(dot, target.x, target.y);
-      place(burst, target.x, target.y);
-      frame = settled ? 0 : requestAnimationFrame(render);
-    };
-
     const move = (event) => {
-      target.x = event.clientX;
-      target.y = event.clientY;
-      if (!frame) frame = requestAnimationFrame(render);
+      place(ring, event.clientX, event.clientY);
+      place(dot, event.clientX, event.clientY);
+      place(burst, event.clientX, event.clientY);
       if (!visible) {
         visible = true;
-        ringPosition.x = target.x;
-        ringPosition.y = target.y;
-        place(ring, target.x, target.y);
-        place(dot, target.x, target.y);
-        place(burst, target.x, target.y);
         root.classList.remove("is-hidden");
       }
       const interactive = event.target?.closest?.(interactiveSelector);
-      root.classList.toggle("is-hovering", Boolean(interactive));
+      const typing = event.target?.closest?.(textSelector);
+      root.classList.toggle("is-hovering", Boolean(interactive) && !typing);
+      root.classList.toggle("is-text", Boolean(typing));
     };
 
     const hide = () => {
@@ -377,7 +260,6 @@ function GildedCursor() {
     document.documentElement.addEventListener("mouseleave", hide);
 
     return () => {
-      cancelAnimationFrame(frame);
       window.removeEventListener("pointermove", move);
       window.removeEventListener("pointerdown", press);
       window.removeEventListener("pointerup", release);
@@ -389,7 +271,9 @@ function GildedCursor() {
   return (
     <div className="lux-cursor is-hidden" ref={rootRef} aria-hidden="true">
       <span className="lux-cursor-burst" ref={burstRef}><i /></span>
-      <span className="lux-cursor-ring" ref={ringRef} />
+      <span className="lux-cursor-ring" ref={ringRef}>
+        <b /><b /><b /><b />
+      </span>
       <span className="lux-cursor-dot" ref={dotRef} />
     </div>
   );

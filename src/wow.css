@@ -722,19 +722,19 @@ html.has-entrance .home-cinematic-page > .hero-editorial {
 
 @media (hover: hover) and (pointer: fine) {
   :is(.project-card, .home-post-card, .post-card) .thumb img:not(.thumb-fill) {
-    filter: grayscale(1) contrast(1.25) brightness(0.9);
+    filter: grayscale(0.72) contrast(1.16) brightness(0.98) saturate(1.2);
     transition:
       transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1),
       filter 700ms ease;
   }
 
   :is(.project-card, .home-post-card, .post-card) .thumb .thumb-fill {
-    filter: blur(22px) grayscale(1) brightness(0.5);
+    filter: blur(22px) grayscale(0.7) brightness(0.62) saturate(1.25);
   }
 
   :is(.project-card, .home-post-card, .post-card) .thumb.thumb::before {
-    opacity: 0.55;
-    background: #5a5f9c;
+    opacity: 0.46;
+    background: #3a2ef0;
     box-shadow: none;
     mix-blend-mode: color;
     transition: opacity 700ms ease;
