@@ -863,10 +863,170 @@ html.has-entrance .home-cinematic-page > .hero-editorial {
   }
 }
 
+/* ---------- Lock-on reticle and signal rules ---------- */
+
+.lock-on {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 25;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 220ms ease,
+    transform 460ms var(--ease-lux),
+    width 460ms var(--ease-lux),
+    height 460ms var(--ease-lux);
+}
+
+.lock-on.is-on {
+  opacity: 1;
+}
+
+.lock-on-frame {
+  position: absolute;
+  inset: -10px;
+  animation: lockSnap 520ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+
+.lock-on-frame > i:not(.lock-on-scan) {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: #e7eaff;
+  border-style: solid;
+  border-width: 0;
+}
+
+.lock-on-frame .is-tl {
+  top: 0;
+  left: 0;
+  border-top-width: 1.5px;
+  border-left-width: 1.5px;
+}
+
+.lock-on-frame .is-tr {
+  top: 0;
+  right: 0;
+  border-top-width: 1.5px;
+  border-right-width: 1.5px;
+}
+
+.lock-on-frame .is-bl {
+  bottom: 0;
+  left: 0;
+  border-bottom-width: 1.5px;
+  border-left-width: 1.5px;
+}
+
+.lock-on-frame .is-br {
+  right: 0;
+  bottom: 0;
+  border-right-width: 1.5px;
+  border-bottom-width: 1.5px;
+  border-color: #2416f2;
+}
+
+.lock-on-tag {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  padding: 3px 8px;
+  border: 1px solid rgba(231, 234, 255, 0.7);
+  background: #07060f;
+  color: #b7c0ff;
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: 3px 3px 0 #2416f2;
+  animation: lockTag 420ms steps(5) 160ms backwards;
+}
+
+.lock-on-scan {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  height: 1px;
+  background: rgba(231, 234, 255, 0.85);
+  box-shadow: 0 0 10px rgba(36, 22, 242, 0.9);
+  opacity: 0;
+  animation: lockScan 950ms cubic-bezier(0.6, 0, 0.3, 1) 80ms;
+}
+
+@keyframes lockSnap {
+  from {
+    inset: -30px;
+    opacity: 0;
+  }
+
+  45% {
+    opacity: 1;
+  }
+}
+
+@keyframes lockTag {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0);
+  }
+}
+
+@keyframes lockScan {
+  0% {
+    top: 10px;
+    opacity: 1;
+  }
+
+  85% {
+    opacity: 0.8;
+  }
+
+  100% {
+    top: calc(100% - 10px);
+    opacity: 0;
+  }
+}
+
+.reveal.is-visible .section-heading::after {
+  background:
+    linear-gradient(90deg, transparent, rgba(231, 234, 255, 0.95), transparent) -120px 100% / 120px 2px no-repeat,
+    linear-gradient(90deg, var(--signal) 0 28px, var(--gilt) 28px 128px, transparent 128px) left bottom / 100% 2px no-repeat,
+    rgba(183, 192, 255, 0.22);
+  animation: ruleSignal 5s cubic-bezier(0.6, 0, 0.3, 1) 1.2s infinite;
+}
+
+@keyframes ruleSignal {
+  0% {
+    background-position: -120px 100%, left bottom, 0 0;
+  }
+
+  55%,
+  100% {
+    background-position: calc(100% + 120px) 100%, left bottom, 0 0;
+  }
+}
+
 /* ---------- Heading decrypt ---------- */
 
 .hero-title.is-scrambling::after {
   content: none;
+}
+
+.is-ciphering {
+  overflow: hidden;
+  white-space: nowrap;
+  color: #e7eaff;
+}
+
+html {
+  scrollbar-color: #4b5088 #07060f;
+  scrollbar-width: thin;
 }
 
 /* ---------- Living backdrop: museum slideshow ---------- */
@@ -1042,7 +1202,8 @@ html.has-entrance .home-cinematic-page > .hero-editorial {
   .ornament-rule::after,
   .ornament-rule svg :is(path, ellipse, circle),
   .footer-wordmark i,
-  .page-art-stage .page-art {
+  .page-art-stage .page-art,
+  .reveal.is-visible .section-heading::after {
     animation: none !important;
   }
 

@@ -27,8 +27,9 @@ import GrandEntrance from "./components/GrandEntrance";
 import Ornament from "./components/Ornament";
 import ArtPlacard from "./components/ArtPlacard";
 import ArtBackdrop from "./components/ArtBackdrop";
+import LockOn from "./components/LockOn";
 import RouteCurtain from "./components/RouteCurtain";
-import { holdDecrypt, startHeadingDecrypt } from "./decrypt";
+import { holdDecrypt, startHeadingDecrypt, startHoverCipher } from "./decrypt";
 import staticContent from "../data/content.json";
 
 const languageOptions = [
@@ -387,6 +388,7 @@ function App() {
     if (wipeRef.current.count > 0) holdDecrypt(1050);
   }, [location.pathname]);
   useEffect(() => startHeadingDecrypt(document.body), []);
+  useEffect(() => startHoverCipher(document.body), []);
   const [museumArt, setMuseumArt] = useState([]);
   const [artCycle, setArtCycle] = useState(0);
   const museumEnabled = !isStaticSite && Boolean(content) && content.profile?.museumBackgrounds !== false;
@@ -872,6 +874,7 @@ function App() {
         <i ref={progressRef} />
       </div>
       <GrandEntrance name={profile.name} tagline={siteLabel(profile, "entranceTagline")} />
+      <LockOn />
       {wipeRef.current.count > 0 && (
         <RouteCurtain
           key={wipeRef.current.count}

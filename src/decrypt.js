@@ -20,7 +20,7 @@ function caesar(character, shift) {
   return String.fromCharCode(((code - base + shift) % 26) + base);
 }
 
-function decryptElement(element) {
+function decryptElement(element, { duration: fixedDuration, className = "is-scrambling", onDone } = {}) {
   const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
   const items = [];
   let total = 0;
@@ -30,14 +30,17 @@ function decryptElement(element) {
     items.push({ node, final: node.nodeValue, written: node.nodeValue, base: total });
     total += node.nodeValue.length;
   }
-  if (!items.length) return;
+  if (!items.length) {
+    onDone?.();
+    return;
+  }
 
-  const duration = Math.max(720, Math.min(1600, total * 46));
+  const duration = fixedDuration ?? Math.max(720, Math.min(1600, total * 46));
   const span = duration - HASH_MS - 120;
   const settleAt = Array.from({ length: total }, (_, index) => HASH_MS + (index / total) * span + Math.random() * 120);
   const addedLabel = !element.hasAttribute("aria-label");
   if (addedLabel) element.setAttribute("aria-label", element.textContent.trim());
-  element.classList.add("is-scrambling");
+  element.classList.add(className);
 
   const start = performance.now();
   const tick = (now) => {
@@ -73,10 +76,33 @@ function decryptElement(element) {
     items.forEach((item) => {
       if (!item.stale && item.node.nodeValue === item.written) item.node.nodeValue = item.final;
     });
-    element.classList.remove("is-scrambling");
+    element.classList.remove(className);
     if (addedLabel) element.removeAttribute("aria-label");
+    onDone?.();
   };
   requestAnimationFrame(tick);
+}
+
+const HOVER_SELECTOR = ".topbar-nav a:not(.brand), .footer-links a";
+
+export function startHoverCipher(root = document.body) {
+  if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return () => {};
+  if (!window.matchMedia?.("(hover: hover) and (pointer: fine)").matches) return () => {};
+
+  const onOver = (event) => {
+    const element = event.target instanceof Element ? event.target.closest(HOVER_SELECTOR) : null;
+    if (!element || element.contains(event.relatedTarget)) return;
+    if (element.classList.contains("is-ciphering") || element.classList.contains("is-scrambling")) return;
+    element.style.width = `${element.getBoundingClientRect().width}px`;
+    decryptElement(element, {
+      duration: 420,
+      className: "is-ciphering",
+      onDone: () => element.style.removeProperty("width")
+    });
+  };
+
+  root.addEventListener("pointerover", onOver, { passive: true });
+  return () => root.removeEventListener("pointerover", onOver);
 }
 
 export function startHeadingDecrypt(root = document.body) {

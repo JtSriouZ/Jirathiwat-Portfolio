@@ -1,31 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import { siteLabel } from "../siteCopy";
 
+const MUSOPEN = {
+  artist: "Frédéric Chopin · Musopen",
+  artistUrl: "https://archive.org/details/musopen-chopin",
+  license: "CC0",
+  licenseUrl: "https://creativecommons.org/publicdomain/zero/1.0/"
+};
+
 const TRACKS = [
-  {
-    src: "/music/deep-house-sunset.mp3",
-    title: "Deep House Sunset",
-    artist: "Alex Morgan",
-    artistUrl: "https://freemusicarchive.org/music/alex-morgan/",
-    license: "CC BY",
-    licenseUrl: "https://creativecommons.org/licenses/by/4.0/"
-  },
-  {
-    src: "/music/cocktail-bar.mp3",
-    title: "Cocktail Bar",
-    artist: "Alex Morgan",
-    artistUrl: "https://freemusicarchive.org/music/alex-morgan/",
-    license: "CC BY",
-    licenseUrl: "https://creativecommons.org/licenses/by/4.0/"
-  },
-  {
-    src: "/music/midnight-club.mp3",
-    title: "Midnight Club",
-    artist: "Alex Morgan",
-    artistUrl: "https://freemusicarchive.org/music/alex-morgan/",
-    license: "CC BY",
-    licenseUrl: "https://creativecommons.org/licenses/by/4.0/"
-  }
+  { src: "/music/chopin-nocturne-c-sharp-minor-lento.mp3", title: "Nocturne in C-sharp Minor", ...MUSOPEN },
+  { src: "/music/chopin-nocturne-c-minor-op48.mp3", title: "Nocturne in C Minor, Op. 48", ...MUSOPEN },
+  { src: "/music/chopin-prelude-raindrop-op28-15.mp3", title: "Raindrop Prelude, Op. 28", ...MUSOPEN },
+  { src: "/music/chopin-nocturne-b-flat-minor-op9.mp3", title: "Nocturne in B-flat Minor, Op. 9", ...MUSOPEN }
 ];
 
 const LEVEL = 0.55;

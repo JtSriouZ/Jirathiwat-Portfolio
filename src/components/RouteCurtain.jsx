@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EUROPEAN_ART } from "../europeanArt";
 
+const CURTAIN_MS = 2500;
 const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 const ROMAN = [[1000, "M"], [900, "CM"], [500, "D"], [400, "CD"], [100, "C"], [90, "XC"], [50, "L"], [40, "XL"], [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"]];
 
@@ -43,8 +44,16 @@ export function GateDoors({ leftLabel, rightLabel = YEAR }) {
 }
 
 export default function RouteCurtain({ label, index = 0, total = NUMERALS.length }) {
+  const [done, setDone] = useState(false);
   const letters = Array.from(String(label || ""));
   const numeral = NUMERALS[index] || NUMERALS[0];
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDone(true), CURTAIN_MS);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (done) return null;
 
   return (
     <div className="route-wipe" aria-hidden="true">

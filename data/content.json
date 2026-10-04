@@ -161,31 +161,40 @@
     ],
     "tracks": [
       {
-        "id": "deep-house-sunset",
-        "src": "/music/deep-house-sunset.mp3",
-        "title": "Deep House Sunset",
-        "artist": "Alex Morgan",
-        "artistUrl": "https://freemusicarchive.org/music/alex-morgan/",
-        "license": "CC BY",
-        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+        "id": "chopin-nocturne-c-sharp-minor",
+        "src": "/music/chopin-nocturne-c-sharp-minor-lento.mp3",
+        "title": "Nocturne in C-sharp Minor",
+        "artist": "Frédéric Chopin · Musopen",
+        "artistUrl": "https://archive.org/details/musopen-chopin",
+        "license": "CC0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
       },
       {
-        "id": "cocktail-bar",
-        "src": "/music/cocktail-bar.mp3",
-        "title": "Cocktail Bar",
-        "artist": "Alex Morgan",
-        "artistUrl": "https://freemusicarchive.org/music/alex-morgan/",
-        "license": "CC BY",
-        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+        "id": "chopin-nocturne-c-minor",
+        "src": "/music/chopin-nocturne-c-minor-op48.mp3",
+        "title": "Nocturne in C Minor, Op. 48",
+        "artist": "Frédéric Chopin · Musopen",
+        "artistUrl": "https://archive.org/details/musopen-chopin",
+        "license": "CC0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
       },
       {
-        "id": "midnight-club",
-        "src": "/music/midnight-club.mp3",
-        "title": "Midnight Club",
-        "artist": "Alex Morgan",
-        "artistUrl": "https://freemusicarchive.org/music/alex-morgan/",
-        "license": "CC BY",
-        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+        "id": "chopin-raindrop-prelude",
+        "src": "/music/chopin-prelude-raindrop-op28-15.mp3",
+        "title": "Raindrop Prelude, Op. 28",
+        "artist": "Frédéric Chopin · Musopen",
+        "artistUrl": "https://archive.org/details/musopen-chopin",
+        "license": "CC0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      {
+        "id": "chopin-nocturne-b-flat-minor",
+        "src": "/music/chopin-nocturne-b-flat-minor-op9.mp3",
+        "title": "Nocturne in B-flat Minor, Op. 9",
+        "artist": "Frédéric Chopin · Musopen",
+        "artistUrl": "https://archive.org/details/musopen-chopin",
+        "license": "CC0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
       }
     ],
     "backgrounds": [
