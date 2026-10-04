@@ -336,10 +336,14 @@ p,
 }
 
 /* Roman folio: every section carries an inscription numeral */
-.page-content,
+.page-content:not(.about-content-rest),
 .home-cinematic-page,
 .about-cinematic-page {
   counter-reset: folio;
+}
+
+.about-cinematic-page .page-content {
+  counter-reset: none;
 }
 
 .section {
@@ -875,8 +879,8 @@ body,
   padding: clamp(6.4rem, 12vh, 8rem) max(20px, calc((100% - 1160px) / 2)) clamp(2.5rem, 6vh, 4rem);
   text-align: left;
   background:
-    linear-gradient(90deg, rgba(7, 6, 15, 0.58), rgba(7, 6, 15, 0.38) 55%, rgba(7, 6, 15, 0.24)),
-    linear-gradient(180deg, rgba(7, 6, 15, 0.12), rgba(7, 6, 15, 0.3));
+    linear-gradient(90deg, rgba(7, 6, 15, 0.36), rgba(7, 6, 15, 0.18) 55%, rgba(7, 6, 15, 0.08)),
+    linear-gradient(180deg, rgba(7, 6, 15, 0.04), rgba(7, 6, 15, 0.14));
   border-bottom: 1px solid var(--frame);
   overflow: hidden;
 }
@@ -1343,6 +1347,10 @@ body,
   align-items: stretch;
 }
 
+.still-folio::before {
+  content: counter(folio, upper-roman);
+}
+
 .still-folio {
   position: relative;
   z-index: 0;
@@ -1355,17 +1363,24 @@ body,
   font-weight: 500;
   line-height: 0.72;
   pointer-events: none;
-  -webkit-text-stroke: 1px rgba(183, 192, 255, 0.62);
+  -webkit-text-stroke: 1px rgba(183, 192, 255, 0.18);
   opacity: 0;
   transform: translate3d(0, 18px, 0);
   transition:
     opacity 520ms cubic-bezier(0.22, 1, 0.36, 1),
-    transform 620ms cubic-bezier(0.16, 1, 0.3, 1);
+    transform 620ms cubic-bezier(0.16, 1, 0.3, 1),
+    -webkit-text-stroke-color 420ms ease;
 }
 
 .reveal.is-visible .still-folio {
   opacity: 1;
   transform: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .still-section:hover .still-folio {
+    -webkit-text-stroke-color: rgba(183, 192, 255, 0.55);
+  }
 }
 
 .still-index {
