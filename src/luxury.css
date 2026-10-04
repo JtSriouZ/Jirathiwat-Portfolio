@@ -2653,8 +2653,8 @@ body,
 }
 
 .lux-cursor-ring {
-  width: 16px;
-  height: 16px;
+  width: 22px;
+  height: 22px;
   border: 0;
   background: transparent;
   transition:
@@ -2665,8 +2665,8 @@ body,
 
 .lux-cursor-ring b {
   position: absolute;
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   border: 1px solid #e7eaff;
   transition: width 220ms ease, height 220ms ease, border-color 220ms ease;
 }
@@ -2700,15 +2700,15 @@ body,
 }
 
 .lux-cursor-dot {
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
   background: #2416f2;
   box-shadow: 0 0 0 1px #e7eaff;
 }
 
 .lux-cursor-burst {
-  width: 16px;
-  height: 16px;
+  width: 22px;
+  height: 22px;
 }
 
 .lux-cursor-burst i {
