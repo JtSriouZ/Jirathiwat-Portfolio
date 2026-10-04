@@ -9,7 +9,7 @@ import {
   preloadEuropeanArt
 } from "./europeanArt";
 import { Routes, Route, Link, NavLink, useNavigate, useLocation } from "react-router-dom";
-import { Landmark, Share2, Search, Globe, Edit3, X, Menu, Linkedin, Github, Instagram, Mail } from "lucide-react";
+import { Landmark, Share2, Search, Globe, Edit3, X, Menu, Linkedin, Github, Instagram, Mail, Frame, Keyboard } from "lucide-react";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Skills from "./pages/Skills";
@@ -28,6 +28,8 @@ import Ornament from "./components/Ornament";
 import ArtPlacard from "./components/ArtPlacard";
 import ArtBackdrop from "./components/ArtBackdrop";
 import LockOn from "./components/LockOn";
+import GalleryMode from "./components/GalleryMode";
+import Codex from "./components/Codex";
 import RouteCurtain from "./components/RouteCurtain";
 import { holdDecrypt, startHeadingDecrypt, startHoverCipher } from "./decrypt";
 import staticContent from "../data/content.json";
@@ -54,6 +56,7 @@ const ROUTE_LABELS = {
   blog: "navBlog",
   admin: "navAdmin",
 };
+const KEY_ROUTES = { 1: "/", 2: "/projects", 3: "/certificates", 4: "/skills", 5: "/about", 6: "/blog" };
 
 function houseArtInfo(src, houseLabel) {
   const name = String(src || "").match(/\/ornament\/european-([a-z-]+)\.\w+$/)?.[1];
@@ -419,6 +422,8 @@ function App() {
   useEffect(() => startHoverCipher(document.body), []);
   const [museumArt, setMuseumArt] = useState([]);
   const [artCycle, setArtCycle] = useState(0);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [codexOpen, setCodexOpen] = useState(false);
   const museumEnabled = !isStaticSite && Boolean(content) && content.profile?.museumBackgrounds !== false;
   const backgroundKey = (content?.profile?.backgrounds || []).join("|");
   const museumKey = museumEnabled ? museumArt.map((item) => item.src).join("|") : "";
@@ -472,6 +477,35 @@ function App() {
     }, ART_SLIDE_MS);
     return () => window.clearInterval(timer);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (location.pathname.startsWith("/admin")) return undefined;
+    const onKey = (event) => {
+      if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey) return;
+      if (event.target instanceof Element && event.target.closest("input, textarea, select, [contenteditable='true']")) return;
+      const { key } = event;
+      if (key === "Escape") {
+        setGalleryOpen(false);
+        setCodexOpen(false);
+      } else if (key === "?") {
+        setCodexOpen((open) => !open);
+      } else if (key === "g" || key === "G") {
+        setCodexOpen(false);
+        setGalleryOpen((open) => !open);
+      } else if (key === "m" || key === "M") {
+        window.dispatchEvent(new Event("atelier:sound-toggle"));
+      } else if (galleryOpen && (key === "ArrowRight" || key === "ArrowLeft")) {
+        event.preventDefault();
+        setArtCycle((cycle) => cycle + (key === "ArrowRight" ? 1 : -1));
+      } else if (KEY_ROUTES[key]) {
+        setGalleryOpen(false);
+        setCodexOpen(false);
+        navigate(KEY_ROUTES[key]);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [galleryOpen, location.pathname, navigate]);
 
   useEffect(() => {
     if (!museumEnabled || !artCycle || artCycle % 5 || museumArt.length >= ART_POOL_LIMIT) return undefined;
@@ -887,13 +921,17 @@ function App() {
   const pageArt = artMap[artRouteKey] || artMap.home;
   if (!museumEnabled || museumArt.length) shownArtRef.current.routes[artRouteKey] = pageArt;
   const shownArt =
-    artCycle && artPool.length ? artPool[(Math.max(0, artPool.indexOf(pageArt)) + artCycle) % artPool.length] : pageArt;
+    artCycle && artPool.length
+      ? artPool[(((Math.max(0, artPool.indexOf(pageArt)) + artCycle) % artPool.length) + artPool.length) % artPool.length]
+      : pageArt;
   const pageArtInfo =
     (museumEnabled && museumArt.find((item) => item.src === shownArt)) || houseArtInfo(shownArt, siteLabel(profile, "placardHouse"));
   const brandLetters = Array.from(siteLabel(profile, "brand"));
 
   return (
-    <div className={`portfolio page-${routeKey} route-${subRouteKey}${placardShown ? " is-placard-shown" : ""}`}>
+    <div
+      className={`portfolio page-${routeKey} route-${subRouteKey}${placardShown ? " is-placard-shown" : ""}${galleryOpen ? " is-gallery" : ""}`}
+    >
       <div className="page-motion-bg" aria-hidden="true">
         <ArtBackdrop src={shownArt} />
         <div className="page-art-light" />
@@ -916,7 +954,20 @@ function App() {
         index={Math.max(0, artPool.indexOf(shownArt))}
         label={siteLabel(profile, "placardLabel")}
         sourceLabel={siteLabel(profile, "placardSource")}
+        openLabel={siteLabel(profile, "galleryOpen")}
+        onOpen={() => setGalleryOpen(true)}
       />
+      <GalleryMode
+        open={galleryOpen}
+        art={pageArtInfo}
+        index={Math.max(0, artPool.indexOf(shownArt))}
+        total={artPool.length}
+        profile={profile}
+        onPrev={() => setArtCycle((cycle) => cycle - 1)}
+        onNext={() => setArtCycle((cycle) => cycle + 1)}
+        onClose={() => setGalleryOpen(false)}
+      />
+      <Codex open={codexOpen} profile={profile} onClose={() => setCodexOpen(false)} />
       <div className="scroll-progress" aria-hidden="true">
         <i ref={progressRef} />
       </div>
@@ -955,6 +1006,22 @@ function App() {
               <Search size={18} />
             </Link>
             <button
+              className="icon-button nav-icon nav-gallery"
+              onClick={() => setGalleryOpen(true)}
+              aria-label={siteLabel(profile, "galleryOpen")}
+              title={`${siteLabel(profile, "galleryOpen")} (G)`}
+            >
+              <Frame size={18} />
+            </button>
+            <button
+              className="icon-button nav-icon nav-codex"
+              onClick={() => setCodexOpen(true)}
+              aria-label={siteLabel(profile, "codexTitle")}
+              title={`${siteLabel(profile, "codexTitle")} (?)`}
+            >
+              <Keyboard size={18} />
+            </button>
+            <button
               className="icon-button nav-icon"
               onClick={() => setLanguageOpen(true)}
               aria-label="Choose language"
@@ -979,7 +1046,7 @@ function App() {
         </nav>
       </header>
 
-      <main id="top">
+      <main id="top" inert={galleryOpen}>
         <Routes>
           <Route path="/" element={<Home content={content} language={language} />} />
           <Route path="/projects" element={<Projects content={content} />} />

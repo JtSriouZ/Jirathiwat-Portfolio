@@ -6,6 +6,7 @@ import "./styles.css";
 import "./luxury.css";
 import "./wow.css";
 import "./curtain.css";
+import "./gallery.css";
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>

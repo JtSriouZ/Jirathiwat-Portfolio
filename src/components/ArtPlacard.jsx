@@ -8,7 +8,7 @@ const NUMERALS = [
   [1, "I"],
 ];
 
-function toRoman(value) {
+export function toRoman(value) {
   let rest = Math.max(1, Math.floor(value));
   let out = "";
   NUMERALS.forEach(([size, mark]) => {
@@ -20,7 +20,7 @@ function toRoman(value) {
   return out;
 }
 
-export default function ArtPlacard({ art, index, label, sourceLabel }) {
+export default function ArtPlacard({ art, index, label, sourceLabel, openLabel, onOpen }) {
   if (!art?.title) return null;
 
   const year = String(art.date || "").match(/\d{3,4}/)?.[0];
@@ -34,11 +34,18 @@ export default function ArtPlacard({ art, index, label, sourceLabel }) {
       <strong>{art.title}</strong>
       {byline && <span className="art-placard-by">{byline}</span>}
       {art.museum && <span className="art-placard-museum">{art.museum}</span>}
-      {art.link && (
-        <a href={art.link} target="_blank" rel="noreferrer">
-          {sourceLabel}
-        </a>
-      )}
+      <span className="art-placard-actions">
+        {onOpen && (
+          <button type="button" onClick={onOpen}>
+            {openLabel} <kbd>G</kbd>
+          </button>
+        )}
+        {art.link && (
+          <a href={art.link} target="_blank" rel="noreferrer">
+            {sourceLabel}
+          </a>
+        )}
+      </span>
     </aside>
   );
 }

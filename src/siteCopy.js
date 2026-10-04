@@ -141,6 +141,25 @@ export const siteCopyGroups = [
       ["soundRaise", "Sound control, open", "Open player"],
     ],
   },
+  {
+    title: "Gallery mode and keys",
+    fields: [
+      ["galleryOpen", "Gallery mode button", "Contemplate the painting"],
+      ["galleryKicker", "Gallery mode kicker", "Contemplatio"],
+      ["galleryHint", "Gallery mode hint", "← → change painting · move to light it · Esc to return"],
+      ["galleryPrev", "Gallery mode, previous", "Previous painting"],
+      ["galleryNext", "Gallery mode, next", "Next painting"],
+      ["galleryClose", "Gallery mode, close", "Return"],
+      ["codexTitle", "Keyboard panel title", "Codex of keys"],
+      ["codexHint", "Keyboard panel hint", "Press ? for the codex"],
+      ["codexGallery", "Keys · gallery", "Contemplate the painting"],
+      ["codexArt", "Keys · paintings", "Change painting while contemplating"],
+      ["codexPages", "Keys · pages", "Home · Projects · Certificates · Skills · About · Blog"],
+      ["codexSound", "Keys · music", "Music on or off"],
+      ["codexToggle", "Keys · codex", "Open or close this codex"],
+      ["codexEscape", "Keys · escape", "Close any panel"],
+    ],
+  },
 ];
 
 export const siteCopy = Object.fromEntries(

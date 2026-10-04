@@ -114,6 +114,7 @@ export default function AtelierSound({ profile }) {
 
     const onGesture = (event) => {
       if (event.target instanceof Element && event.target.closest(".atelier-sound")) return;
+      if (event.key === "m" || event.key === "M") return;
       if (!enabled || isPlaying()) return;
       start();
     };
@@ -163,6 +164,14 @@ export default function AtelierSound({ profile }) {
     stopSource();
     setPlaying(false);
   };
+
+  const toggleRef = useRef(toggle);
+  toggleRef.current = toggle;
+  useEffect(() => {
+    const onToggle = () => toggleRef.current();
+    window.addEventListener("atelier:sound-toggle", onToggle);
+    return () => window.removeEventListener("atelier:sound-toggle", onToggle);
+  }, []);
 
   const skip = () => setIndex((current) => (current + 1) % tracks.length);
 
