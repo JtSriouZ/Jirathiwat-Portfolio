@@ -40,7 +40,8 @@ const WIKIDATA_QUERY = `SELECT ?item ?title ?image ?creator ?year ?museumName WH
   OPTIONAL { ?item rdfs:label ?title FILTER(LANG(?title) = "en") }
   OPTIONAL { ?item wdt:P170/rdfs:label ?creator FILTER(LANG(?creator) = "en") }
   OPTIONAL { ?museum rdfs:label ?museumName FILTER(LANG(?museumName) = "en") }
-}`;
+}
+LIMIT 240`;
 
 const pools = new Map();
 
