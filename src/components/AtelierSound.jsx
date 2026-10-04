@@ -19,74 +19,39 @@ const LEVEL = 0.55;
 const STORAGE = "atelier-sound";
 const SUNK_STORAGE = "atelier-sound-sunk";
 
-let ctx = null;
-let gain = null;
-let source = null;
+let audio = null;
 let enabled = true;
 let generation = 0;
 let level = LEVEL;
 let muted = false;
-const decoded = new Map();
 
-function getContext() {
-  if (ctx) return ctx;
-  const Ctx = window.AudioContext || window.webkitAudioContext;
-  ctx = new Ctx();
-  gain = ctx.createGain();
-  gain.gain.value = muted ? 0 : level;
-  gain.connect(ctx.destination);
-  return ctx;
+function getAudio() {
+  if (audio) return audio;
+  audio = new Audio();
+  audio.preload = "none";
+  audio.volume = muted ? 0 : level;
+  return audio;
 }
 
 function applyLevel() {
-  if (!ctx || !gain) return;
-  const value = muted ? 0 : level;
-  gain.gain.cancelScheduledValues(ctx.currentTime);
-  gain.gain.setValueAtTime(value, ctx.currentTime);
+  if (audio) audio.volume = muted ? 0 : level;
 }
+
+const isPlaying = () => Boolean(audio && !audio.paused && !audio.ended);
 
 function stopSource() {
-  const node = source;
-  source = null;
-  if (!node) return;
-  node.onended = null;
-  try {
-    node.stop();
-  } catch {
-    /* already finished */
-  }
-  try {
-    node.disconnect();
-  } catch {
-    /* already disconnected */
-  }
+  if (!audio) return;
+  audio.onended = null;
+  audio.pause();
 }
 
-async function loadBuffer(src) {
+function playTrack(src, onEnded) {
+  const element = getAudio();
   const url = new URL(src, window.location.href).href;
-  if (decoded.has(url)) return decoded.get(url);
-  const context = getContext();
-  const response = await fetch(url);
-  const raw = await response.arrayBuffer();
-  const buffer = await context.decodeAudioData(raw.slice(0));
-  decoded.set(url, buffer);
-  return buffer;
-}
-
-function playBuffer(buffer, onEnded) {
-  const context = getContext();
-  stopSource();
-  const node = context.createBufferSource();
-  node.buffer = buffer;
-  node.connect(gain);
-  node.onended = () => {
-    if (source !== node) return;
-    source = null;
-    onEnded();
-  };
-  source = node;
+  if (element.src !== url) element.src = url;
+  element.onended = onEnded;
   applyLevel();
-  node.start();
+  return element.play();
 }
 
 function remember(on) {
@@ -127,21 +92,18 @@ export default function AtelierSound({ profile }) {
   useEffect(() => {
     let closed = false;
     const mine = ++generation;
-    const context = getContext();
 
     const start = () => {
       if (!enabled || closed || mine !== generation) return;
-      context.resume().then(() => loadBuffer(track.src)).then((buffer) => {
-        if (!enabled || closed || mine !== generation) return;
-        if (context.state !== "running") {
-          setPlaying(false);
+      playTrack(track.src, () => {
+        if (!closed && mine === generation) {
+          setIndex((current) => (current + 1) % tracks.length);
+        }
+      }).then(() => {
+        if (!enabled || closed || mine !== generation) {
+          if (mine === generation) stopSource();
           return;
         }
-        playBuffer(buffer, () => {
-          if (!closed && mine === generation) {
-            setIndex((current) => (current + 1) % tracks.length);
-          }
-        });
         setPlaying(true);
       }).catch(() => {
         if (mine === generation) setPlaying(false);
@@ -152,13 +114,13 @@ export default function AtelierSound({ profile }) {
 
     const onGesture = (event) => {
       if (event.target instanceof Element && event.target.closest(".atelier-sound")) return;
-      if (!enabled || (context.state === "running" && source)) return;
+      if (!enabled || isPlaying()) return;
       start();
     };
     let scrollAttempt = 0;
     const onScroll = () => {
       if (!enabled || closed || mine !== generation) return;
-      if (context.state === "running" && source) return;
+      if (isPlaying()) return;
       if (scrollAttempt) return;
       scrollAttempt = window.setTimeout(() => {
         scrollAttempt = 0;
@@ -185,15 +147,15 @@ export default function AtelierSound({ profile }) {
   }, [track.src]);
 
   const toggle = () => {
-    const context = getContext();
-    if (!source) {
+    if (!isPlaying()) {
       enabled = true;
       remember(true);
-      context.resume().then(() => loadBuffer(track.src)).then((buffer) => {
-        if (!enabled) return;
-        playBuffer(buffer, () => setIndex((current) => (current + 1) % tracks.length));
-        setPlaying(true);
-      }).catch(() => setPlaying(false));
+      playTrack(track.src, () => setIndex((current) => (current + 1) % tracks.length))
+        .then(() => {
+          if (enabled) setPlaying(true);
+          else stopSource();
+        })
+        .catch(() => setPlaying(false));
       return;
     }
     enabled = false;

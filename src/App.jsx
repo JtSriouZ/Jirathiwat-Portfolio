@@ -66,6 +66,18 @@ function houseArtInfo(src, houseLabel) {
   };
 }
 
+const FRAME_INTERVAL = 1000 / 30 - 2;
+
+const isLiteDevice = () => {
+  const cores = navigator.hardwareConcurrency || 8;
+  const memory = navigator.deviceMemory || 8;
+  return cores <= 4 || memory <= 4 || navigator.connection?.saveData === true;
+};
+
+if (typeof document !== "undefined" && isLiteDevice()) {
+  document.documentElement.classList.add("is-lite");
+}
+
 function AnimatedBackgroundCanvas({ routeKey }) {
   const canvasRef = useRef(null);
 
@@ -76,7 +88,9 @@ function AnimatedBackgroundCanvas({ routeKey }) {
     const context = canvas.getContext("2d", { alpha: true });
     if (!context) return undefined;
 
-    const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    const reduceMotion =
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ||
+      document.documentElement.classList.contains("is-lite");
     let frame = 0;
     let width = 0;
     let height = 0;
@@ -143,7 +157,14 @@ function AnimatedBackgroundCanvas({ routeKey }) {
       }
     };
 
+    let lastDrawAt = 0;
     const draw = (time = 0) => {
+      if (!reduceMotion && time - lastDrawAt < FRAME_INTERVAL) {
+        frame = requestAnimationFrame(draw);
+        return;
+      }
+      const step = lastDrawAt ? Math.min(3, (time - lastDrawAt) / 16.67) : 1;
+      lastDrawAt = time;
       const palette = getPalette();
       const seconds = time * 0.001;
       context.clearRect(0, 0, width, height);
@@ -154,9 +175,11 @@ function AnimatedBackgroundCanvas({ routeKey }) {
       context.globalCompositeOperation = "source-over";
 
       if (!reduceMotion) {
-        pointer.x += (pointer.targetX - pointer.x) * 0.1;
-        pointer.y += (pointer.targetY - pointer.y) * 0.1;
+        const ease = 1 - 0.9 ** step;
+        pointer.x += (pointer.targetX - pointer.x) * ease;
+        pointer.y += (pointer.targetY - pointer.y) * ease;
       }
+      const damping = 0.985 ** step;
 
       context.globalCompositeOperation = "lighter";
 
@@ -166,14 +189,14 @@ function AnimatedBackgroundCanvas({ routeKey }) {
           const dy = pointer.y - mote.y;
           const distance = Math.hypot(dx, dy);
           if (distance < 200 && distance > 0.001) {
-            const pull = ((200 - distance) / 200) * 0.012;
+            const pull = ((200 - distance) / 200) * 0.012 * step;
             mote.vx += (dx / distance) * pull;
             mote.vy += (dy / distance) * pull;
           }
-          mote.vx *= 0.985;
-          mote.vy = mote.vy * 0.985 - 0.002;
-          mote.x += mote.vx + Math.sin(seconds * 0.6 + mote.sway) * 0.12;
-          mote.y += mote.vy;
+          mote.vx *= damping;
+          mote.vy = mote.vy * damping - 0.002 * step;
+          mote.x += (mote.vx + Math.sin(seconds * 0.6 + mote.sway) * 0.12) * step;
+          mote.y += mote.vy * step;
           if (mote.x < -20) mote.x = width + 20;
           if (mote.x > width + 20) mote.x = -20;
           if (mote.y < -20) {
@@ -195,12 +218,12 @@ function AnimatedBackgroundCanvas({ routeKey }) {
       // Pointer sparks
       sparks = sparks.filter((spark) => spark.life > 0);
       sparks.forEach((spark) => {
-        spark.x += spark.vx;
-        spark.y += spark.vy;
-        spark.vy += 0.015;
-        spark.vx *= 0.97;
-        spark.life -= spark.decay;
-        spark.spin += 0.1;
+        spark.x += spark.vx * step;
+        spark.y += spark.vy * step;
+        spark.vy += 0.015 * step;
+        spark.vx *= 0.97 ** step;
+        spark.life -= spark.decay * step;
+        spark.spin += 0.1 * step;
 
         // Crisp pixel sparks (squares and plus-signs), no glow
         context.save();
@@ -301,15 +324,21 @@ function GildedCursor() {
     const render = () => {
       ringPosition.x += (target.x - ringPosition.x) * 0.22;
       ringPosition.y += (target.y - ringPosition.y) * 0.22;
+      const settled = Math.abs(target.x - ringPosition.x) < 0.3 && Math.abs(target.y - ringPosition.y) < 0.3;
+      if (settled) {
+        ringPosition.x = target.x;
+        ringPosition.y = target.y;
+      }
       place(ring, ringPosition.x, ringPosition.y);
       place(dot, target.x, target.y);
       place(burst, target.x, target.y);
-      frame = requestAnimationFrame(render);
+      frame = settled ? 0 : requestAnimationFrame(render);
     };
 
     const move = (event) => {
       target.x = event.clientX;
       target.y = event.clientY;
+      if (!frame) frame = requestAnimationFrame(render);
       if (!visible) {
         visible = true;
         ringPosition.x = target.x;
@@ -337,7 +366,6 @@ function GildedCursor() {
     const release = () => root.classList.remove("is-pressed");
 
     root.classList.add("is-hidden");
-    frame = requestAnimationFrame(render);
     window.addEventListener("pointermove", move, { passive: true });
     window.addEventListener("pointerdown", press, { passive: true });
     window.addEventListener("pointerup", release, { passive: true });
@@ -481,7 +509,6 @@ function App() {
       ".project-preview-stage",
     ].join(",");
 
-    const root = document.documentElement;
     let tiltedCard = null;
     let magnet = null;
     let pointerFrame = 0;
@@ -525,8 +552,12 @@ function App() {
         const point = pointer;
         if (!point) return;
 
-        root.style.setProperty("--px", (point.x / Math.max(1, window.innerWidth)).toFixed(3));
-        root.style.setProperty("--py", (point.y / Math.max(1, window.innerHeight)).toFixed(3));
+        // Scoped to the backdrop: setting these on :root restyles the whole document.
+        const backdrop = document.querySelector(".page-motion-bg");
+        if (backdrop) {
+          backdrop.style.setProperty("--px", (point.x / Math.max(1, window.innerWidth)).toFixed(3));
+          backdrop.style.setProperty("--py", (point.y / Math.max(1, window.innerHeight)).toFixed(3));
+        }
 
         const nextMagnet = point.target?.closest?.(magnetSelector);
         if (nextMagnet !== magnet) {
@@ -639,6 +670,22 @@ function App() {
       window.clearTimeout(settle);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+    };
+  }, [location.pathname, content]);
+
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") return undefined;
+    let observer;
+    const timer = window.setTimeout(() => {
+      observer = new IntersectionObserver(
+        (entries) => entries.forEach((entry) => entry.target.classList.toggle("is-offscreen", !entry.isIntersecting)),
+        { rootMargin: "120px 0px" }
+      );
+      document.querySelectorAll(".hero-editorial, .editorial-marquee, .site-footer").forEach((el) => observer.observe(el));
+    }, 150);
+    return () => {
+      window.clearTimeout(timer);
+      observer?.disconnect();
     };
   }, [location.pathname, content]);
 

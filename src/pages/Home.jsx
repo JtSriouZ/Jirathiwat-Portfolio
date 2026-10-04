@@ -50,49 +50,11 @@ const RandomNumber = ({ value }) => {
   return <strong>{displayValue}</strong>;
 };
 
-export default function Home({ content, language }) {
-  const { profile, experiences, certificates, projects, posts } = content;
-
-  const safeExperiences = actualRecords(experiences);
-  const safeCerts = actualRecords(certificates);
-  const safeProjects = actualRecords(projects);
-  const safePosts = actualRecords(posts);
+function TypingRole({ phrases, fallback }) {
   const [typedText, setTypedText] = useState("");
   const [typingIndex, setTypingIndex] = useState(0);
   const [isDeletingRole, setIsDeletingRole] = useState(false);
-  const [activeProject, setActiveProject] = useState(0);
-  const [portraitStep, setPortraitStep] = useState(0);
-  const [isPreviewPaused, setIsPreviewPaused] = useState(false);
-  const previewDelay = 4200;
-
-  const typingPhrases = useMemo(
-    () => {
-      if (profile.roles && profile.roles.length > 0) {
-        return [profile.role, ...profile.roles].filter(Boolean);
-      }
-      return [
-        profile.role,
-        "Real-time AI systems builder",
-        "Full-stack web application developer",
-        "Computer vision and data science creator",
-      ].filter(Boolean);
-    },
-    [profile.role, profile.roles]
-  );
-  const currentTypingPhrase = typingPhrases[typingIndex % Math.max(typingPhrases.length, 1)] || "";
-
-  const featuredProjects = useMemo(
-    () =>
-      [...safeProjects]
-        .sort((a, b) => (a.featuredRank || 999) - (b.featuredRank || 999))
-        .slice(0, 5),
-    [safeProjects]
-  );
-
-  const activeProjectData = featuredProjects[activeProject % Math.max(featuredProjects.length, 1)];
-  const nextProjectData = featuredProjects.length > 1
-    ? featuredProjects[(activeProject + 1) % featuredProjects.length]
-    : null;
+  const currentTypingPhrase = phrases[typingIndex % Math.max(phrases.length, 1)] || "";
 
   useEffect(() => {
     if (!currentTypingPhrase) return undefined;
@@ -117,11 +79,53 @@ export default function Home({ content, language }) {
     }
 
     const timer = setTimeout(() => {
-      setTypingIndex((index) => (index + 1) % typingPhrases.length);
+      setTypingIndex((index) => (index + 1) % phrases.length);
       setIsDeletingRole(false);
     }, 180);
     return () => clearTimeout(timer);
-  }, [currentTypingPhrase, isDeletingRole, typedText, typingPhrases.length]);
+  }, [currentTypingPhrase, isDeletingRole, typedText, phrases.length]);
+
+  return <span>{typedText || currentTypingPhrase || fallback}</span>;
+}
+
+export default function Home({ content, language }) {
+  const { profile, experiences, certificates, projects, posts } = content;
+
+  const safeExperiences = actualRecords(experiences);
+  const safeCerts = actualRecords(certificates);
+  const safeProjects = actualRecords(projects);
+  const safePosts = actualRecords(posts);
+  const [activeProject, setActiveProject] = useState(0);
+  const [portraitStep, setPortraitStep] = useState(0);
+  const [isPreviewPaused, setIsPreviewPaused] = useState(false);
+  const previewDelay = 4200;
+
+  const typingPhrases = useMemo(
+    () => {
+      if (profile.roles && profile.roles.length > 0) {
+        return [profile.role, ...profile.roles].filter(Boolean);
+      }
+      return [
+        profile.role,
+        "Real-time AI systems builder",
+        "Full-stack web application developer",
+        "Computer vision and data science creator",
+      ].filter(Boolean);
+    },
+    [profile.role, profile.roles]
+  );
+  const featuredProjects = useMemo(
+    () =>
+      [...safeProjects]
+        .sort((a, b) => (a.featuredRank || 999) - (b.featuredRank || 999))
+        .slice(0, 5),
+    [safeProjects]
+  );
+
+  const activeProjectData = featuredProjects[activeProject % Math.max(featuredProjects.length, 1)];
+  const nextProjectData = featuredProjects.length > 1
+    ? featuredProjects[(activeProject + 1) % featuredProjects.length]
+    : null;
 
   useEffect(() => {
     if (featuredProjects.length < 2 || isPreviewPaused) return undefined;
@@ -219,7 +223,7 @@ export default function Home({ content, language }) {
             </div>
             <div className="command-bar" aria-label="Current role">
               <Sparkles size={14} />
-              <span>{typedText || currentTypingPhrase || profile.role}</span>
+              <TypingRole phrases={typingPhrases} fallback={profile.role} />
             </div>
             <div className="signal-panel">
               {stats.map((stat) => (
