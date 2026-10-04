@@ -3328,10 +3328,7 @@ body {
 .admin-shell {
   min-height: 100vh;
   padding: clamp(7.2rem, 13vh, 8.8rem) max(18px, calc((100vw - 1180px) / 2)) 4rem;
-  background:
-    radial-gradient(circle at 18% 0%, rgba(42, 53, 242, 0.14), transparent 25rem),
-    radial-gradient(circle at 80% 12%, rgba(42, 53, 242, 0.12), transparent 28rem),
-    var(--bg);
+  background: transparent;
 }
 
 .admin-header {
@@ -3416,10 +3413,51 @@ body {
   margin-bottom: 0;
 }
 
+.admin-tabs {
+  position: sticky;
+  top: 4.6rem;
+  z-index: 30;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0 0 1rem;
+  padding: 0.45rem;
+  border: 1px solid rgba(183, 192, 255, 0.28);
+  background: rgba(7, 6, 15, 0.62);
+}
+
+.admin-tabs.is-sub {
+  position: static;
+  margin-top: -0.4rem;
+}
+
+.admin-tabs button {
+  border: 1px solid transparent;
+  background: transparent;
+  color: #b7c0ff;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  padding: 0.55rem 0.7rem;
+  text-transform: uppercase;
+}
+
+.admin-tabs button.is-current {
+  border-color: #2416f2;
+  background: rgba(36, 22, 242, 0.2);
+  color: #ffffff;
+}
+
 .admin-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
+}
+
+.admin-grid > [hidden] {
+  display: none;
 }
 
 .editor-panel {
@@ -3429,17 +3467,16 @@ body {
   padding: 1.2rem;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: var(--panel);
+  background: rgba(7, 6, 15, 0.42);
   box-shadow: var(--shadow);
   overflow: hidden;
-  backdrop-filter: blur(18px);
 }
 
 .editor-panel:hover {
   border-color: color-mix(in srgb, var(--page-accent) 42%, transparent);
   background:
-    radial-gradient(circle at var(--card-x) var(--card-y), color-mix(in srgb, var(--page-accent) 16%, transparent), transparent 14rem),
-    var(--panel);
+    radial-gradient(circle at var(--card-x) var(--card-y), color-mix(in srgb, var(--page-accent) 12%, transparent), transparent 14rem),
+    rgba(7, 6, 15, 0.5);
   box-shadow:
     var(--shadow),
     0 0 34px color-mix(in srgb, var(--page-accent) 10%, transparent);
@@ -3496,7 +3533,7 @@ body {
   width: 100%;
   border: 1px solid rgba(183, 192, 255, 0.2);
   border-radius: 8px;
-  background: rgba(183, 192, 255, 0.025);
+  background: rgba(7, 6, 15, 0.72);
   color: var(--text);
   outline: none;
   padding: 0.78rem 0.82rem;

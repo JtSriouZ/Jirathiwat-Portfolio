@@ -11,6 +11,22 @@ const blankEducation = { school: "", program: "", period: "", description: "", s
 const blankCertificate = { title: "", issuer: "", date: "", credentialUrl: "", imageUrl: "", mediaUrls: "", description: "", fullDescription: "", skills: "" };
 const blankProject = { title: "", description: "", fullDescription: "", language: "", repoUrl: "", liveUrl: "", imageUrl: "", mediaUrls: "", updated: "", period: "", associated: "", skills: "", highlights: "", featuredRank: "" };
 const blankExpertise = { category: "", description: "", skills: "" };
+const ADMIN_TABS = [
+  ["profile", "Profile"],
+  ["headings", "Headings"],
+  ["about", "About"],
+  ["stills", "Stills"],
+  ["portraits", "Portraits"],
+  ["music", "Music"],
+  ["paintings", "Paintings"],
+  ["words", "Words"],
+  ["expertise", "Skill groups"],
+  ["projects", "Projects"],
+  ["certificates", "Certificates"],
+  ["posts", "Posts"],
+  ["experience", "Experience"],
+  ["education", "Education"]
+];
 const richContentHelp = "Bold and bullets work only in this article box. Press Bold to wrap words like **this**. Press Bullet, or start a line with - and a space. A short line on its own, such as The Challenge, becomes a heading. A line like Award: Judges' Pick makes the words before the colon stand out.";
 
 function highlightsToText(value) {
@@ -158,6 +174,8 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
   const [expertiseList, setExpertiseList] = useState(content.expertise || []);
   const [saving, setSaving] = useState("");
   const [message, setMessage] = useState("");
+  const [adminTab, setAdminTab] = useState("projects");
+  const [wordGroup, setWordGroup] = useState(siteCopyGroups[0]?.title || "");
   const canSave = canEdit && Boolean(adminToken);
 
   const updateHeading = (key, value) => {
@@ -486,6 +504,37 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
         </div>
       </header>
 
+      <nav className="admin-tabs" aria-label="Admin sections">
+        {ADMIN_TABS.map(([id, label]) => (
+          <button
+            key={id}
+            type="button"
+            className={adminTab === id ? "is-current" : ""}
+            aria-current={adminTab === id ? "true" : undefined}
+            onClick={() => {
+              setAdminTab(id);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          >
+            {label}
+          </button>
+        ))}
+      </nav>
+      {adminTab === "words" && (
+        <div className="admin-tabs is-sub" aria-label="Wording groups">
+          {siteCopyGroups.map((group) => (
+            <button
+              key={group.title}
+              type="button"
+              className={wordGroup === group.title ? "is-current" : ""}
+              onClick={() => setWordGroup(group.title)}
+            >
+              {group.title}
+            </button>
+          ))}
+        </div>
+      )}
+
       <main className="admin-grid">
         {canEdit && !adminToken && (
           <section className="editor-panel wide-panel auth-panel">
@@ -500,7 +549,7 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
           </section>
         )}
 
-        <section className="editor-panel wide-panel">
+        <section className="editor-panel wide-panel" hidden={adminTab !== "profile"}>
           <div className="panel-title">
             <h2>Profile</h2>
             <button className="primary-button" onClick={saveProfile} disabled={!canSave || saving === "profile"}>
@@ -522,7 +571,7 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
           </div>
         </section>
 
-        <section className="editor-panel wide-panel">
+        <section className="editor-panel wide-panel" hidden={adminTab !== "headings"}>
           <div className="panel-title">
             <h2>Page Headings & Descriptions</h2>
             <button className="primary-button" onClick={saveProfile} disabled={!canSave || saving === "profile"}>
@@ -549,7 +598,7 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
           </div>
         </section>
 
-        <section className="editor-panel wide-panel">
+        <section className="editor-panel wide-panel" hidden={adminTab !== "about"}>
           <div className="panel-title">
             <h2>About page section</h2>
             <button className="primary-button" onClick={saveProfile} disabled={!canSave || saving === "profile"}>
@@ -563,7 +612,7 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
           </div>
         </section>
 
-        <section className="editor-panel wide-panel">
+        <section className="editor-panel wide-panel" hidden={adminTab !== "stills"}>
           <div className="panel-title">
             <h2>Instagram stills</h2>
             <div className="admin-actions">
@@ -603,7 +652,7 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
           </div>
         </section>
 
-        <section className="editor-panel wide-panel">
+        <section className="editor-panel wide-panel" hidden={adminTab !== "portraits"}>
           <div className="panel-title">
             <h2>Portrait frames</h2>
             <div className="admin-actions">
@@ -642,7 +691,7 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
           </div>
         </section>
 
-        <section className="editor-panel wide-panel">
+        <section className="editor-panel wide-panel" hidden={adminTab !== "music"}>
           <div className="panel-title">
             <h2>Soundtrack</h2>
             <div className="admin-actions">
@@ -677,7 +726,7 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
           </div>
         </section>
 
-        <section className="editor-panel wide-panel">
+        <section className="editor-panel wide-panel" hidden={adminTab !== "paintings"}>
           <div className="panel-title">
             <h2>Background paintings</h2>
             <button className="primary-button" onClick={saveProfile} disabled={!canSave || saving === "profile"}>
@@ -692,14 +741,14 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
                 onChange={(event) => setProfile({ ...profile, museumBackgrounds: event.target.checked })}
               />
               <span>
-                Pull random European paintings from museum collections on every visit
-                (Louvre, Rijksmuseum, National Gallery, Prado, Uffizi, Orsay and more).
-                Pale or white-bordered scans are skipped.
-                The list below fills any page the museums can't.
+                Automatic museum backgrounds. Leave this on. Each visit asks Wikidata and Wikimedia Commons
+                for a new set of European paintings from the Louvre, Rijksmuseum, Prado, Uffizi, National Gallery, and other museums.
+                You do not paste those images here.
               </span>
             </label>
             <TextArea
-              label="One image path or URL per line. These are the paintings behind the pages."
+              label="Backup images only, one path or URL per line. Used when the museum APIs cannot be reached, or when the box above is off."
+              help="Leave the box above checked. This list is not the live gallery. It is the spare set."
               value={(profile.backgrounds || []).join("\n")}
               onChange={(value) => setProfile({ ...profile, backgrounds: value.split("\n") })}
             />
@@ -707,7 +756,7 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
         </section>
 
         {siteCopyGroups.map((group) => (
-          <section className="editor-panel wide-panel" key={group.title}>
+          <section className="editor-panel wide-panel" key={group.title} hidden={adminTab !== "words" || wordGroup !== group.title}>
             <div className="panel-title">
               <h2>{group.title}</h2>
               <button className="primary-button" onClick={saveProfile} disabled={!canSave || saving === "profile"}>
@@ -727,7 +776,7 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
           </section>
         ))}
 
-        <section className="editor-panel wide-panel">
+        <section className="editor-panel wide-panel" hidden={adminTab !== "expertise"}>
           <div className="panel-title">
             <h2>Expertise</h2>
             <button className="primary-button" onClick={() => setExpertiseList([{ ...blankExpertise, id: `temp-${Date.now()}` }, ...expertiseList])} disabled={!canSave}>
@@ -754,12 +803,7 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
           </DragDropContext>
         </section>
 
-        <section className="editor-panel wide-panel">
-          <WritingGuide items={[
-            { label: "Short summary", text: "The paragraph on the project card. Write normal sentences. Bold and bullets do not work here." },
-            { label: "Key points", text: "One point on each line. Each line becomes one bullet. You can use commas inside a sentence." },
-            { label: "Article", text: "The long page. Use the Bold and Bullet buttons in that box." }
-          ]} />
+        <section className="editor-panel wide-panel" hidden={adminTab !== "projects"}>
           <div className="panel-title">
             <h2>Projects</h2>
             <button className="primary-button" onClick={() => setProjects([{ ...blankProject, id: `temp-${Date.now()}` }, ...projects])} disabled={!canSave}>
@@ -786,11 +830,7 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
           </DragDropContext>
         </section>
 
-        <section className="editor-panel wide-panel">
-          <WritingGuide items={[
-            { label: "Short summary", text: "A plain paragraph. Bold and bullets do not work here." },
-            { label: "Article", text: "The long certificate page. Use the Bold and Bullet buttons in that box." }
-          ]} />
+        <section className="editor-panel wide-panel" hidden={adminTab !== "certificates"}>
           <div className="panel-title">
             <h2>Certificates</h2>
             <button className="primary-button" onClick={() => setCertificates([{ ...blankCertificate, id: `temp-${Date.now()}` }, ...certificates])} disabled={!canSave}>
@@ -817,7 +857,7 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
           </DragDropContext>
         </section>
 
-        <section className="editor-panel wide-panel">
+        <section className="editor-panel wide-panel" hidden={adminTab !== "posts"}>
           <div className="panel-title">
             <h2>Posts</h2>
             <button className="primary-button" onClick={() => setPosts([{ ...blankPost, id: `temp-${Date.now()}` }, ...posts])} disabled={!canSave}>
@@ -844,7 +884,7 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
           </DragDropContext>
         </section>
 
-        <section className="editor-panel wide-panel">
+        <section className="editor-panel wide-panel" hidden={adminTab !== "experience"}>
           <div className="panel-title">
             <h2>Experience</h2>
             <button className="primary-button" onClick={() => setExperiences([{ ...blankExperience, id: `temp-${Date.now()}` }, ...experiences])} disabled={!canSave}>
@@ -871,7 +911,7 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
           </DragDropContext>
         </section>
 
-        <section className="editor-panel wide-panel">
+        <section className="editor-panel wide-panel" hidden={adminTab !== "education"}>
           <div className="panel-title">
             <h2>Education</h2>
             <button className="primary-button" onClick={() => setEducations([{ ...blankEducation, id: `temp-${Date.now()}` }, ...educations])} disabled={!canSave}>
@@ -937,12 +977,12 @@ function EditablePost({ post, canEdit, onSave, onDelete, saving, dragHandleProps
         <TextInput label="Title" value={draft.title} onChange={(title) => setDraft({ ...draft, title })} />
         <TextInput label="Category" value={draft.category} onChange={(category) => setDraft({ ...draft, category })} />
         <TextInput label="Date" type="date" value={draft.date} onChange={(date) => setDraft({ ...draft, date })} />
-        <TextArea label="Short summary" help="Shown on the blog card. Plain sentences. Bold and bullets do not work here." value={draft.summary} onChange={(summary) => setDraft({ ...draft, summary })} />
+        <TextArea label="Summary" value={draft.summary} onChange={(summary) => setDraft({ ...draft, summary })} />
         <TextInput label="Image URL" value={draft.imageUrl || ""} onChange={(imageUrl) => setDraft({ ...draft, imageUrl })} />
         <TextInput label="YouTube URL" value={draft.youtubeUrl || ""} onChange={(youtubeUrl) => setDraft({ ...draft, youtubeUrl })} />
         <TextInput label="External Link (Optional)" value={draft.externalUrl || ""} onChange={(externalUrl) => setDraft({ ...draft, externalUrl })} />
         <TextInput label="Additional Media URLs (Comma separated)" value={draft.mediaUrls || ""} onChange={(mediaUrls) => setDraft({ ...draft, mediaUrls })} />
-        <RichTextArea label="Article" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft((current) => ({ ...current, fullDescription }))} mediaUrls={draft.mediaUrls} onMediaUrlsChange={(mediaUrls) => setDraft((current) => ({ ...current, mediaUrls }))} youtubeUrl={draft.youtubeUrl} />
+        <RichTextArea label="Full Content (Optional)" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft((current) => ({ ...current, fullDescription }))} mediaUrls={draft.mediaUrls} onMediaUrlsChange={(mediaUrls) => setDraft((current) => ({ ...current, mediaUrls }))} youtubeUrl={draft.youtubeUrl} />
       </div>
       <RecordActions onSave={() => onSave(draft)} onDelete={() => onDelete(draft.id)} disabled={!canEdit || saving === `post-${draft.id}` || saving === `post-delete-${draft.id}`} />
     </article>
@@ -988,9 +1028,9 @@ function EditableCertificate({ certificate, canEdit, onSave, onDelete, saving, d
         <TextInput label="Credential URL" value={draft.credentialUrl || ""} onChange={(credentialUrl) => setDraft({ ...draft, credentialUrl })} />
         <TextInput label="Image URL" value={draft.imageUrl || ""} onChange={(imageUrl) => setDraft({ ...draft, imageUrl })} />
         <TextInput label="Skills" value={draft.skills || ""} onChange={(skills) => setDraft({ ...draft, skills })} />
-        <TextArea label="Short summary" help="Plain paragraph on the certificate card. Bold and bullets do not work here." value={draft.description || ""} onChange={(description) => setDraft({ ...draft, description })} />
-        <TextInput label="Extra images, separated by commas" value={draft.mediaUrls || ""} onChange={(mediaUrls) => setDraft({ ...draft, mediaUrls })} />
-        <RichTextArea label="Article" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft((current) => ({ ...current, fullDescription }))} mediaUrls={draft.mediaUrls} onMediaUrlsChange={(mediaUrls) => setDraft((current) => ({ ...current, mediaUrls }))} />
+        <TextArea label="Description" value={draft.description || ""} onChange={(description) => setDraft({ ...draft, description })} />
+        <TextInput label="Additional Media URLs (Comma separated)" value={draft.mediaUrls || ""} onChange={(mediaUrls) => setDraft({ ...draft, mediaUrls })} />
+        <RichTextArea label="Full Description (Optional)" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft((current) => ({ ...current, fullDescription }))} mediaUrls={draft.mediaUrls} onMediaUrlsChange={(mediaUrls) => setDraft((current) => ({ ...current, mediaUrls }))} />
       </div>
       <RecordActions onSave={() => onSave(draft)} onDelete={() => onDelete(draft.id)} disabled={!canEdit || saving === `certificate-${draft.id}` || saving === `certificate-delete-${draft.id}`} />
     </article>
@@ -1306,6 +1346,15 @@ function RichTextArea({ label, value, onChange, mediaUrls = "", onMediaUrlsChang
       <textarea ref={textareaRef} value={value} onChange={(event) => onChange(event.target.value)} rows={10} />
       <div className="rich-editor-toolbar" aria-label="Inline media tools">
         <div className="rich-editor-formatbar">
+          <button type="button" className="rich-editor-button square" title="Bold" onClick={() => wrapSelection("**", "**", "bold text")}>
+            <Bold size={16} />
+          </button>
+          <button type="button" className="rich-editor-button square" title="Italic" onClick={() => wrapSelection("*", "*", "italic text")}>
+            <Italic size={16} />
+          </button>
+          <button type="button" className="rich-editor-button square" title="Heading" onClick={() => prefixSelectionLines("## ", "Heading")}>
+            <Heading2 size={16} />
+          </button>
           <button type="button" className="rich-editor-button" title="Makes the selected words bold" onClick={() => wrapSelection("**", "**", "bold text")}>
             <Bold size={15} /> Bold
           </button>
@@ -1323,15 +1372,6 @@ function RichTextArea({ label, value, onChange, mediaUrls = "", onMediaUrlsChang
           </button>
           <button type="button" className="rich-editor-button" title="Marks the selected words as code" onClick={() => wrapSelection("`", "`", "code")}>
             <Code2 size={15} /> Code
-          </button>
-        </div>
-        <div className="rich-editor-group">
-          <button type="button" className="rich-editor-button" onClick={() => promptAndInsert("image")}><ImageIcon size={15} /> Image</button>
-          <button type="button" className="rich-editor-button" onClick={() => promptAndInsert("youtube")}><Youtube size={15} /> YouTube</button>
-          <button type="button" className="rich-editor-button" onClick={() => promptAndInsert("video")}><Video size={15} /> Video</button>
-          <button type="button" className="rich-editor-button" onClick={() => promptAndInsert("link")}><LinkIcon size={15} /> Link</button>
-          {youtubeUrl && (
-            <button type="button" className="rich-editor-button accent" onClick={() => insertBlock(buildMediaDirective("youtube", youtubeUrl))}>
               Use YouTube URL
             </button>
           )}
