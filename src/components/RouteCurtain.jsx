@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { EUROPEAN_ART } from "../europeanArt";
+
 const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 const ROMAN = [[1000, "M"], [900, "CM"], [500, "D"], [400, "CD"], [100, "C"], [90, "XC"], [50, "L"], [40, "XL"], [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"]];
 
@@ -15,21 +18,43 @@ export function romanYear(year = new Date().getFullYear()) {
 
 const YEAR = romanYear();
 
+export function GateDoors({ leftLabel, rightLabel = YEAR }) {
+  const [art] = useState(() => EUROPEAN_ART[Math.floor(Math.random() * EUROPEAN_ART.length)]);
+  const artStyle = { "--gate-art": `url("${art}")` };
+
+  return (
+    <>
+      <i className="gate-flare" />
+      <div className="gate-panel is-left" style={artStyle}>
+        <i className="gate-art" />
+        <i className="gate-teeth" />
+        <i className="gate-scan" />
+        <span className="gate-corner">{leftLabel}</span>
+      </div>
+      <div className="gate-panel is-right" style={artStyle}>
+        <i className="gate-art" />
+        <i className="gate-teeth" />
+        <i className="gate-scan" />
+        <span className="gate-corner">{rightLabel}</span>
+      </div>
+      <i className="gate-seam" />
+    </>
+  );
+}
+
 export default function RouteCurtain({ label, index = 0, total = NUMERALS.length }) {
   const letters = Array.from(String(label || ""));
   const numeral = NUMERALS[index] || NUMERALS[0];
 
   return (
     <div className="route-wipe" aria-hidden="true">
-      <div className="gate-panel is-left">
-        <span className="gate-corner">Nº {numeral}</span>
-      </div>
-      <div className="gate-panel is-right">
-        <span className="gate-corner">{YEAR}</span>
-      </div>
-      <i className="gate-seam" />
+      <GateDoors leftLabel={`Nº ${numeral}`} />
       <div className="gate-plaque">
-        <span className="gate-mark is-numeral">{numeral}</span>
+        <i className="gate-sweep" />
+        <span className="gate-mark is-numeral">
+          {numeral}
+          <i className="gate-pulse" />
+        </span>
         <span className="gate-title" style={{ "--n": Math.max(4, letters.length) }}>
           <span className="gate-word">
             {letters.map((letter, letterIndex) => (

@@ -384,7 +384,7 @@ function App() {
     wipeRef.current = { path: location.pathname, count: wipeRef.current.count + 1 };
   }
   useLayoutEffect(() => {
-    if (wipeRef.current.count > 0) holdDecrypt(620);
+    if (wipeRef.current.count > 0) holdDecrypt(1050);
   }, [location.pathname]);
   useEffect(() => startHeadingDecrypt(document.body), []);
   const [museumArt, setMuseumArt] = useState([]);

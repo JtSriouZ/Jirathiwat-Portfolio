@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { holdDecrypt } from "../decrypt";
-import { romanYear } from "./RouteCurtain";
+import { GateDoors } from "./RouteCurtain";
 
 const SEEN_KEY = "grand-entrance-seen";
 const COUNT_MS = 1500;
 const LIFT_AT = 1900;
 const LIFT_MS = 1500;
 const DELAY_RELEASE_AT = 5200;
-const YEAR = romanYear();
 
 function shouldPlay() {
   if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return false;
@@ -71,15 +70,13 @@ export default function GrandEntrance({ name, tagline }) {
       aria-hidden="true"
       onClick={() => setPhase("out")}
     >
-      <div className="gate-panel is-left">
-        <span className="gate-corner">Nº I · Atelier</span>
-      </div>
-      <div className="gate-panel is-right">
-        <span className="gate-corner">{YEAR}</span>
-      </div>
-      <i className="gate-seam" />
+      <GateDoors leftLabel="Nº I · Atelier" />
       <div className="gate-plaque">
-        <span className="gate-mark">{monogram}</span>
+        <i className="gate-sweep" />
+        <span className="gate-mark">
+          {monogram}
+          <i className="gate-pulse" />
+        </span>
         <p className="gate-title">
           {words.map((word, wordIndex) => (
             <span className="gate-word" key={`${word}-${wordIndex}`}>
