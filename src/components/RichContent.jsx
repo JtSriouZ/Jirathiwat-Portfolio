@@ -171,17 +171,37 @@ function InlineMediaBlock({ block, itemTitle }) {
   );
 }
 
+const SUBHEAD = /^[A-Z0-9][^.!?:;,]{1,62}$/;
+const LEAD_LABEL = /^([A-Z][^:.!?]{1,40}:)\s+(\S.*)$/;
+const isSubhead = (line) => SUBHEAD.test(line) && !/https?:\/\//.test(line);
+
 export default function RichContent({ text = "", mediaUrls = [], itemTitle = "Content media" }) {
   const blocks = [];
   let paragraphLines = [];
   let listBlock = null;
 
+  const pushLead = (line) => {
+    const lead = line.match(LEAD_LABEL);
+    blocks.push({ type: "lead", label: lead[1], text: lead[2] });
+  };
+
   const flushParagraph = () => {
-    const paragraph = paragraphLines.join(" ").trim();
-    if (paragraph) {
-      blocks.push({ type: "paragraph", text: paragraph });
-    }
+    let lines = paragraphLines.filter(Boolean);
     paragraphLines = [];
+    if (!lines.length) return;
+    if (lines.length > 1 && isSubhead(lines[0]) && /^[A-Z0-9"“]/.test(lines[1])) {
+      blocks.push({ type: "subhead", text: lines[0] });
+      lines = lines.slice(1);
+    }
+    if (lines.length > 1 && lines.every((line) => LEAD_LABEL.test(line))) {
+      lines.forEach(pushLead);
+    } else if (lines.length === 1 && isSubhead(lines[0])) {
+      blocks.push({ type: "subhead", text: lines[0] });
+    } else if (lines.length === 1 && LEAD_LABEL.test(lines[0])) {
+      pushLead(lines[0]);
+    } else {
+      blocks.push({ type: "paragraph", text: lines.join(" ") });
+    }
   };
 
   const flushList = () => {
@@ -257,6 +277,16 @@ export default function RichContent({ text = "", mediaUrls = [], itemTitle = "Co
       {blocks.map((block, index) => {
         if (block.type === "paragraph") {
           return <p key={`paragraph-${index}`}>{renderInlineText(block.text)}</p>;
+        }
+        if (block.type === "subhead") {
+          return <h3 key={`subhead-${index}`} className="rich-subhead">{renderInlineText(block.text)}</h3>;
+        }
+        if (block.type === "lead") {
+          return (
+            <p key={`lead-${index}`} className="rich-lead">
+              <strong>{renderInlineText(block.label)}</strong> {renderInlineText(block.text)}
+            </p>
+          );
         }
         if (block.type === "heading") {
           const HeadingTag = block.level <= 2 ? "h2" : block.level === 3 ? "h3" : "h4";

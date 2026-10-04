@@ -32,6 +32,7 @@ import GalleryMode from "./components/GalleryMode";
 import Codex from "./components/Codex";
 import RouteCurtain from "./components/RouteCurtain";
 import { holdDecrypt, startHeadingDecrypt, startHoverCipher } from "./decrypt";
+import { startClickSeal, startInfraredLens } from "./interactions";
 import staticContent from "../data/content.json";
 
 const languageOptions = [
@@ -420,6 +421,8 @@ function App() {
   }, [location.pathname]);
   useEffect(() => startHeadingDecrypt(document.body), []);
   useEffect(() => startHoverCipher(document.body), []);
+  useEffect(() => startInfraredLens(document), []);
+  useEffect(() => startClickSeal(document), []);
   const [museumArt, setMuseumArt] = useState([]);
   const [artCycle, setArtCycle] = useState(0);
   const [galleryOpen, setGalleryOpen] = useState(false);
@@ -527,6 +530,7 @@ function App() {
 
   useEffect(() => {
     const cardSelector = [
+      ".hero-seal",
       ".quick-card",
       ".project-card",
       ".certificate-card",

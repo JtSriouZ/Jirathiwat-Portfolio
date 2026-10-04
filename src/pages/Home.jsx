@@ -28,7 +28,7 @@ function actualRecords(value) {
   return Array.isArray(value) ? value.filter((item) => item && item.id) : [];
 }
 
-const RandomNumber = ({ value }) => {
+const RandomNumber = ({ value, roll = 0 }) => {
   const [displayValue, setDisplayValue] = useState("00");
 
   useEffect(() => {
@@ -45,10 +45,20 @@ const RandomNumber = ({ value }) => {
     }, 45);
 
     return () => clearInterval(timer);
-  }, [value]);
+  }, [value, roll]);
 
   return <strong>{displayValue}</strong>;
 };
+
+function Stat({ value, label }) {
+  const [roll, setRoll] = useState(0);
+  return (
+    <div className="stat" onMouseEnter={() => setRoll((count) => count + 1)}>
+      <RandomNumber value={value} roll={roll} />
+      <span>{label}</span>
+    </div>
+  );
+}
 
 function TypingRole({ phrases, fallback }) {
   const [typedText, setTypedText] = useState("");
@@ -227,10 +237,7 @@ export default function Home({ content, language }) {
             </div>
             <div className="signal-panel">
               {stats.map((stat) => (
-                <div className="stat" key={stat.label}>
-                  <RandomNumber value={stat.value} />
-                  <span>{stat.label}</span>
-                </div>
+                <Stat key={stat.label} value={stat.value} label={stat.label} />
               ))}
             </div>
           </div>
