@@ -11,7 +11,34 @@ const blankEducation = { school: "", program: "", period: "", description: "", s
 const blankCertificate = { title: "", issuer: "", date: "", credentialUrl: "", imageUrl: "", mediaUrls: "", description: "", fullDescription: "", skills: "" };
 const blankProject = { title: "", description: "", fullDescription: "", language: "", repoUrl: "", liveUrl: "", imageUrl: "", mediaUrls: "", updated: "", period: "", associated: "", skills: "", highlights: "", featuredRank: "" };
 const blankExpertise = { category: "", description: "", skills: "" };
-const richContentHelp = "Cards in Media library show in the page gallery. Click a card to also place it in the text. Use the small text button to remove only from text, or the trash button to remove from the gallery.";
+const richContentHelp = "Bold and bullets work only in this article box. Press Bold to wrap words like **this**. Press Bullet, or start a line with - and a space. A short line on its own, such as The Challenge, becomes a heading. A line like Award: Judges' Pick makes the words before the colon stand out.";
+
+function highlightsToText(value) {
+  if (Array.isArray(value)) return value.map((item) => String(item).trim()).filter(Boolean).join("\n");
+  return String(value || "")
+    .split(/\s*\|\s*/)
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .join("\n");
+}
+
+function highlightsFromText(value) {
+  return String(value || "")
+    .split(/\r?\n/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function WritingGuide({ items }) {
+  return (
+    <div className="admin-guide">
+      <strong>How to write this</strong>
+      {items.map((item) => (
+        <p key={item.label}><b>{item.label}.</b> {item.text}</p>
+      ))}
+    </div>
+  );
+}
 
 export const StrictModeDroppable = ({ children, ...props }) => {
   const [enabled, setEnabled] = useState(false);
@@ -728,6 +755,11 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
         </section>
 
         <section className="editor-panel wide-panel">
+          <WritingGuide items={[
+            { label: "Short summary", text: "The paragraph on the project card. Write normal sentences. Bold and bullets do not work here." },
+            { label: "Key points", text: "One point on each line. Each line becomes one bullet. You can use commas inside a sentence." },
+            { label: "Article", text: "The long page. Use the Bold and Bullet buttons in that box." }
+          ]} />
           <div className="panel-title">
             <h2>Projects</h2>
             <button className="primary-button" onClick={() => setProjects([{ ...blankProject, id: `temp-${Date.now()}` }, ...projects])} disabled={!canSave}>
@@ -755,6 +787,10 @@ export default function AdminPanel({ content, canEdit, canPublish, onRefresh, on
         </section>
 
         <section className="editor-panel wide-panel">
+          <WritingGuide items={[
+            { label: "Short summary", text: "A plain paragraph. Bold and bullets do not work here." },
+            { label: "Article", text: "The long certificate page. Use the Bold and Bullet buttons in that box." }
+          ]} />
           <div className="panel-title">
             <h2>Certificates</h2>
             <button className="primary-button" onClick={() => setCertificates([{ ...blankCertificate, id: `temp-${Date.now()}` }, ...certificates])} disabled={!canSave}>
@@ -901,12 +937,12 @@ function EditablePost({ post, canEdit, onSave, onDelete, saving, dragHandleProps
         <TextInput label="Title" value={draft.title} onChange={(title) => setDraft({ ...draft, title })} />
         <TextInput label="Category" value={draft.category} onChange={(category) => setDraft({ ...draft, category })} />
         <TextInput label="Date" type="date" value={draft.date} onChange={(date) => setDraft({ ...draft, date })} />
-        <TextArea label="Summary" value={draft.summary} onChange={(summary) => setDraft({ ...draft, summary })} />
+        <TextArea label="Short summary" help="Shown on the blog card. Plain sentences. Bold and bullets do not work here." value={draft.summary} onChange={(summary) => setDraft({ ...draft, summary })} />
         <TextInput label="Image URL" value={draft.imageUrl || ""} onChange={(imageUrl) => setDraft({ ...draft, imageUrl })} />
         <TextInput label="YouTube URL" value={draft.youtubeUrl || ""} onChange={(youtubeUrl) => setDraft({ ...draft, youtubeUrl })} />
         <TextInput label="External Link (Optional)" value={draft.externalUrl || ""} onChange={(externalUrl) => setDraft({ ...draft, externalUrl })} />
         <TextInput label="Additional Media URLs (Comma separated)" value={draft.mediaUrls || ""} onChange={(mediaUrls) => setDraft({ ...draft, mediaUrls })} />
-        <RichTextArea label="Full Content (Optional)" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft((current) => ({ ...current, fullDescription }))} mediaUrls={draft.mediaUrls} onMediaUrlsChange={(mediaUrls) => setDraft((current) => ({ ...current, mediaUrls }))} youtubeUrl={draft.youtubeUrl} />
+        <RichTextArea label="Article" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft((current) => ({ ...current, fullDescription }))} mediaUrls={draft.mediaUrls} onMediaUrlsChange={(mediaUrls) => setDraft((current) => ({ ...current, mediaUrls }))} youtubeUrl={draft.youtubeUrl} />
       </div>
       <RecordActions onSave={() => onSave(draft)} onDelete={() => onDelete(draft.id)} disabled={!canEdit || saving === `post-${draft.id}` || saving === `post-delete-${draft.id}`} />
     </article>
@@ -952,9 +988,9 @@ function EditableCertificate({ certificate, canEdit, onSave, onDelete, saving, d
         <TextInput label="Credential URL" value={draft.credentialUrl || ""} onChange={(credentialUrl) => setDraft({ ...draft, credentialUrl })} />
         <TextInput label="Image URL" value={draft.imageUrl || ""} onChange={(imageUrl) => setDraft({ ...draft, imageUrl })} />
         <TextInput label="Skills" value={draft.skills || ""} onChange={(skills) => setDraft({ ...draft, skills })} />
-        <TextArea label="Description" value={draft.description || ""} onChange={(description) => setDraft({ ...draft, description })} />
-        <TextInput label="Additional Media URLs (Comma separated)" value={draft.mediaUrls || ""} onChange={(mediaUrls) => setDraft({ ...draft, mediaUrls })} />
-        <RichTextArea label="Full Description (Optional)" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft((current) => ({ ...current, fullDescription }))} mediaUrls={draft.mediaUrls} onMediaUrlsChange={(mediaUrls) => setDraft((current) => ({ ...current, mediaUrls }))} />
+        <TextArea label="Short summary" help="Plain paragraph on the certificate card. Bold and bullets do not work here." value={draft.description || ""} onChange={(description) => setDraft({ ...draft, description })} />
+        <TextInput label="Extra images, separated by commas" value={draft.mediaUrls || ""} onChange={(mediaUrls) => setDraft({ ...draft, mediaUrls })} />
+        <RichTextArea label="Article" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft((current) => ({ ...current, fullDescription }))} mediaUrls={draft.mediaUrls} onMediaUrlsChange={(mediaUrls) => setDraft((current) => ({ ...current, mediaUrls }))} />
       </div>
       <RecordActions onSave={() => onSave(draft)} onDelete={() => onDelete(draft.id)} disabled={!canEdit || saving === `certificate-${draft.id}` || saving === `certificate-delete-${draft.id}`} />
     </article>
@@ -962,8 +998,8 @@ function EditableCertificate({ certificate, canEdit, onSave, onDelete, saving, d
 }
 
 function EditableProject({ project, canEdit, onSave, onDelete, saving, dragHandleProps }) {
-  const [draft, setDraft] = useState({ ...project, skills: normalizeList(project.skills).join(", "), highlights: normalizeList(project.highlights).join(" | "), mediaUrls: normalizeList(project.mediaUrls).join(", ") });
-  useEffect(() => { setDraft({ ...project, skills: normalizeList(project.skills).join(", "), highlights: normalizeList(project.highlights).join(" | "), mediaUrls: normalizeList(project.mediaUrls).join(", ") }); }, [project]);
+  const [draft, setDraft] = useState({ ...project, skills: normalizeList(project.skills).join(", "), highlights: highlightsToText(project.highlights), mediaUrls: normalizeList(project.mediaUrls).join(", ") });
+  useEffect(() => { setDraft({ ...project, skills: normalizeList(project.skills).join(", "), highlights: highlightsToText(project.highlights), mediaUrls: normalizeList(project.mediaUrls).join(", ") }); }, [project]);
   return (
     <article className="record-card">
       {dragHandleProps && (
@@ -981,13 +1017,13 @@ function EditableProject({ project, canEdit, onSave, onDelete, saving, dragHandl
         <TextInput label="Live URL" value={draft.liveUrl || ""} onChange={(liveUrl) => setDraft({ ...draft, liveUrl })} />
         <TextInput label="Image URL" value={draft.imageUrl || ""} onChange={(imageUrl) => setDraft({ ...draft, imageUrl })} />
         <TextInput label="Featured Rank" value={draft.featuredRank ?? ""} onChange={(featuredRank) => setDraft({ ...draft, featuredRank })} />
-        <TextInput label="Skills" value={draft.skills || ""} onChange={(skills) => setDraft({ ...draft, skills })} />
-        <TextArea label="Description" value={draft.description || ""} onChange={(description) => setDraft({ ...draft, description })} />
-        <TextArea label="Highlights" value={draft.highlights || ""} onChange={(highlights) => setDraft({ ...draft, highlights })} />
-        <TextInput label="Additional Media URLs (Comma separated)" value={draft.mediaUrls || ""} onChange={(mediaUrls) => setDraft({ ...draft, mediaUrls })} />
-        <RichTextArea label="Full Description (Optional)" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft((current) => ({ ...current, fullDescription }))} mediaUrls={draft.mediaUrls} onMediaUrlsChange={(mediaUrls) => setDraft((current) => ({ ...current, mediaUrls }))} />
+        <TextInput label="Skills, separated by commas" value={draft.skills || ""} onChange={(skills) => setDraft({ ...draft, skills })} />
+        <TextArea label="Short summary" help="Shown on the project card. Write normal sentences. Bold and bullets do not work in this box." value={draft.description || ""} onChange={(description) => setDraft({ ...draft, description })} />
+        <TextArea label="Key points" help="One point per line. Each line becomes one bullet. Commas inside a sentence are kept." rows={6} value={draft.highlights || ""} onChange={(highlights) => setDraft({ ...draft, highlights })} />
+        <TextInput label="Extra images, separated by commas" value={draft.mediaUrls || ""} onChange={(mediaUrls) => setDraft({ ...draft, mediaUrls })} />
+        <RichTextArea label="Article on the detail page" value={draft.fullDescription || ""} onChange={(fullDescription) => setDraft((current) => ({ ...current, fullDescription }))} mediaUrls={draft.mediaUrls} onMediaUrlsChange={(mediaUrls) => setDraft((current) => ({ ...current, mediaUrls }))} />
       </div>
-      <RecordActions onSave={() => onSave(draft)} onDelete={() => onDelete(draft.id)} disabled={!canEdit || saving === `project-${draft.id}` || saving === `project-delete-${draft.id}`} />
+      <RecordActions onSave={() => onSave({ ...draft, name: draft.title || draft.name, highlights: highlightsFromText(draft.highlights) })} onDelete={() => onDelete(draft.id)} disabled={!canEdit || saving === `project-${draft.id}` || saving === `project-delete-${draft.id}`} />
     </article>
   );
 }
@@ -1270,23 +1306,23 @@ function RichTextArea({ label, value, onChange, mediaUrls = "", onMediaUrlsChang
       <textarea ref={textareaRef} value={value} onChange={(event) => onChange(event.target.value)} rows={10} />
       <div className="rich-editor-toolbar" aria-label="Inline media tools">
         <div className="rich-editor-formatbar">
-          <button type="button" className="rich-editor-button square" title="Bold" onClick={() => wrapSelection("**", "**", "bold text")}>
-            <Bold size={16} />
+          <button type="button" className="rich-editor-button" title="Makes the selected words bold" onClick={() => wrapSelection("**", "**", "bold text")}>
+            <Bold size={15} /> Bold
           </button>
-          <button type="button" className="rich-editor-button square" title="Italic" onClick={() => wrapSelection("*", "*", "italic text")}>
-            <Italic size={16} />
+          <button type="button" className="rich-editor-button" title="Makes the selected words italic" onClick={() => wrapSelection("*", "*", "italic text")}>
+            <Italic size={15} /> Italic
           </button>
-          <button type="button" className="rich-editor-button square" title="Heading" onClick={() => prefixSelectionLines("## ", "Heading")}>
-            <Heading2 size={16} />
+          <button type="button" className="rich-editor-button" title="Turns the line into a heading" onClick={() => prefixSelectionLines("## ", "Heading")}>
+            <Heading2 size={15} /> Heading
           </button>
-          <button type="button" className="rich-editor-button square" title="Bullet list" onClick={() => prefixSelectionLines("- ", "List item")}>
-            <List size={16} />
+          <button type="button" className="rich-editor-button" title="Turns each selected line into a bullet" onClick={() => prefixSelectionLines("- ", "List item")}>
+            <List size={15} /> Bullet
           </button>
-          <button type="button" className="rich-editor-button square" title="Quote" onClick={() => prefixSelectionLines("> ", "Quote")}>
-            <Quote size={16} />
+          <button type="button" className="rich-editor-button" title="Turns the line into a quote" onClick={() => prefixSelectionLines("> ", "Quote")}>
+            <Quote size={15} /> Quote
           </button>
-          <button type="button" className="rich-editor-button square" title="Inline code" onClick={() => wrapSelection("`", "`", "code")}>
-            <Code2 size={16} />
+          <button type="button" className="rich-editor-button" title="Marks the selected words as code" onClick={() => wrapSelection("`", "`", "code")}>
+            <Code2 size={15} /> Code
           </button>
         </div>
         <div className="rich-editor-group">
