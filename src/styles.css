@@ -56,6 +56,7 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 110px;
+  background: #07060f;
 }
 
 body {
@@ -4111,6 +4112,41 @@ body {
 @media (max-width: 840px) {
   html {
     scroll-padding-top: 132px;
+  }
+
+  .reveal,
+  .reveal .skill-card,
+  .reveal .skill-group,
+  .reveal .post-card,
+  .reveal .home-post-card,
+  .reveal .project-card,
+  .reveal .certificate-card {
+    filter: none;
+    transform: none;
+    will-change: auto;
+  }
+
+  .reveal .skill-card,
+  .reveal .post-card,
+  .reveal .home-post-card,
+  .reveal .skill-card.is-card-visible,
+  .reveal .post-card.is-card-visible,
+  .reveal .home-post-card.is-card-visible {
+    opacity: 1;
+    animation: none;
+    filter: none;
+    transform: none;
+  }
+
+  .skill-card {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 148px;
+  }
+
+  .post-image.thumb,
+  .post-image.thumb img,
+  .home-post-media {
+    background: #07060f;
   }
 
   .home-server-room {

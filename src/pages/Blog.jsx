@@ -1,6 +1,6 @@
 import { Newspaper, CalendarDays, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { resolveMediaUrl, getYoutubeEmbedUrl } from "../utils";
+import { resolveMediaUrl } from "../utils";
 import { siteLabel } from "../siteCopy";
 
 export default function Blog({ content }) {
@@ -49,17 +49,6 @@ export default function Blog({ content }) {
                 </Link>
               </h3>
               <p>{post.summary}</p>
-              {getYoutubeEmbedUrl(post.youtubeUrl) && (
-                <div className="video-frame">
-                  <iframe
-                    src={getYoutubeEmbedUrl(post.youtubeUrl)}
-                    title={`${post.title} video`}
-                    loading="lazy"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  />
-                </div>
-              )}
               <div className="project-actions" style={{ marginTop: "1.5rem" }}>
                 <Link className="primary-button" to={`/blog/${post.id}`}>
                   {siteLabel(profile, "readMore")}

@@ -3270,6 +3270,7 @@ body,
   justify-content: center;
   object-fit: contain;
   color: var(--gilt-light);
+  background: #07060f;
 }
 
 .skill-card span {

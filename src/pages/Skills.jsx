@@ -44,10 +44,12 @@ function SkillCard({ skill }) {
   return (
     <div className="skill-card">
       {currentUrl ? (
-        <img 
-          src={currentUrl} 
-          alt={skill} 
+        <img
+          src={currentUrl}
+          alt=""
           className="skill-card-icon"
+          loading="lazy"
+          decoding="async"
           onError={() => setUrlIndex(i => i + 1)}
         />
       ) : (

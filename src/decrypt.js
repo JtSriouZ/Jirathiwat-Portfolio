@@ -107,6 +107,7 @@ export function startHoverCipher(root = document.body) {
 
 export function startHeadingDecrypt(root = document.body) {
   if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return () => {};
+  if (window.matchMedia?.("(hover: none), (pointer: coarse)").matches) return () => {};
 
   const watched = new WeakSet();
   const timers = new Set();
