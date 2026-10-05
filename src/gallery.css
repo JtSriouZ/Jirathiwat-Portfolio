@@ -13,15 +13,18 @@
 }
 
 .is-gallery :is(.topbar, .gallery-rail, .art-placard, .scroll-progress, .atelier-sound, .codex-hint) {
-  animation: galleryHide 420ms ease forwards !important;
+  opacity: 0;
   pointer-events: none;
+  transition: opacity 700ms ease;
 }
 
-@keyframes galleryHide {
-  to {
-    opacity: 0;
-    visibility: hidden;
-  }
+.topbar,
+.gallery-rail,
+.art-placard,
+.scroll-progress,
+.atelier-sound,
+.codex-hint {
+  transition: opacity 700ms ease;
 }
 
 .page-art-stage .page-art {
@@ -124,6 +127,33 @@
   visibility: visible;
   pointer-events: auto;
   transition: opacity 700ms ease 180ms;
+}
+
+.gallery-mode.is-open.is-closing {
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 900ms ease,
+    visibility 0s linear 900ms;
+}
+
+.gallery-mode.is-closing::before {
+  clip-path: inset(50% 50% 50% 50%);
+  transition: clip-path 800ms var(--ease-lux);
+}
+
+.gallery-mode.is-closing .gallery-corner {
+  opacity: 0;
+  transform: scale(0.3);
+  transition:
+    transform 700ms var(--ease-lux),
+    opacity 420ms ease;
+  transition-delay: 0ms;
+}
+
+.gallery-mode.is-closing :is(.gallery-caption, .gallery-numeral, .gallery-hint, .gallery-zone) {
+  opacity: 0;
+  transition: opacity 420ms ease;
 }
 
 .gallery-mode::before {
@@ -299,14 +329,52 @@
   letter-spacing: 0.24em;
   text-transform: uppercase;
   transition:
-    translate 260ms var(--ease-lux),
-    box-shadow 260ms var(--ease-lux);
+    translate 320ms var(--ease-lux),
+    box-shadow 320ms var(--ease-lux),
+    border-color 220ms ease,
+    background 220ms ease;
 }
 
 .gallery-close:hover,
 .gallery-close:focus-visible {
-  translate: -2px -2px;
-  box-shadow: 6px 6px 0 #2416f2;
+  translate: -4px -4px;
+  border-color: #b7c0ff;
+  background: #100c30;
+  box-shadow: 10px 10px 0 #2416f2;
+}
+
+.gallery-close:hover svg,
+.gallery-close:focus-visible svg {
+  transform: rotate(-12deg) scale(1.08);
+}
+
+.gallery-close svg {
+  transition: transform 420ms var(--ease-lux);
+}
+
+.gallery-close.is-closing {
+  animation: galleryClosePress 420ms var(--ease-lux) forwards;
+}
+
+.gallery-close.is-closing svg {
+  transform: rotate(90deg) scale(0.7);
+}
+
+@keyframes galleryClosePress {
+  0% {
+    box-shadow: 4px 4px 0 #2416f2;
+  }
+
+  45% {
+    translate: 2px 2px;
+    box-shadow: 0 0 0 #2416f2;
+  }
+
+  100% {
+    opacity: 0;
+    translate: 8px 8px;
+    box-shadow: 0 0 0 #2416f2;
+  }
 }
 
 .gallery-caption {
@@ -705,6 +773,150 @@
 
 .modal-backdrop:not(.is-hidden) > .language-modal .translator-status {
   animation: langRule 900ms var(--ease-lux) 760ms backwards;
+}
+
+.modal-backdrop.is-closing {
+  pointer-events: none;
+  animation: langBackdropOut 980ms ease forwards;
+}
+
+.modal-backdrop.is-closing > .language-modal {
+  animation:
+    langUnfoldOut 580ms var(--ease-lux) 360ms forwards,
+    langPlateOut 520ms var(--ease-lux) 160ms forwards;
+}
+
+.modal-backdrop.is-closing > .language-modal .panel-title h2 {
+  animation: langTitleOut 480ms var(--ease-lux) 120ms forwards;
+}
+
+.modal-backdrop.is-closing > .language-modal .panel-title .icon-button {
+  animation: langXOut 380ms var(--ease-lux) forwards;
+}
+
+.modal-backdrop.is-closing > .language-modal > p {
+  animation: langRiseOut 380ms var(--ease-lux) 60ms forwards;
+}
+
+.modal-backdrop.is-closing > .language-modal .language-options > * {
+  animation: langOptionOut 340ms var(--ease-lux) forwards;
+}
+
+.modal-backdrop.is-closing > .language-modal .language-options > :nth-child(1) { animation-delay: 200ms; }
+.modal-backdrop.is-closing > .language-modal .language-options > :nth-child(2) { animation-delay: 160ms; }
+.modal-backdrop.is-closing > .language-modal .language-options > :nth-child(3) { animation-delay: 120ms; }
+.modal-backdrop.is-closing > .language-modal .language-options > :nth-child(4) { animation-delay: 80ms; }
+.modal-backdrop.is-closing > .language-modal .language-options > :nth-child(5) { animation-delay: 40ms; }
+.modal-backdrop.is-closing > .language-modal .language-options > :nth-child(n + 6) { animation-delay: 0ms; }
+
+.modal-backdrop.is-closing > .language-modal .translator-status {
+  animation: langRuleOut 340ms var(--ease-lux) forwards;
+}
+
+@keyframes langBackdropOut {
+  0%,
+  68% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes langUnfoldOut {
+  from {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(-40px -40px -40px -40px);
+  }
+
+  55% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+    clip-path: inset(50% -40px 50% -40px);
+  }
+}
+
+@keyframes langPlateOut {
+  from {
+    box-shadow:
+      12px 12px 0 0 var(--ultra-bright),
+      0 40px 100px rgba(0, 0, 0, 0.35);
+  }
+
+  to {
+    box-shadow:
+      0 0 0 0 var(--ultra-bright),
+      0 24px 40px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@keyframes langTitleOut {
+  from {
+    opacity: 1;
+    clip-path: inset(-20% -10% -20% -10%);
+  }
+
+  to {
+    opacity: 0;
+    letter-spacing: 0.32em;
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+@keyframes langXOut {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+
+  to {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.6);
+  }
+}
+
+@keyframes langRiseOut {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@keyframes langOptionOut {
+  from {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(-6px -6px -6px -6px);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(14px);
+    clip-path: inset(0 0 100% 0);
+  }
+}
+
+@keyframes langRuleOut {
+  from {
+    opacity: 1;
+    clip-path: inset(-4px -4px -4px -4px);
+  }
+
+  to {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+  }
 }
 
 @keyframes langUnfold {
@@ -1375,6 +1587,7 @@
   .codex.is-open .codex-panel li,
   .modal-backdrop:not(.is-hidden) > .language-modal,
   .modal-backdrop:not(.is-hidden) > .language-modal *,
+  .modal-backdrop.is-closing,
   .project-detail-header,
   .project-detail-hero,
   .project-detail-image,
@@ -1383,6 +1596,10 @@
   .project-detail-content .rich-content > *,
   .project-detail-content .rich-subhead::after {
     animation: none !important;
+  }
+
+  .modal-backdrop.is-closing {
+    opacity: 0;
   }
 
   .gallery-mode::before,

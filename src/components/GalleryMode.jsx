@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { toRoman } from "./ArtPlacard";
 import { siteLabel } from "../siteCopy";
@@ -20,15 +21,40 @@ function Letters({ text }) {
 export default function GalleryMode({ open, art, index, total, profile, onPrev, onNext, onClose }) {
   const year = String(art?.date || "").match(/\d{3,4}/)?.[0];
   const byline = [art?.artist, year].filter(Boolean).join(", ");
+  const [shown, setShown] = useState(open);
+  const [closing, setClosing] = useState(false);
+  const wasOpen = useRef(false);
+
+  useEffect(() => {
+    if (open) {
+      wasOpen.current = true;
+      setShown(true);
+      setClosing(false);
+      return undefined;
+    }
+    if (!wasOpen.current) return undefined;
+    setClosing(true);
+    const timer = window.setTimeout(() => {
+      wasOpen.current = false;
+      setShown(false);
+      setClosing(false);
+    }, 900);
+    return () => window.clearTimeout(timer);
+  }, [open]);
+
+  const close = () => {
+    if (closing || !open) return;
+    onClose();
+  };
 
   return (
     <div
-      className={`gallery-mode${open ? " is-open" : ""}`}
+      className={`gallery-mode${shown ? " is-open" : ""}${closing ? " is-closing" : ""}`}
       role="dialog"
       aria-modal="true"
-      aria-hidden={!open}
+      aria-hidden={!shown}
       aria-label={siteLabel(profile, "galleryOpen")}
-      inert={!open}
+      inert={!shown}
       data-no-decrypt
     >
       <span className="gallery-corner is-tl" aria-hidden="true" />
@@ -44,13 +70,13 @@ export default function GalleryMode({ open, art, index, total, profile, onPrev, 
         <ChevronRight size={34} strokeWidth={1} />
       </button>
 
-      <button type="button" className="gallery-close" onClick={onClose}>
+      <button type="button" className={`gallery-close${closing ? " is-closing" : ""}`} onClick={close}>
         <X size={14} />
         {siteLabel(profile, "galleryClose")}
         <kbd>Esc</kbd>
       </button>
 
-      {open && art?.title && (
+      {shown && art?.title && (
         <div className="gallery-caption" key={art.title}>
           <span className="gallery-kicker">
             {siteLabel(profile, "galleryKicker")} · Nº {toRoman(index + 1)} / {toRoman(Math.max(1, total))}
@@ -63,7 +89,7 @@ export default function GalleryMode({ open, art, index, total, profile, onPrev, 
         </div>
       )}
 
-      {open && (
+      {shown && (
         <span className="gallery-numeral" key={`n-${index}`} aria-hidden="true">
           {toRoman(index + 1)}
         </span>

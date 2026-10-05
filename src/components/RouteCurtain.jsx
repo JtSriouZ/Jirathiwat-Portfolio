@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { EUROPEAN_ART } from "../europeanArt";
 
 const CURTAIN_MS = 2500;
-const PHONE_CURTAIN_MS = 720;
 const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 const ROMAN = [[1000, "M"], [900, "CM"], [500, "D"], [400, "CD"], [100, "C"], [90, "XC"], [50, "L"], [40, "XL"], [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"]];
 
@@ -64,8 +63,7 @@ export default function RouteCurtain({ label, index = 0, total = NUMERALS.length
   const numeral = NUMERALS[index] || NUMERALS[0];
 
   useEffect(() => {
-    const phone = window.matchMedia?.("(hover: none), (pointer: coarse)").matches || window.innerWidth < 840;
-    const timer = setTimeout(() => setDone(true), phone ? PHONE_CURTAIN_MS : CURTAIN_MS);
+    const timer = setTimeout(() => setDone(true), CURTAIN_MS);
     return () => clearTimeout(timer);
   }, []);
 
@@ -73,9 +71,11 @@ export default function RouteCurtain({ label, index = 0, total = NUMERALS.length
 
   const phone = typeof window !== "undefined"
     && (window.matchMedia?.("(hover: none), (pointer: coarse)").matches || window.innerWidth < 840);
+  const letterCount = Math.max(letters.length, 1);
+  const letterStep = letterCount > 1 ? 360 / (letterCount - 1) : 0;
 
   return (
-    <div className="route-wipe" style={phone ? { "--gate-open": "240ms" } : undefined} aria-hidden="true">
+    <div className={`route-wipe${phone ? " is-phone" : ""}`} aria-hidden="true">
       <GateDoors leftLabel={`Nº ${numeral}`} paintings={paintings} />
       <div className="gate-plaque">
         <i className="gate-sweep" />
@@ -84,7 +84,7 @@ export default function RouteCurtain({ label, index = 0, total = NUMERALS.length
           <i className="gate-pulse" />
         </span>
         <span className="gate-title" style={{ "--n": Math.max(4, letters.length) }}>
-          <span className="gate-word">
+          <span className="gate-word" style={{ "--letter-step": `${letterStep}ms` }}>
             {letters.map((letter, letterIndex) => (
               <i key={letterIndex} style={{ "--i": letterIndex }}>
                 {letter === " " ? "\u00a0" : letter}

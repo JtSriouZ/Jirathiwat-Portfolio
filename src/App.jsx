@@ -9,7 +9,7 @@ import {
   preloadEuropeanArt
 } from "./europeanArt";
 import { Routes, Route, Link, NavLink, useNavigate, useLocation } from "react-router-dom";
-import { Landmark, Share2, Search, Globe, Edit3, X, Menu, Linkedin, Github, Instagram, Mail, Frame, Keyboard } from "lucide-react";
+import { Landmark, Share2, Search, Globe, Edit3, X, Linkedin, Github, Instagram, Mail, Frame, Keyboard } from "lucide-react";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Skills from "./pages/Skills";
@@ -287,7 +287,13 @@ function App() {
   const [canEdit, setCanEdit] = useState(false);
   const [canPublish, setCanPublish] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
+  const [languageClosing, setLanguageClosing] = useState(false);
+  const languageCloseRef = useRef(0);
+  const languageClosingRef = useRef(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [mobileNavClosing, setMobileNavClosing] = useState(false);
+  const mobileCloseRef = useRef(0);
+  const mobileClosingRef = useRef(false);
   const [navScrolled, setNavScrolled] = useState(false);
   const [placardShown, setPlacardShown] = useState(false);
   const [language, setLanguage] = useState("en");
@@ -766,7 +772,45 @@ function App() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Close mobile nav when route changes
-  const handleNavClick = () => setMobileNavOpen(false);
+  const openMobileNav = () => {
+    window.clearTimeout(mobileCloseRef.current);
+    mobileClosingRef.current = false;
+    setMobileNavClosing(false);
+    setMobileNavOpen(true);
+  };
+
+  const closeMobileNav = () => {
+    if (!mobileNavOpen || mobileClosingRef.current) return;
+    mobileClosingRef.current = true;
+    setMobileNavClosing(true);
+    window.clearTimeout(mobileCloseRef.current);
+    mobileCloseRef.current = window.setTimeout(() => {
+      mobileClosingRef.current = false;
+      setMobileNavOpen(false);
+      setMobileNavClosing(false);
+    }, 700);
+  };
+
+  const handleNavClick = () => closeMobileNav();
+
+  const openLanguage = () => {
+    window.clearTimeout(languageCloseRef.current);
+    languageClosingRef.current = false;
+    setLanguageClosing(false);
+    setLanguageOpen(true);
+  };
+
+  const closeLanguage = () => {
+    if (!languageOpen || languageClosingRef.current) return;
+    languageClosingRef.current = true;
+    setLanguageClosing(true);
+    window.clearTimeout(languageCloseRef.current);
+    languageCloseRef.current = window.setTimeout(() => {
+      languageClosingRef.current = false;
+      setLanguageOpen(false);
+      setLanguageClosing(false);
+    }, 1000);
+  };
 
   const chooseLanguage = useCallback((code) => {
     setLanguage(code);
@@ -885,7 +929,7 @@ function App() {
           </Link>
 
           {/* Desktop + mobile-dropdown links */}
-          <div className={`nav-links${mobileNavOpen ? " is-open" : ""}`}>
+          <div className={`nav-links${mobileNavOpen ? " is-open" : ""}${mobileNavClosing ? " is-closing" : ""}`}>
             <NavLink to="/" end className={({ isActive }) => isActive ? "active" : ""} onClick={handleNavClick}>{siteLabel(profile, "navHome")}</NavLink>
             <NavLink to="/projects" className={({ isActive }) => isActive ? "active" : ""} onClick={handleNavClick}>{siteLabel(profile, "navProjects")}</NavLink>
             <NavLink to="/certificates" className={({ isActive }) => isActive ? "active" : ""} onClick={handleNavClick}>{siteLabel(profile, "navCertificates")}</NavLink>
@@ -917,7 +961,7 @@ function App() {
             </button>
             <button
               className="icon-button nav-icon"
-              onClick={() => setLanguageOpen(true)}
+              onClick={openLanguage}
               aria-label="Choose language"
             >
               <Globe size={18} />
@@ -930,11 +974,14 @@ function App() {
             )}
             {/* Hamburger — mobile only */}
             <button
-              className="icon-button mobile-toggle"
-              onClick={() => setMobileNavOpen((v) => !v)}
-              aria-label={mobileNavOpen ? "Close menu" : "Open menu"}
+              className={`icon-button mobile-toggle${mobileNavOpen && !mobileNavClosing ? " is-open" : ""}`}
+              onClick={() => (mobileNavOpen && !mobileNavClosing ? closeMobileNav() : openMobileNav())}
+              aria-label={mobileNavOpen && !mobileNavClosing ? "Close menu" : "Open menu"}
+              aria-expanded={mobileNavOpen && !mobileNavClosing}
             >
-              {mobileNavOpen ? <X size={20} /> : <Menu size={20} />}
+              <span className="mobile-toggle-bars" aria-hidden="true">
+                <i /><i /><i />
+              </span>
             </button>
           </div>
         </nav>
@@ -1028,13 +1075,13 @@ function App() {
 
       {/* Language modal */}
       <div
-        className={languageOpen ? "modal-backdrop" : "modal-backdrop is-hidden"}
+        className={`modal-backdrop${!languageOpen && !languageClosing ? " is-hidden" : ""}${languageClosing ? " is-closing" : ""}`}
         role="dialog"
         aria-modal="true"
-        aria-hidden={!languageOpen}
+        aria-hidden={!languageOpen && !languageClosing}
         aria-label="Choose language"
         onClick={(e) => {
-          if (e.target === e.currentTarget) setLanguageOpen(false);
+          if (e.target === e.currentTarget) closeLanguage();
         }}
       >
         <div className="language-modal">
@@ -1042,7 +1089,7 @@ function App() {
             <h2>{siteLabel(profile, "translateTitle")}</h2>
             <button
               className="icon-button"
-              onClick={() => setLanguageOpen(false)}
+              onClick={closeLanguage}
               aria-label="Close language chooser"
             >
               <X size={18} />
