@@ -30,7 +30,7 @@ import ArtBackdrop from "./components/ArtBackdrop";
 import LockOn from "./components/LockOn";
 import GalleryMode from "./components/GalleryMode";
 import Codex from "./components/Codex";
-import RouteCurtain from "./components/RouteCurtain";
+import RouteCurtain, { CURTAIN_MS } from "./components/RouteCurtain";
 import { holdDecrypt, startHeadingDecrypt, startHoverCipher } from "./decrypt";
 import { startClickSeal, startGalleryLantern, startInfraredLens } from "./interactions";
 import staticContent from "../data/content.json";
@@ -307,7 +307,7 @@ function App() {
     wipeRef.current = { path: location.pathname, count: wipeRef.current.count + 1 };
   }
   useLayoutEffect(() => {
-    if (wipeRef.current.count > 0) holdDecrypt(1050);
+    if (wipeRef.current.count > 0) holdDecrypt(CURTAIN_MS);
   }, [location.pathname]);
   useEffect(() => startHeadingDecrypt(document.body), []);
   useEffect(() => startHoverCipher(document.body), []);

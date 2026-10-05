@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { EUROPEAN_ART } from "../europeanArt";
 
-const CURTAIN_MS = 2500;
+export const CURTAIN_MS = 2910;
 const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 const ROMAN = [[1000, "M"], [900, "CM"], [500, "D"], [400, "CD"], [100, "C"], [90, "XC"], [50, "L"], [40, "XL"], [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"]];
 
@@ -72,6 +72,7 @@ export default function RouteCurtain({ label, index = 0, total = NUMERALS.length
   const phone = typeof window !== "undefined"
     && (window.matchMedia?.("(hover: none), (pointer: coarse)").matches || window.innerWidth < 840);
   const letterCount = Math.max(letters.length, 1);
+  // Spread matches --letter-span in curtain.css, so the last letter ends before --gate-open.
   const letterStep = letterCount > 1 ? 360 / (letterCount - 1) : 0;
 
   return (

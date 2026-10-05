@@ -29,7 +29,12 @@
 }
 
 .route-wipe {
-  --gate-open: 820ms;
+  --letter-lead: 160ms;
+  --letter-span: 360ms;
+  --letter-ms: 720ms;
+  --letter-settle: 180ms;
+  /* Plaque starts at gate-open - 80ms, after the last letter has settled. */
+  --gate-open: calc(var(--letter-lead) + var(--letter-span) + var(--letter-ms) + var(--letter-settle) + 80ms);
   z-index: 9996;
   pointer-events: none;
 }
@@ -400,6 +405,11 @@
   animation-delay: calc(160ms + var(--i) * var(--letter-step, 28ms));
 }
 
+.route-wipe .gate-word i {
+  animation-duration: var(--letter-ms);
+  animation-delay: calc(var(--letter-lead) + var(--i) * var(--letter-step, 28ms));
+}
+
 .gate-ticks {
   position: relative;
   width: 100%;
@@ -731,7 +741,6 @@
 
 @media (hover: none), (pointer: coarse), (max-width: 840px) {
   .route-wipe {
-    --gate-open: 820ms;
     perspective: none;
   }
 
